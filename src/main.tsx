@@ -4,14 +4,25 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import Protected from './context/Protected';
 
-import Root from "./routes/Root";
+import WelcomePage from "./routes/Welcome";
+
+import Root from "./routes/app/Root";
 import ErrorPage from './ErrorPage';
 
 const router = createBrowserRouter([
   {
+    path: "/welcome",
+    element: <WelcomePage />,
+  },
+  {
     path: "/",
-    element: <Root />,
+    element: (
+      <Protected>
+        <Root />
+      </Protected>
+    ),
     errorElement: <ErrorPage />,
   }
 ]);
