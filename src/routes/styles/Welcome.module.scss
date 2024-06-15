@@ -1,7 +1,63 @@
+$primary: #aea9cb;
+$secondary: #443e6f;
+$accent: #533fd5;
+$background: #0a0a0f;
+$color: #e5e4ec;
+
 .main {
-  width: 100vw;
-  height: 100vh;
+  width: calc(100vw - 48px);
+  padding-inline: 24px;
+  height: 100svh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  background: rgb(229, 228, 236);
+  background: linear-gradient(0deg, $background 0%, $accent 50%, $primary 100%);
+}
+
+.title {
+  text-align: center;
+  line-height: 1.1;
+  font-weight: 900;
+  font-size: 75px;
+  color: $color;
+}
+
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 48px;
+}
+
+.inlineContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+}
+
+.button {
+  width: calc(100% - 36px);
+  flex: 1;
+  text-align: center;
+  background-color: $color;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.buttonText {
+  color: $background;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.orText {
+  font-weight: 600;
 }

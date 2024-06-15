@@ -30,11 +30,11 @@ body {
 }
 
 ::-moz-selection {
-  color: $background;
-  background: $primary;
+  color: $color;
+  background: $secondary;
 }
 
 ::selection {
-  color: $background;
-  background: $primary;
+  color: $color;
+  background: $secondary;
 }
