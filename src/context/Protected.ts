@@ -8,7 +8,7 @@ export default function Protected({ children }: any) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      await auth;
+      auth;
 
       // Check if user is logged in
       const user = auth.currentUser;

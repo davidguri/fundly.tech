@@ -14,8 +14,14 @@ $color: #e5e4ec;
   align-items: center;
   justify-content: center;
   gap: 24px;
-  background: rgb(229, 228, 236);
-  background: linear-gradient(0deg, $background 0%, $accent 50%, $primary 100%);
+  background: $color;
+  background: linear-gradient(
+    0deg,
+    $color 0%,
+    $primary 25%,
+    $accent 75%,
+    $background 100%
+  );
 }
 
 .title {
@@ -35,17 +41,14 @@ $color: #e5e4ec;
   margin-top: 48px;
 }
 
-.inlineContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  gap: 12px;
-}
-
 .button {
   width: calc(100% - 36px);
   flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   text-align: center;
   background-color: $color;
   padding: 18px;
@@ -53,7 +56,7 @@ $color: #e5e4ec;
 }
 
 .buttonText {
-  color: $background;
+  color: $color;
   font-weight: 800;
   font-size: 18px;
 }
