@@ -1,6 +1,6 @@
 import styles from "./styles/Welcome.module.scss";
 
-import { IoLogoGoogle } from "react-icons/io5";
+import { IoEnter } from "react-icons/io5";
 
 export default function WelcomePage() {
   return (
@@ -8,17 +8,13 @@ export default function WelcomePage() {
       <main className={styles.main}>
         <text className={styles.title}>Welcome To Legera!</text>
         <div className={styles.buttonContainer}>
-          <div className={styles.button} style={{ backgroundColor: "#aea9cb" }}>
-            <text className={styles.buttonText}>Log In</text>
-          </div>
-          <div className={styles.button} style={{ backgroundColor: "#443e6f" }}>
-            <text className={styles.buttonText}>Sign Up</text>
-          </div>
-          <text className={styles.orText}>or</text>
-          <div className={styles.button} style={{ backgroundColor: "#533fd5" }}>
-            <IoLogoGoogle className={styles.buttonText} />
-            <text className={styles.buttonText}>Continue With Google</text>
-          </div>
+          <a href="/signup" className="link" style={{ width: "100%" }}>
+            <div className={styles.button} style={{ backgroundColor: "#533fd5" }}>
+              <IoEnter className={styles.buttonText} size={28} />
+              <text className={styles.buttonText}>Let's Get Started</text>
+            </div>
+          </a>
+          <text className={styles.orText}>Already have an account? <a href="/login" className="link" style={{ color: "#533fd5" }}>Log in</a>.</text>
         </div>
       </main>
     </>

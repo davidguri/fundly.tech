@@ -5,17 +5,18 @@ $background: #0a0a0f;
 $color: #e5e4ec;
 
 .main {
-  width: calc(100vw - 48px);
-  padding-inline: 24px;
+  width: calc(100vw - 20px);
+  padding-inline: 10px;
   height: 100svh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 24px;
   background: $color;
   background: linear-gradient(0deg, $color 0%, $accent 50%, $background 100%);
+  position: fixed;
 }
 
 .title {
@@ -24,6 +25,7 @@ $color: #e5e4ec;
   font-weight: 900;
   font-size: 75px;
   color: $color;
+  margin-top: 12px;
 }
 
 .buttonContainer {
@@ -57,4 +59,6 @@ $color: #e5e4ec;
 
 .orText {
   font-weight: 600;
+  color: $background;
+  margin-bottom: 12px;
 }

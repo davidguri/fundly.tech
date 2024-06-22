@@ -4,18 +4,28 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import ErrorPage from './ErrorPage';
 // import Protected from './context/Protected';
 
 import WelcomePage from "./routes/auth/Welcome";
+import Signup from './routes/auth/Signup';
+import Login from './routes/auth/Login';
 
 import Root from "./routes/app/Root";
-import ErrorPage from './ErrorPage';
 import Transactions from './routes/app/Transactions';
 
 const router = createBrowserRouter([
   {
     path: "/welcome",
     element: <WelcomePage />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
   },
   {
     path: "/",
