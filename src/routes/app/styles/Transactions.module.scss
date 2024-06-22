@@ -1,0 +1,32 @@
+$primary: #aea9cb;
+$secondary: #443e6f;
+$accent: #533fd5;
+$background: #0a0a0f;
+$color: #e5e4ec;
+
+.main {
+  width: calc(100% - 20px);
+  padding-inline: 10px;
+  padding-top: 10px;
+  min-height: calc(100svh - 10px);
+  height: fit-content;
+  overflow: hidden !important;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.titleContainer {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.transactionsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}

@@ -1,9 +1,7 @@
 import styles from "./styles/Root.module.scss";
 import Layout from "../../components/layout/Layout";
 
-import { IoArrowForward, IoAdd, IoCalendar, IoRepeat, IoWallet } from "react-icons/io5";
-
-import Svg from "../../assets/react.svg";
+import { IoAdd, IoCalendar, IoRepeat, IoWallet, IoSettings } from "react-icons/io5";
 
 export default function Root() {
   return (
@@ -11,14 +9,9 @@ export default function Root() {
       <Layout>
         <main className={styles.main}>
           <section className={styles.topSection}>
-            <div className={styles.topContainer}>
-              <div className={styles.titleContainer}>
-                <text className={styles.subtitle}>Current Month</text>
-                <text className={styles.title}>$200,5</text>
-              </div>
-              <div className={styles.profileContainer}>
-                <img src={Svg} className={styles.profileImage} alt="profile_image" />
-              </div>
+            <div className={styles.titleContainer}>
+              <text className="subtitle">Current Month</text>
+              <text className="title">$1,004.5</text>
             </div>
           </section>
           <section className={styles.bottomSection}>
@@ -29,13 +22,15 @@ export default function Root() {
               <IoCalendar className={styles.buttonIcon} />
             </div>
             <div className={styles.buttonContainer}>
-              <IoAdd size={45} />
+              <IoSettings className={styles.buttonIcon} />
             </div>
+            <a href="/transactions" className={`${styles.buttonContainer} ${"link"}`}>
+              <div className={styles.buttonContainer}>
+                <IoRepeat className={styles.buttonIcon} />
+              </div>
+            </a>
             <div className={styles.buttonContainer}>
-              <IoRepeat className={styles.buttonIcon} />
-            </div>
-            <div className={styles.buttonContainer}>
-              <IoArrowForward className={styles.buttonIcon} />
+              <IoAdd className={styles.buttonIcon} />
             </div>
           </section>
         </main>

@@ -1,3 +1,7 @@
+# Legera
+
+This is the code for the PWA Legera, and app which help small, local businesses manage and take note of their physical payments by writing them down in one centralized app for their entire team, getting analytics as well as setting up future appointments.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

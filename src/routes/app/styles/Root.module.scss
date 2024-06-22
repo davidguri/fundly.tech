@@ -6,14 +6,18 @@ $color: #e5e4ec;
 
 .main {
   width: calc(100% - 20px);
-  margin-inline: 10px;
-  height: 100svh;
+  padding-inline: 10px;
+  padding-top: 10px;
+  height: calc(100svh - 10px);
   overflow: hidden !important;
 
   display: flex;
   flex-direction: column;
 
   position: fixed;
+
+  background: $color;
+  background: linear-gradient(0deg, $color 5%, $accent 50%, $background 100%);
 }
 
 .topSection,
@@ -40,18 +44,6 @@ $color: #e5e4ec;
   flex-direction: column;
 }
 
-.subtitle {
-  font-weight: 800;
-  font-size: 26px;
-  opacity: 0.5;
-}
-
-.title {
-  font-weight: 900;
-  font-size: 56px;
-  line-height: 1;
-}
-
 .profileImage {
   border-radius: 100px;
   outline: 1.6px solid $accent;
@@ -74,7 +66,7 @@ $color: #e5e4ec;
   aspect-ratio: 1;
 
   border-radius: 12px;
-  background-color: $accent;
+  background: $accent;
 
   display: flex;
   align-items: center;

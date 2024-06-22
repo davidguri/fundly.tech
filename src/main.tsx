@@ -4,12 +4,13 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import Protected from './context/Protected';
+// import Protected from './context/Protected';
 
-import WelcomePage from "./routes/Welcome";
+import WelcomePage from "./routes/auth/Welcome";
 
 import Root from "./routes/app/Root";
 import ErrorPage from './ErrorPage';
+import Transactions from './routes/app/Transactions';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       <Root />
     ),
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/transactions",
+    element: <Transactions />,
   }
 ]);
 
