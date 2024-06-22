@@ -1,0 +1,86 @@
+$primary: #aea9cb;
+$secondary: #443e6f;
+$accent: #533fd5;
+$background: #0a0a0f;
+$color: #e5e4ec;
+
+.main {
+  width: calc(100% - 20px);
+  margin-inline: 10px;
+  height: 100svh;
+  overflow: hidden !important;
+
+  display: flex;
+  flex-direction: column;
+
+  position: fixed;
+}
+
+.topSection,
+.bottomSection {
+  display: flex;
+}
+
+.topSection {
+  flex: 1;
+  flex-direction: column;
+}
+
+.topContainer {
+  width: calc(100% - 20px);
+  margin-inline: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  font-weight: 800;
+  font-size: 26px;
+  opacity: 0.5;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 56px;
+  line-height: 1;
+}
+
+.profileImage {
+  border-radius: 100px;
+  outline: 1.6px solid $accent;
+  outline-offset: 6.4px;
+  width: 58px;
+  aspect-ratio: 1;
+}
+
+.bottomSection {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap-reverse;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.buttonContainer {
+  width: calc(33.33% - 7px);
+  aspect-ratio: 1;
+
+  border-radius: 12px;
+  background-color: $accent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttonIcon {
+  font-size: 36px;
+}
