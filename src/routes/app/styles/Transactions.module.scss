@@ -5,10 +5,11 @@ $background: #0a0a0f;
 $color: #e5e4ec;
 
 .main {
-  width: calc(100% - 20px);
-  padding-inline: 10px;
-  padding-top: 10px;
-  min-height: calc(100svh - 10px);
+  width: calc(100% - 32px);
+  padding-inline: 16px;
+  padding-top: 16px;
+  padding-bottom: 35px;
+  min-height: calc(100svh - 50px);
   height: fit-content;
   overflow: hidden !important;
 

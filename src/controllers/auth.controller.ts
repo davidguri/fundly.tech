@@ -8,8 +8,6 @@ import { validate } from "../utils/validate.util";
 const auth = getAuth();
 const currentUser: any = auth.currentUser;
 
-// const provider = new GoogleAuthProvider();
-
 export class Auth {
   static async signUp(userModel: User, password: string): Promise<void> {
     var uid = ""

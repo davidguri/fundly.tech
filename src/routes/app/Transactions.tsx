@@ -11,7 +11,7 @@ export default function Transactions() {
       <Layout>
         <main className={styles.main}>
           <div className={styles.titleContainer}>
-            <a href="/" className="link">
+            <a href="/home" className="link">
               <IoChevronBack className="title" color="#533fd5" />
             </a>
             <text className="title">All Activity</text>

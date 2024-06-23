@@ -9,10 +9,10 @@ $color: #e5e4ec;
 }
 
 .main {
-  width: calc(100% - 20px);
-  padding-inline: 10px;
-  padding-block: 10px;
-  height: calc(100svh - 20px);
+  width: calc(100% - 32px);
+  padding-inline: 16px;
+  padding-bottom: 34px;
+  height: calc(100svh - 34px);
   overflow: hidden !important;
 
   display: flex;

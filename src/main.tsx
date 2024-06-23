@@ -39,6 +39,15 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: "/home",
+    element: (
+      <Protected>
+        <Root />
+      </Protected>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/transactions",
     element: <Transactions />,
   }
