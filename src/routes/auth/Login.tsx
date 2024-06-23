@@ -1,6 +1,9 @@
 import React from "react"
 import styles from "./styles/Login.module.scss"
 import { useNavigate } from "react-router-dom";
+import { Auth } from "../../controllers/auth.controller";
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../../firebase';
 
 export default function Login() {
 
@@ -8,6 +11,22 @@ export default function Login() {
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  const login = async () => {
+    await Auth.signIn(email, password).catch((error: any) => {
+      console.error(error.message);
+    })
+  }
+
+  React.useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        nav('/'); // Navigate to home page after successful signup
+      }
+    });
+
+    return () => unsubscribe();
+  }, [nav]);
 
   return (
     <>
@@ -20,7 +39,7 @@ export default function Login() {
           <input className={styles.formInput} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
         </div>
         <div className={styles.submitButtonContainer}>
-          <div className={styles.submitButton} onClick={() => nav("/")}>
+          <div className={styles.submitButton} onClick={login}>
             <text className={styles.submitButtonText}>Log In</text>
           </div>
         </div>

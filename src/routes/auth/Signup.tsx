@@ -1,14 +1,42 @@
 import React from "react";
 import styles from "./styles/Signup.module.scss";
 import { useNavigate } from "react-router-dom";
+import User from "../../models/user.model";
+import { Auth } from "../../controllers/auth.controller";
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../../../firebase';
 
 export default function Signup() {
-
-  const nav = useNavigate();
 
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+
+  const nav = useNavigate()
+
+  const user: User = {
+    id: "",
+    displayName: name,
+    email: email,
+    photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true"
+  }
+
+  const signUp = async () => {
+    await Auth.signUp(user, password).catch((error: any) => {
+      console.error(error.message);
+    })
+  }
+
+  React.useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        nav('/'); // Navigate to home page after successful signup
+      }
+    });
+
+    return () => unsubscribe();
+  }, [nav]);
+
 
   return (
     <>
@@ -22,7 +50,7 @@ export default function Signup() {
           <input className={styles.formInput} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
         </div>
         <div className={styles.submitButtonContainer}>
-          <div className={styles.submitButton} onClick={() => nav("/")}>
+          <div className={styles.submitButton} onClick={signUp}>
             <text className={styles.submitButtonText}>Sign Up</text>
           </div>
         </div>

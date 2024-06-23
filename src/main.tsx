@@ -5,7 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import ErrorPage from './ErrorPage';
-// import Protected from './context/Protected';
+import Protected from './context/Protected';
 
 import WelcomePage from "./routes/auth/Welcome";
 import Signup from './routes/auth/Signup';
@@ -30,7 +30,9 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <Root />
+      <Protected>
+        <Root />
+      </Protected>
     ),
     errorElement: <ErrorPage />,
   },

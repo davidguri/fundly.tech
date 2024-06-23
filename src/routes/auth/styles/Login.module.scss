@@ -48,25 +48,20 @@ $color: #e5e4ec;
 }
 
 .formInput {
-  width: calc(100% - 30.4px);
-  padding-block: 18px;
-  padding-inline: 12px;
-  border: 3.2px solid $color;
+  width: calc(100% - 36px);
+  padding: 18px;
   border-radius: 12px;
-  background-color: transparent;
+  background-color: $color;
   font-size: medium;
   font-weight: 600;
   outline: none;
+  border: 0px;
   transition: 0.25s ease-in-out;
-  color: $color;
+  color: $background;
 }
 
 ::placeholder {
-  color: $color;
-}
-
-.formInput:focus {
-  border-color: $accent;
+  color: #0a0a0f;
 }
 
 .submitButtonContainer {
@@ -77,9 +72,8 @@ $color: #e5e4ec;
 }
 
 .submitButton {
-  width: calc(100% - 24px);
+  width: 100%;
   padding-block: 18px;
-  padding-inline: 12px;
   border-radius: 12px;
   background-color: $accent;
   transition: 0.25s ease-in-out;
