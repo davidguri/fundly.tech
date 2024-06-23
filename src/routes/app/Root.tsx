@@ -1,5 +1,6 @@
 import styles from "./styles/Root.module.scss";
 import Layout from "../../components/layout/Layout";
+import { Link } from "react-router-dom";
 
 import { IoAdd, IoCalendar, IoRepeat, IoWallet, IoSettings } from "react-icons/io5";
 
@@ -24,11 +25,11 @@ export default function Root() {
             <div className={styles.buttonContainer}>
               <IoSettings className={styles.buttonIcon} />
             </div>
-            <a href="/transactions" className={`${styles.buttonContainer} ${"link"}`}>
+            <Link to="/transactions" className={`${styles.buttonContainer} ${"link"}`}>
               <div className={styles.buttonContainer}>
                 <IoRepeat className={styles.buttonIcon} />
               </div>
-            </a>
+            </Link>
             <div className={styles.buttonContainer}>
               <IoAdd className={styles.buttonIcon} />
             </div>

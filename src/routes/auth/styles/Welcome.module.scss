@@ -16,10 +16,18 @@ $color: #e5e4ec;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
   background: $color;
   background: linear-gradient(0deg, $color 0%, $accent 50%, $background 100%);
   position: fixed;
+}
+
+.titleContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
 }
 
 .title {
@@ -37,7 +45,6 @@ $color: #e5e4ec;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 48px;
 }
 
 .button {

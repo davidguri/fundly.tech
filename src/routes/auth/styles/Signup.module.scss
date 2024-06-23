@@ -17,20 +17,14 @@ $color: #e5e4ec;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
 
   position: fixed;
 
   background: $color;
   background: linear-gradient(0deg, $color 5%, $accent 50%, $background 100%);
-}
-
-.titleContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  flex: 1;
 }
 
 .title {
@@ -39,16 +33,7 @@ $color: #e5e4ec;
   font-weight: 900;
   font-size: 75px;
   color: $color;
-  margin-top: 12px;
-}
-
-.formContainer {
-  flex: 5;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
+  margin-bottom: 36px;
 }
 
 .formInput {
@@ -64,19 +49,12 @@ $color: #e5e4ec;
   color: $background;
 }
 
-.submitButtonContainer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
-
 .submitButton {
   width: calc(100% - 24px);
   padding-block: 18px;
   padding-inline: 12px;
   border-radius: 12px;
-  background-color: $accent;
+  background-color: $background;
   transition: 0.25s ease-in-out;
   display: flex;
   align-items: center;
@@ -86,4 +64,10 @@ $color: #e5e4ec;
 .submitButtonText {
   font-size: large;
   font-weight: 900;
+}
+
+.alternativeText {
+  color: $background;
+  text-align: center;
+  font-weight: 600;
 }

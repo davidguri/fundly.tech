@@ -41,19 +41,14 @@ export default function Signup() {
   return (
     <>
       <main className={styles.main}>
-        <div className={styles.titleContainer}>
-          <text className={styles.title}>Let's Get Started!</text>
+        <text className={styles.title}>Let's Get Started!</text>
+        <input className={styles.formInput} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} type="text" />
+        <input className={styles.formInput} placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
+        <input className={styles.formInput} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
+        <div className={styles.submitButton} onClick={signUp}>
+          <text className={styles.submitButtonText}>Sign Up</text>
         </div>
-        <div className={styles.formContainer}>
-          <input className={styles.formInput} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} type="text" />
-          <input className={styles.formInput} placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
-          <input className={styles.formInput} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
-        </div>
-        <div className={styles.submitButtonContainer}>
-          <div className={styles.submitButton} onClick={signUp}>
-            <text className={styles.submitButtonText}>Sign Up</text>
-          </div>
-        </div>
+        <text className={styles.alternativeText}>Already have an account? <span className="specialText" style={{ fontWeight: "800" }} onClick={() => nav("/login")}>Log In.</span></text>
       </main>
     </>
   );

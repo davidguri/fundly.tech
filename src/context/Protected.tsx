@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
 
@@ -9,23 +9,20 @@ interface ProtectedProps {
 
 const Protected: React.FC<ProtectedProps> = ({ children }) => {
   const [user, setUser] = useState(auth.currentUser);
-  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      if (user) {
-        navigate('/');
-      }
     });
 
     return () => unsubscribe();
-  }, [navigate]);
+  }, []);
 
   if (user) {
     return <>{children}</>;
   } else {
-    return <Navigate to="/welcome" />;
+    return <Navigate to="/welcome" state={{ from: location }} />;
   }
 };
 
