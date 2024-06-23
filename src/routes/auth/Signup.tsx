@@ -30,7 +30,7 @@ export default function Signup() {
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        nav('/'); // Navigate to home page after successful signup
+        nav('/');
       }
     });
 

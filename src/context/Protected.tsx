@@ -15,7 +15,7 @@ const Protected: React.FC<ProtectedProps> = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       if (user) {
-        navigate('/'); // Navigate to home page after authentication
+        navigate('/');
       }
     });
 
