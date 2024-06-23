@@ -14,6 +14,8 @@ import Login from './routes/auth/Login';
 import Root from "./routes/app/Root";
 import Transactions from './routes/app/Transactions';
 
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+
 const router = createBrowserRouter([
   {
     path: "/welcome",
@@ -45,3 +47,5 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <RouterProvider router={router} />
 );
+
+serviceWorkerRegistration.register();
