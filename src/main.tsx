@@ -13,6 +13,7 @@ import Login from './routes/auth/Login';
 
 import Root from "./routes/app/Root";
 import Transactions from './routes/app/Transactions';
+import Settings from './routes/app/Settings';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
@@ -39,17 +40,22 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: "/home",
+    path: "/settings",
     element: (
       <Protected>
-        <Root />
+        <Settings />
       </Protected>
     ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/transactions",
-    element: <Transactions />,
+    element: (
+      <Protected>
+        <Transactions />
+      </Protected>
+    ),
+    errorElement: <ErrorPage />,
   }
 ]);
 

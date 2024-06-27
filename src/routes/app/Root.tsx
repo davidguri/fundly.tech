@@ -22,9 +22,11 @@ export default function Root() {
             <div className={styles.buttonContainer}>
               <IoCalendar className={styles.buttonIcon} />
             </div>
-            <div className={styles.buttonContainer}>
-              <IoSettings className={styles.buttonIcon} />
-            </div>
+            <Link to="/settings" className={`${styles.buttonContainer} ${"link"}`}>
+              <div className={styles.buttonContainer}>
+                <IoSettings className={styles.buttonIcon} />
+              </div>
+            </Link>
             <Link to="/transactions" className={`${styles.buttonContainer} ${"link"}`}>
               <div className={styles.buttonContainer}>
                 <IoRepeat className={styles.buttonIcon} />
