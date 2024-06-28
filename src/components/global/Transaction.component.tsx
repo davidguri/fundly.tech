@@ -3,6 +3,11 @@ import styles from "./styles/Transaction.module.scss";
 import { IoCaretForward, IoCaretBack } from "react-icons/io5";
 
 export default function Transaction(props: any) {
+
+  function isInt(n: number): boolean {
+    return n % 1 === 0;
+  }
+
   return (
     <main className={styles.main}>
       <div className={styles.topContainer}>
@@ -21,7 +26,14 @@ export default function Transaction(props: any) {
           <text className={styles.subtitle}>{props.name}</text>
         </div>
         <div className={styles.bRightContainer}>
-          <text className={styles.title}>{props.amount}</text>
+          <text className={styles.title}>${isInt(props.amount) ? props.amount : (props.amount).toFixed(1)}</text>
+          {
+            props.tip ? (
+              <text className={styles.subtitle}>+ ${props.tip} Tip</text>
+            ) : (
+              <div style={{ display: "none" }} />
+            )
+          }
         </div>
       </div>
     </main>

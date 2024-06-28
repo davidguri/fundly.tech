@@ -22,9 +22,9 @@ export default function Transactions() {
             <text className="title">All Activity</text>
           </div>
           <div className={styles.transactionsContainer}>
-            <Transaction incoming={true} date="Aug 12th, 2024, 14:08" type="Transaction" name="David Guri" amount="$25.00" />
-            <Transaction incoming={true} date="Aug 12th, 2024, 14:08" type="Transaction" name="David Guri" amount="$25.00" />
-            <Transaction incoming={true} date="Aug 12th, 2024, 14:08" type="Transaction" name="David Guri" amount="$25.00" />
+            <Transaction incoming={true} date="Aug 12th, 2024, 14:08" type="Transaction" name="David Guri" amount={25.5} tip={5} />
+            <Transaction incoming={true} date="Aug 12th, 2024, 14:08" type="Transaction" name="David Guri" amount={25} />
+            <Transaction incoming={true} date="Aug 12th, 2024, 14:08" type="Transaction" name="David Guri" amount={25} tip={12} />
           </div>
         </main>
       </Layout>
