@@ -26,10 +26,10 @@ export default function Transaction(props: any) {
           <text className={styles.subtitle}>{props.name} - {props.duration} hours</text>
         </div>
         <div className={styles.bRightContainer}>
-          <text className={styles.title}>${isInt(props.amount) ? props.amount : (props.amount).toFixed(1)}</text>
+          <text className={styles.title}><span style={{ fontSize: 15 }}>ALL</span> {isInt(props.amount) ? props.amount : (props.amount).toFixed(1)}</text>
           {
             props.tip ? (
-              <text className={styles.subtitle}>+ ${props.tip} Tip</text>
+              <text className={styles.subtitle}>+ <span style={{ fontSize: 12 }}>ALL</span> {props.tip} Tip</text>
             ) : (
               <div style={{ display: "none" }} />
             )

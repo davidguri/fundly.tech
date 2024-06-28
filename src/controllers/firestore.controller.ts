@@ -1,4 +1,4 @@
-import { collection, addDoc, DocumentReference, setDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, DocumentReference, setDoc, doc, getDocs, query, where, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import User from "../models/user.model";
 import Transaction from "../models/transaction.model";
@@ -7,6 +7,17 @@ export class Firestore {
   static async addUserDocument(id: string, userData: User): Promise<DocumentReference> {
     const docRef = await addDoc(collection(db, "users", id), userData);
     return docRef
+  }
+
+  static async getUserById(id: string): Promise<any> {
+    const docRef = doc(db, "users", id);
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      return null;
+    }
   }
 
   static async addTransactionDocument(id: string, transactionData: Transaction): Promise<any> {

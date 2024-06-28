@@ -31,7 +31,7 @@ export default function Transactions() {
     getTransactions()
   }, []);
 
-  function formatTimestamp(timestamp) {
+  function formatTimestamp(timestamp: any) {
     const date = new Date(timestamp);
 
     const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

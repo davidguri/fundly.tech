@@ -15,29 +15,28 @@ export class Auth {
       setPersistence(auth, browserLocalPersistence)
         .then(async () => {
           return await createUserWithEmailAndPassword(auth, userModel.email, password)
-            .then(async (userCredential) => {
-              const user = userCredential.user;
-              uid = user.uid;
+            .then(async () => {
+              uid = auth.currentUser.uid;
               await updateProfile(currentUser, {
                 displayName: userModel.displayName,
                 photoURL: userModel.photoUrl,
               }).then(() => {
                 console.log('✅ Profile updated successfully');
               }).catch((error: any) => {
-                console.error('❌ Error updating profile: ', error.message);
+                alert('❌ Error updating profile: ' + error.message);
               })
             })
             .catch((error: any) => {
               alert(error.message);
             });
         })
+      const userData: User = {
+        id: uid,
+        email: userModel.email,
+        displayName: userModel.displayName,
+        photoUrl: userModel.photoUrl,
+      };
       try {
-        const userData: User = {
-          id: uid,
-          email: userModel.email,
-          displayName: userModel.displayName,
-          photoUrl: userModel.photoUrl,
-        };
         const docRef = await Firestore.addUserDocument(userModel.id, userData)
         console.log("✅ Document written with ID: ", docRef.id);
       } catch (error: any) {
@@ -74,7 +73,7 @@ export class Auth {
         console.log('✅ Signed out successfully: ')
       })
       .catch((error: any) => {
-        throw new Error(error.message)
+        alert(error.message)
       })
   }
 }

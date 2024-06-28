@@ -66,7 +66,7 @@ export default function Add() {
               <input className={styles.formInput} placeholder="Entry Type" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
               <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
               <input className={styles.formInput} placeholder="Tip" value={tip} onChange={(e) => setTip(e.target.value)} type="number" inputMode="numeric" />
-              <input className={styles.formInput} placeholder="Duration" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
+              <input className={styles.formInput} placeholder="Duration (hours)" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
             </div>
             <div className={styles.bottomContainer}>
               <div className={styles.submitButton} onClick={submitHandler}>
