@@ -6,7 +6,7 @@ export default function WelcomePage() {
     <>
       <main className={styles.main}>
         <div className={styles.titleContainer}>
-          <text className={styles.title}>Welcome To Legera!</text>
+          <text className={styles.title}>Welcome To Fundly!</text>
         </div>
         <div className={styles.buttonContainer}>
           <Link to="/signup" className="link" style={{ width: "100%" }}>
