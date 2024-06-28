@@ -23,7 +23,7 @@ export default function Transaction(props: any) {
       <div className={styles.bottomContainer}>
         <div className={styles.bLeftContainer}>
           <text className={styles.title}>{props.type}</text>
-          <text className={styles.subtitle}>{props.name}</text>
+          <text className={styles.subtitle}>{props.name} - {props.duration} hours</text>
         </div>
         <div className={styles.bRightContainer}>
           <text className={styles.title}>${isInt(props.amount) ? props.amount : (props.amount).toFixed(1)}</text>
