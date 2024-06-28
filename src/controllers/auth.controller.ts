@@ -10,14 +10,14 @@ const currentUser: any = auth.currentUser;
 
 export class Auth {
   static async signUp(userModel: User, password: string): Promise<void> {
-    var uid = ""
+    let uid = ""
     if (validate.email(userModel.email)) {
       setPersistence(auth, browserLocalPersistence)
         .then(async () => {
           return await createUserWithEmailAndPassword(auth, userModel.email, password)
             .then(async (userCredential) => {
               const user = userCredential.user;
-              userModel.id = user.uid;
+              uid = user.uid;
               await updateProfile(currentUser, {
                 displayName: userModel.displayName,
                 photoURL: userModel.photoUrl,
@@ -31,15 +31,14 @@ export class Auth {
               alert(error.message);
             });
         })
-
-      const userData: User = {
-        id: userModel.id,
-        email: userModel.email,
-        displayName: userModel.displayName,
-        photoUrl: userModel.photoUrl,
-      };
       try {
-        const docRef = await Firestore.addUserDocument(uid, userData)
+        const userData: User = {
+          id: uid,
+          email: userModel.email,
+          displayName: userModel.displayName,
+          photoUrl: userModel.photoUrl,
+        };
+        const docRef = await Firestore.addUserDocument(userModel.id, userData)
         console.log("✅ Document written with ID: ", docRef.id);
       } catch (error: any) {
         alert(error.message)

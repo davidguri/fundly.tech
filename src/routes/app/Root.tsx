@@ -2,7 +2,7 @@ import styles from "./styles/Root.module.scss";
 import Layout from "../../components/layout/Layout";
 import { Link } from "react-router-dom";
 
-import { IoAdd, IoCalendar, IoRepeat, IoWallet, IoSettings } from "react-icons/io5";
+import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings } from "react-icons/io5";
 
 export default function Root() {
   return (
@@ -32,9 +32,11 @@ export default function Root() {
                 <IoRepeat className={styles.buttonIcon} />
               </div>
             </Link>
-            <div className={styles.buttonContainer}>
-              <IoAdd className={styles.buttonIcon} />
-            </div>
+            <Link to="/add" className={`${styles.buttonContainer} ${"link"}`}>
+              <div className={styles.buttonContainer}>
+                <IoCreate className={styles.buttonIcon} />
+              </div>
+            </Link>
           </section>
         </main>
       </Layout>

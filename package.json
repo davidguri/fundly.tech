@@ -19,6 +19,7 @@
     "react-router-dom": "^6.18.0",
     "sass": "^1.69.5",
     "sort-by": "^1.2.0",
+    "uuid": "^10.0.0",
     "workbox-webpack-plugin": "^7.1.0"
   },
   "devDependencies": {

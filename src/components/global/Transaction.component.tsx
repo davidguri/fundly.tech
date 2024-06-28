@@ -13,9 +13,9 @@ export default function Transaction(props: any) {
       <div className={styles.topContainer}>
         {
           props.incoming ? (
-            <IoCaretForward className={styles.subtitle} size={21} />
+            <IoCaretForward className={styles.subtitle} size={21} style={{ color: "#533fd5" }} />
           ) : (
-            <IoCaretBack className={styles.subtitle} size={21} />
+            <IoCaretBack className={styles.subtitle} size={21} style={{ color: "#533fd5" }} />
           )
         }
         <text className={styles.subtitle}>{props.date}</text>

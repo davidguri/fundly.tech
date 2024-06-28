@@ -1,0 +1,99 @@
+$primary: #aea9cb;
+$secondary: #443e6f;
+$accent: #533fd5;
+$background: #0a0a0f;
+$color: #e5e4ec;
+
+.main {
+  width: calc(100% - 32px);
+  padding-inline: 16px;
+  padding-top: 16px;
+  padding-bottom: 35px;
+  min-height: calc(100svh - 50px);
+  height: fit-content;
+  overflow: hidden !important;
+  position: fixed;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.titleContainer {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.inlineContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.topContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 12px;
+}
+
+.button {
+  width: calc(100% - 36px);
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  background-color: $color;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.buttonText {
+  color: $background;
+  font-weight: 800;
+  font-size: 18px;
+  text-align: center;
+}
+
+.formInput {
+  width: calc(100% - 36px);
+  padding: 18px;
+  border-radius: 12px;
+  background-color: $color;
+  font-size: medium;
+  font-weight: 600;
+  outline: none;
+  border: 0px;
+  color: $background;
+}
+
+.submitButton {
+  width: calc(100% - 24px);
+  padding-block: 18px;
+  padding-inline: 12px;
+  border-radius: 12px;
+  background-color: $accent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submitButtonText {
+  font-size: large;
+  font-weight: 900;
+}

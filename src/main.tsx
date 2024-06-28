@@ -13,6 +13,7 @@ import Login from './routes/auth/Login';
 
 import Root from "./routes/app/Root";
 import Transactions from './routes/app/Transactions';
+import Add from './routes/app/Add';
 import Settings from './routes/app/Settings';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -56,7 +57,16 @@ const router = createBrowserRouter([
       </Protected>
     ),
     errorElement: <ErrorPage />,
-  }
+  },
+  {
+    path: "/add",
+    element: (
+      <Protected>
+        <Add />
+      </Protected>
+    ),
+    errorElement: <ErrorPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
