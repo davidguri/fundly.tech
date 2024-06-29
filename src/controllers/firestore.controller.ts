@@ -1,11 +1,11 @@
-import { collection, addDoc, getDoc, setDoc, doc, getDocs, query, where, deleteDoc, updateDoc } from "firebase/firestore";
+import { collection, getDoc, setDoc, doc, getDocs, query, where, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import User from "../models/user.model";
 import Transaction from "../models/transaction.model";
 
 export class Firestore {
   static async addUserDocument(id: string, userData: User): Promise<any> {
-    const docRef = await setDoc(doc(db, "users", id), userData);
+    await setDoc(doc(db, "users", id), userData);
   }
 
   static async getUserById(id: string) {
@@ -23,9 +23,10 @@ export class Firestore {
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists()) {
-      return docSnap.data()
+      console.log("Document data:", docSnap.data());
     } else {
-      alert("No such document!")
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
     }
   }
 

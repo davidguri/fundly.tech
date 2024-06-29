@@ -17,7 +17,7 @@ export default function Settings() {
 
   const nav = useNavigate()
 
-  const [user, setUser] = React.useState({})
+  // const [user, setUser] = React.useState({})
 
 
   const handleSignOut = async () => {
@@ -28,8 +28,8 @@ export default function Settings() {
     try {
       const data = await Firestore.getUserById(auth.currentUser.uid)
       console.log(data)
-      setUser(data[0])
-      console.log(user)
+      // setUser(data[0])
+      // console.log(user)
     } catch (error: any) {
       alert(error.message)
     }

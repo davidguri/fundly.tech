@@ -82,7 +82,7 @@ export default function Transactions() {
               const date = new Date(transaction.date.seconds * 1000)
               const formattedDate = formatTimestamp(date);
               return (
-                <Transaction key={i} incoming={true} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={handleDelete(transaction.id)} currency={transaction.currency} />
+                <Transaction key={i} incoming={true} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
               )
             })}
           </div>
