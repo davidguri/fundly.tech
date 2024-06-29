@@ -11,6 +11,17 @@ import { auth } from "../../../firebase";
 export default function Root() {
 
   const [transactions, setTransactions] = React.useState([]);
+  const [user, setUser]: any = React.useState()
+
+  const getUserData = async () => {
+    try {
+      const data = await Firestore.getUserById(auth.currentUser.uid)
+      console.log(data)
+      setUser(data)
+    } catch (error: any) {
+      alert(error.message)
+    }
+  }
 
   React.useEffect(() => {
     const getTransactions = async () => {
@@ -24,6 +35,7 @@ export default function Root() {
     }
 
     getTransactions()
+    getUserData()
   }, []);
 
   const getTotal = () => {

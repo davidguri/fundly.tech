@@ -1,4 +1,4 @@
-// import React from "react"
+import React from "react"
 import styles from "./styles/Settings.module.scss"
 import Layout from "../../components/layout/Layout"
 
@@ -6,31 +6,57 @@ import { useNavigate } from "react-router-dom"
 import { IoChevronBack } from "react-icons/io5"
 
 import { Auth } from "../../controllers/auth.controller"
-// import { auth } from "../../../firebase"
-// import { Firestore } from "../../controllers/firestore.controller"
+import { Firestore } from "../../controllers/firestore.controller"
+import { getAuth } from "firebase/auth"
+import User from "../../models/user.model"
 
 export default function Settings() {
 
-  const nav = useNavigate()
-  // const uid = auth.currentUser.uid
+  const auth = getAuth()
+  // console.log(auth.currentUser.email)
 
-  // const [user, setUser] = React.useState()
+  const nav = useNavigate()
+
+  const [user, setUser] = React.useState({})
+
 
   const handleSignOut = async () => {
     return await Auth.signOut()
   }
 
-  // const getUserData = async (uid: string) => {
-  //   try {
-  //     const data = await Firestore.getUserById(uid)
-  //     setUser(data)
-  //     console.log(data)
-  //   } catch (error: any) {
-  //     alert(error.message)
-  //   }
-  // }
+  const getUserData = async () => {
+    try {
+      const data = await Firestore.getUserById(auth.currentUser.uid)
+      console.log(data)
+      setUser(data[0])
+      console.log(user)
+    } catch (error: any) {
+      alert(error.message)
+    }
+  }
 
-  // getUserData("6pb43Y5aP8fNxlQnmqvYoUSMFXF3")
+  React.useEffect(() => {
+    getUserData()
+  }, []);
+
+  const [currency, setCurrency] = React.useState("ALL")
+
+  const handleCurrencyChange = (e: any) => {
+    setCurrency(e.target.value)
+  }
+
+  const userData: User = {
+    id: auth.currentUser.uid,
+    displayName: "user",
+    email: auth.currentUser.email,
+    currency: currency,
+    photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true"
+  }
+
+  const handleUpdate = async () => {
+    await Firestore.updateUserData(auth.currentUser.uid, userData)
+    alert("Changes Saved!")
+  }
 
   return (
     <>
@@ -44,12 +70,33 @@ export default function Settings() {
           </div>
           <div className={styles.content}>
             <div className={styles.topContainer}>
-              {/* <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>{user.name}</text> */}
+              <div className={styles.accountContainer}>
+                <div className={styles.accountImageContainer}>
+                  <img src="https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true" className={styles.accountImage} alt="account_image" />
+                </div>
+                <div className={styles.accountInfoContainer}>
+                  <text className={styles.accountInfoText}>user</text>
+                  <text className={styles.accountInfoTextAlt}>{auth.currentUser.email}</text>
+                </div>
+              </div>
+              <div className={styles.setting}>
+                <text className={styles.settingText}>Currency</text>
+                <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency}>
+                  <option value="ALL">ALL</option>
+                  <option value="EUR">EUR</option>
+                  <option value="USD">USD</option>
+                  <option value="GBP">GBP</option>
+                </select>
+              </div>
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.button} style={{ backgroundColor: "#533fd5" }} onClick={handleSignOut}>
-                <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>Log Out</text>
+              <div className={styles.button} style={{ backgroundColor: "#aea9cb", boxShadow: "0px 0px 12px rgba(174, 169, 203, 0.75)" }} onClick={handleUpdate}>
+                <text className={styles.buttonText} style={{ color: "#0a0a0f" }}>Save Changes</text>
               </div>
+              <div className={styles.button} onClick={handleSignOut}>
+                <text className={styles.buttonText}>Log Out</text>
+              </div>
+              <text className={styles.supportText}>Made with 💜 By <a href="https://buymeacoffee.com/davidguri" target="_blank" rel="noopener noreferrer" className="link" style={{ textDecoration: "underline", textDecorationColor: "#aea9cb" }}>David Guri</a></text>
             </div>
           </div>
         </main>

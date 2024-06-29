@@ -1,23 +1,37 @@
-import { collection, addDoc, DocumentReference, setDoc, doc, getDocs, query, where, getDoc } from "firebase/firestore";
+import { collection, addDoc, getDoc, setDoc, doc, getDocs, query, where, deleteDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import User from "../models/user.model";
 import Transaction from "../models/transaction.model";
 
 export class Firestore {
-  static async addUserDocument(id: string, userData: User): Promise<DocumentReference> {
-    const docRef = await addDoc(collection(db, "users", id), userData);
-    return docRef
+  static async addUserDocument(id: string, userData: User): Promise<any> {
+    const docRef = await setDoc(doc(db, "users", id), userData);
   }
 
-  static async getUserById(id: string): Promise<any> {
+  static async getUserById(id: string) {
+    // const q = query(collection(db, "users", id));
+
+    // const querySnapshot = await getDocs(q);
+    // const data = querySnapshot.docs.map(doc => ({
+    //   id: doc.id,
+    //   ...doc.data()
+    // }))
+
+    // return data
+
     const docRef = doc(db, "users", id);
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists()) {
-      return docSnap.data();
+      return docSnap.data()
     } else {
-      return null;
+      alert("No such document!")
     }
+  }
+
+  static async updateUserData(id: string, userData: User): Promise<any> {
+    const userRef = doc(db, "users", id);
+    await updateDoc(userRef, userData);
   }
 
   static async addTransactionDocument(id: string, transactionData: Transaction): Promise<any> {
@@ -35,5 +49,9 @@ export class Firestore {
     }))
 
     return data
+  }
+
+  static async deleteTransaction(id: string): Promise<any> {
+    await deleteDoc(doc(db, "transactions", id))
   }
 }

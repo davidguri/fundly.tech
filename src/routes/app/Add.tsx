@@ -17,24 +17,30 @@ export default function Add() {
 
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState("");
+  const [currency, setCurrency] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [duration, setDuration] = React.useState("");
   const [tip, setTip] = React.useState("");
 
   const submitHandler = async () => {
+
+    const id = uuidv4()
+
     const transactionData: Transaction = {
+      id: id,
       name: name,
       type: type,
       amount: parseFloat(amount),
-      tip: parseFloat(tip),
+      currency: currency,
+      tip: (tip ? parseFloat(tip) : 0),
       userId: auth.currentUser.uid,
-      duration: parseInt(duration),
+      duration: (duration ? parseInt(duration) : null),
       incoming: true,
       date: new Date()
     }
 
     try {
-      const docRef = await Firestore.addTransactionDocument(uuidv4(), transactionData);
+      const docRef = await Firestore.addTransactionDocument(id, transactionData);
       console.log("✅ Document written with ID: ", docRef)
       alert("Entry Added Successfully!");
     } catch (error: any) {
@@ -64,9 +70,10 @@ export default function Add() {
               </div>
               <input className={styles.formInput} placeholder="Worker Name" value={name} onChange={(e) => setName(e.target.value)} type="text" autoCorrect="off" />
               <input className={styles.formInput} placeholder="Entry Type" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
+              <input className={styles.formInput} placeholder="Currency" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
               <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
-              <input className={styles.formInput} placeholder="Tip" value={tip} onChange={(e) => setTip(e.target.value)} type="number" inputMode="numeric" />
-              <input className={styles.formInput} placeholder="Duration (hours)" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
+              <input className={styles.formInput} placeholder="Tip (optional)" value={tip} onChange={(e) => setTip(e.target.value)} type="number" inputMode="numeric" />
+              <input className={styles.formInput} placeholder="Hours (optional)" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
             </div>
             <div className={styles.bottomContainer}>
               <div className={styles.submitButton} onClick={submitHandler}>

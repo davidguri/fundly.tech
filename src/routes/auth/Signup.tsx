@@ -18,11 +18,12 @@ export default function Signup() {
     id: "",
     displayName: name,
     email: email,
-    photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true"
+    photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true",
+    currency: "ALL"
   }
 
   const signUp = async () => {
-    await Auth.signUp(user, password).catch((error: any) => {
+    await Auth.signUp(user, password, name, "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true").catch((error: any) => {
       console.error(error.message);
     })
   }

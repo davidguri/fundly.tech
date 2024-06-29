@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import Transaction from "../../components/global/Transaction.component";
 
-import { IoChevronBack } from "react-icons/io5";
+import { IoChevronBack, IoRefresh } from "react-icons/io5";
 import { Firestore } from "../../controllers/firestore.controller";
 import { auth } from "../../../firebase";
 
@@ -16,18 +16,18 @@ export default function Transactions() {
 
   const [transactions, setTransactions] = React.useState([])
 
-  React.useEffect(() => {
-    const getTransactions = async () => {
-      try {
-        setTransactions([])
-        const data = await Firestore.getTransactions(auth.currentUser.uid)
-        setTransactions(data)
-        console.log(data)
-      } catch (error: any) {
-        alert(error.message)
-      }
+  const getTransactions = async () => {
+    try {
+      setTransactions([])
+      const data = await Firestore.getTransactions(auth.currentUser.uid)
+      setTransactions(data)
+      console.log(data)
+    } catch (error: any) {
+      alert(error.message)
     }
+  }
 
+  React.useEffect(() => {
     getTransactions()
   }, []);
 
@@ -57,23 +57,32 @@ export default function Transactions() {
     return formattedDate;
   }
 
+  const handleDelete = async (id: string) => {
+    await Firestore.deleteTransaction(id)
+    getTransactions()
+  }
 
   return (
     <>
       <Layout>
         <main className={styles.main}>
           <div className={styles.titleContainer}>
-            <div onClick={() => nav(-1)}>
-              <IoChevronBack className="title" color="#533fd5" />
+            <div className={styles.titleLeftContainer}>
+              <div onClick={() => nav(-1)}>
+                <IoChevronBack className="title" color="#533fd5" />
+              </div>
+              <text className="title">All Activity</text>
             </div>
-            <text className="title">All Activity</text>
+            <div onClick={getTransactions}>
+              <IoRefresh className="title" color="#533fd5" size={38} />
+            </div>
           </div>
           <div className={styles.transactionsContainer}>
             {transactions.map((transaction, i) => {
               const date = new Date(transaction.date.seconds * 1000)
               const formattedDate = formatTimestamp(date);
               return (
-                <Transaction key={i} incoming={true} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} />
+                <Transaction key={i} incoming={true} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={handleDelete(transaction.id)} currency={transaction.currency} />
               )
             })}
           </div>

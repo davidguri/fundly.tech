@@ -1,5 +1,5 @@
 import { Firestore } from "./firestore.controller";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, signOut, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
 
 import User from "../models/user.model";
 
@@ -9,36 +9,35 @@ const auth = getAuth();
 const currentUser: any = auth.currentUser;
 
 export class Auth {
-  static async signUp(userModel: User, password: string): Promise<void> {
-    let uid = ""
+  static async signUp(userModel: User, password: string, displayName: string, photoUrl: string): Promise<void> {
+    let uid: string
     if (validate.email(userModel.email)) {
-      setPersistence(auth, browserLocalPersistence)
+      await createUserWithEmailAndPassword(auth, userModel.email, password)
         .then(async () => {
-          return await createUserWithEmailAndPassword(auth, userModel.email, password)
-            .then(async () => {
-              uid = auth.currentUser.uid;
-              await updateProfile(currentUser, {
-                displayName: userModel.displayName,
-                photoURL: userModel.photoUrl,
-              }).then(() => {
-                console.log('✅ Profile updated successfully');
-              }).catch((error: any) => {
-                alert('❌ Error updating profile: ' + error.message);
-              })
-            })
-            .catch((error: any) => {
-              alert(error.message);
-            });
+          uid = auth.currentUser.uid;
+          console.log("UID: " + uid);
+          await updateProfile(currentUser, {
+            displayName: displayName,
+            photoURL: photoUrl,
+          }).then(() => {
+            console.log('✅ Profile updated successfully');
+          }).catch((error: any) => {
+            alert('❌ Error updating profile: ' + error.message);
+          })
         })
+        .catch((error: any) => {
+          alert(error.message);
+        });
       const userData: User = {
         id: uid,
         email: userModel.email,
         displayName: userModel.displayName,
         photoUrl: userModel.photoUrl,
+        currency: userModel.currency,
       };
       try {
-        const docRef = await Firestore.addUserDocument(userModel.id, userData)
-        console.log("✅ Document written with ID: ", docRef.id);
+        const docRef = await Firestore.addUserDocument(uid, userData)
+        console.log("✅ Document written with ID: ", docRef);
       } catch (error: any) {
         alert(error.message)
       };
@@ -75,5 +74,15 @@ export class Auth {
       .catch((error: any) => {
         alert(error.message)
       })
+  }
+
+  static getUserData(): any {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        return user
+      } else {
+        return null
+      }
+    })
   }
 }

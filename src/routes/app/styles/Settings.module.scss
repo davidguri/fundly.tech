@@ -1,4 +1,4 @@
-$primary: #aea9cb;
+$primary: rgb(174, 169, 203);
 $secondary: #443e6f;
 $accent: #533fd5;
 $background: #0a0a0f;
@@ -36,6 +36,17 @@ $color: #e5e4ec;
 
 .topContainer {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  gap: 12px;
+}
+
+.bottomContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .button {
@@ -47,14 +58,86 @@ $color: #e5e4ec;
   justify-content: center;
   gap: 10px;
   text-align: center;
+  background-color: $accent;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0px 0px 12px rgba(83, 63, 213, 0.75);
+}
+
+.buttonText {
+  color: $color;
+  font-weight: 800;
+  font-size: 18px;
+  text-align: center;
+}
+
+.accountContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.accountImageContainer {
+  height: 90px;
+}
+
+.accountImage {
+  height: 100%;
+  border-radius: 100px;
+}
+
+.accountInfoContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.accountInfoText {
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.accountInfoTextAlt {
+  font-size: 21px;
+  font-weight: 800;
+  opacity: 0.5;
+}
+
+.setting {
+  width: calc(100% - 36px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   background-color: $color;
   padding: 18px;
   border-radius: 12px;
 }
 
-.buttonText {
+.settingText {
   color: $background;
   font-weight: 800;
   font-size: 18px;
   text-align: center;
+}
+
+.select {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: $background;
+  font-size: 18px;
+  font-weight: 800;
+  padding: 0px;
+  margin: 0px;
+  text-align: right;
+}
+
+.supportText {
+  width: 100%;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
 }
