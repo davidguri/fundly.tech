@@ -1,23 +1,19 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../firebase';
+import { useAuth } from './AuthProvider'
+import Loading from '../Loading';
 
 interface ProtectedProps {
   children: ReactNode;
 }
 
 const Protected: React.FC<ProtectedProps> = ({ children }) => {
-  const [user, setUser] = useState(auth.currentUser);
+  const { user, loading } = useAuth();
   const location = useLocation();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  if (loading) {
+    return <Loading />;
+  }
 
   if (user) {
     return <>{children}</>;

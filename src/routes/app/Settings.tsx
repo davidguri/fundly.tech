@@ -73,7 +73,7 @@ export default function Settings() {
             <div className={styles.topContainer}>
               <div className={styles.accountContainer}>
                 <div className={styles.accountImageContainer}>
-                  <img src={user.photoUrl} className={styles.accountImage} alt="account_image" />
+                  <img src={user.photoUrl} className={styles.accountImage} />
                 </div>
                 <div className={styles.accountInfoContainer}>
                   <text className={styles.accountInfoText}>{auth.currentUser.displayName} - {user.role}</text>
@@ -92,7 +92,7 @@ export default function Settings() {
               </div>
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.button} style={{ backgroundColor: "#aea9cb", boxShadow: "0px 0px 12px rgba(174, 169, 203, 0.75)" }} onClick={handleUpdate}>
+              <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={handleUpdate}>
                 <text className={styles.buttonText} style={{ color: "#0a0a0f" }}>Save Changes</text>
               </div>
               <div className={styles.button} onClick={handleSignOut}>

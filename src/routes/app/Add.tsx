@@ -17,6 +17,7 @@ export default function Add() {
 
   const [name, setName] = React.useState("");
   const [type, setType] = React.useState("");
+  // const [incoming, setIncoming] = React.useState(true);
   const [currency, setCurrency] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [duration, setDuration] = React.useState("");
@@ -30,7 +31,7 @@ export default function Add() {
       id: id,
       name: name,
       type: type,
-      amount: parseFloat(amount),
+      amount: (parseFloat(amount)),
       currency: currency,
       tip: (tip ? parseFloat(tip) : 0),
       userId: auth.currentUser.uid,

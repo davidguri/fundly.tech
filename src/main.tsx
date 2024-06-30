@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import ErrorPage from './ErrorPage';
+import { AuthProvider } from './context/AuthProvider';
 import Protected from './context/Protected';
 
 import WelcomePage from "./routes/auth/Welcome";
@@ -21,49 +22,69 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 const router = createBrowserRouter([
   {
     path: "/welcome",
-    element: <WelcomePage />,
+    element: (
+      <AuthProvider>
+        <WelcomePage />
+      </AuthProvider>
+    ),
   },
   {
     path: "/signup",
-    element: <Signup />,
+    element: (
+      <AuthProvider>
+        <Signup />
+      </AuthProvider>
+    ),
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <AuthProvider>
+        <Login />
+      </AuthProvider>
+    ),
   },
   {
     path: "/",
     element: (
-      <Protected>
-        <Root />
-      </Protected>
+      <AuthProvider>
+        <Protected>
+          <Root />
+        </Protected>
+      </AuthProvider>
     ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/settings",
     element: (
-      <Protected>
-        <Settings />
-      </Protected>
+      <AuthProvider>
+        <Protected>
+          <Settings />
+        </Protected>
+      </AuthProvider>
     ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/transactions",
     element: (
-      <Protected>
-        <Transactions />
-      </Protected>
+      <AuthProvider>
+        <Protected>
+          <Transactions />
+        </Protected>
+      </AuthProvider>
     ),
     errorElement: <ErrorPage />,
   },
   {
     path: "/add",
     element: (
-      <Protected>
-        <Add />
-      </Protected>
+      <AuthProvider>
+        <Protected>
+          <Add />
+        </Protected>
+      </AuthProvider>
     ),
     errorElement: <ErrorPage />,
   },

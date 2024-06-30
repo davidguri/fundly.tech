@@ -61,7 +61,6 @@ $color: #e5e4ec;
   background-color: $accent;
   padding: 18px;
   border-radius: 12px;
-  box-shadow: 0px 0px 12px rgba(83, 63, 213, 0.75);
 }
 
 .buttonText {
@@ -86,6 +85,7 @@ $color: #e5e4ec;
 
 .accountImage {
   height: 100%;
+  aspect-ratio: 1;
   border-radius: 100px;
 }
 

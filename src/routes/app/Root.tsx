@@ -141,8 +141,8 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
-              <text className="title"><span style={{ fontSize: 32 }}>{user.currency}</span> {getTotal()}</text>
-              <text className="subtitle">Current Month: <span style={{ fontSize: 18, fontWeight: "900" }}>{user.currency}</span> {getMonthly()}</text>
+              <text className="title"><span style={{ fontSize: 32 }}>{user.currency || "ALL"}</span> {getTotal()}</text>
+              <text className="subtitle">Current Month: <span style={{ fontSize: 18, fontWeight: "900" }}>{user.currency || "ALL"}</span> {getMonthly()}</text>
             </div>
           </section>
           <section className={styles.bottomSection}>
