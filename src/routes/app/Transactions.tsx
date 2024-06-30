@@ -34,11 +34,7 @@ export default function Transactions() {
         ...doc.data()
       }))
 
-      const filteredTransactions = data.filter(transaction => {
-        return transaction.name === userData.displayName
-      })
-
-      setTransactions(filteredTransactions)
+      setTransactions(data)
       // console.log(transactions)
     } catch (error: any) {
       alert("Error: " + error.message)
