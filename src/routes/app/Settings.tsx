@@ -17,8 +17,7 @@ export default function Settings() {
 
   const nav = useNavigate()
 
-  // const [user, setUser] = React.useState({})
-
+  const [user, setUser]: any = React.useState([])
 
   const handleSignOut = async () => {
     return await Auth.signOut()
@@ -27,9 +26,9 @@ export default function Settings() {
   const getUserData = async () => {
     try {
       const data = await Firestore.getUserById(auth.currentUser.uid)
+      setUser(data)
       console.log(data)
-      // setUser(data[0])
-      // console.log(user)
+      console.log(user.displayName)
     } catch (error: any) {
       alert(error.message)
     }
@@ -47,15 +46,17 @@ export default function Settings() {
 
   const userData: User = {
     id: auth.currentUser.uid,
-    displayName: "user",
+    role: user.role,
+    displayName: user.displayName,
     email: auth.currentUser.email,
     currency: currency,
-    photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true"
+    photoUrl: user.photoUrl
   }
 
   const handleUpdate = async () => {
     await Firestore.updateUserData(auth.currentUser.uid, userData)
     alert("Changes Saved!")
+    getUserData()
   }
 
   return (
@@ -72,10 +73,10 @@ export default function Settings() {
             <div className={styles.topContainer}>
               <div className={styles.accountContainer}>
                 <div className={styles.accountImageContainer}>
-                  <img src="https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true" className={styles.accountImage} alt="account_image" />
+                  <img src={user.photoUrl} className={styles.accountImage} alt="account_image" />
                 </div>
                 <div className={styles.accountInfoContainer}>
-                  <text className={styles.accountInfoText}>user</text>
+                  <text className={styles.accountInfoText}>{auth.currentUser.displayName} - {user.role}</text>
                   <text className={styles.accountInfoTextAlt}>{auth.currentUser.email}</text>
                 </div>
               </div>
@@ -85,6 +86,7 @@ export default function Settings() {
                   <option value="ALL">ALL</option>
                   <option value="EUR">EUR</option>
                   <option value="USD">USD</option>
+                  <option value="CAD">CAD</option>
                   <option value="GBP">GBP</option>
                 </select>
               </div>
@@ -96,7 +98,7 @@ export default function Settings() {
               <div className={styles.button} onClick={handleSignOut}>
                 <text className={styles.buttonText}>Log Out</text>
               </div>
-              <text className={styles.supportText}>Made with 💜 By <a href="https://buymeacoffee.com/davidguri" target="_blank" rel="noopener noreferrer" className="link" style={{ textDecoration: "underline", textDecorationColor: "#aea9cb" }}>David Guri</a></text>
+              <text className={styles.supportText}>Made with 💜 By David Guri</text>
             </div>
           </div>
         </main>

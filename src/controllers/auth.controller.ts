@@ -6,17 +6,16 @@ import User from "../models/user.model";
 import { validate } from "../utils/validate.util";
 
 const auth = getAuth();
-const currentUser: any = auth.currentUser;
 
 export class Auth {
   static async signUp(userModel: User, password: string, displayName: string, photoUrl: string): Promise<void> {
     let uid: string
     if (validate.email(userModel.email)) {
       await createUserWithEmailAndPassword(auth, userModel.email, password)
-        .then(async () => {
-          uid = auth.currentUser.uid;
-          console.log("UID: " + uid);
-          await updateProfile(currentUser, {
+        .then(async (userCredential) => {
+          const user = userCredential.user;
+          uid = user.uid;
+          await updateProfile(auth.currentUser, {
             displayName: displayName,
             photoURL: photoUrl,
           }).then(() => {
@@ -30,6 +29,7 @@ export class Auth {
         });
       const userData: User = {
         id: uid,
+        role: userModel.role,
         email: userModel.email,
         displayName: userModel.displayName,
         photoUrl: userModel.photoUrl,

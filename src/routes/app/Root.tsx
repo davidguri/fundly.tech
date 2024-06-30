@@ -6,18 +6,21 @@ import { Link } from "react-router-dom";
 import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings } from "react-icons/io5";
 
 import { Firestore } from "../../controllers/firestore.controller";
-import { auth } from "../../../firebase";
+import { getAuth } from "firebase/auth";
 
 export default function Root() {
 
+  const auth = getAuth()
+
   const [transactions, setTransactions] = React.useState([]);
-  // const [user, setUser]: any = React.useState()
+  const [user, setUser]: any = React.useState([])
 
   const getUserData = async () => {
     try {
       const data = await Firestore.getUserById(auth.currentUser.uid)
+      setUser(data)
       console.log(data)
-      // setUser(data)
+      console.log(user.displayName)
     } catch (error: any) {
       alert(error.message)
     }
@@ -38,12 +41,64 @@ export default function Root() {
     getUserData()
   }, []);
 
+  const exchangeRates = {
+    USD: {
+      USD: 1,
+      CAD: 1.25,
+      GBP: 0.75,
+      EUR: 0.85,
+      ALL: 102.5,
+    },
+    CAD: {
+      USD: 0.8,
+      CAD: 1,
+      GBP: 0.6,
+      EUR: 0.68,
+      ALL: 82,
+    },
+    GBP: {
+      USD: 1.33,
+      CAD: 1.67,
+      GBP: 1,
+      EUR: 1.13,
+      ALL: 136.67,
+    },
+    EUR: {
+      USD: 1.18,
+      CAD: 1.47,
+      GBP: 0.88,
+      EUR: 1,
+      ALL: 120.85,
+    },
+    ALL: {
+      USD: 0.0098,
+      CAD: 0.0122,
+      GBP: 0.0073,
+      EUR: 0.0083,
+      ALL: 1,
+    }
+  };
+
+  function convertCurrency(fromCurrency, toCurrency, amount) {
+    const rate = exchangeRates[fromCurrency][toCurrency];
+    const convertedAmount = amount * rate;
+    return convertedAmount;
+  }
+
+
   const getTotal = () => {
     let totalPay = 0
+    let newTotalPay = 0;
     transactions.forEach((transaction) => {
-      totalPay += transaction.amount + transaction.tip
+      if (transaction.currency !== user.currency) {
+        const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
+        const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
+        newTotalPay += newAmount + newTip
+      } else {
+        totalPay += transaction.amount + transaction.tip
+      }
     })
-    return totalPay
+    return totalPay + newTotalPay
   }
 
   function filterCurrentMonthTransactions(transactions: any) {
@@ -66,11 +121,18 @@ export default function Root() {
 
   const getMonthly = () => {
     let monthlyPay = 0
+    let newMonthlyPay = 0;
 
     currentMonthTransactions.forEach((transaction) => {
-      monthlyPay += transaction.amount + transaction.tip
+      if (transaction.currency !== user.currency) {
+        const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
+        const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
+        newMonthlyPay += newAmount + newTip
+      } else {
+        monthlyPay += transaction.amount + transaction.tip
+      }
     })
-    return monthlyPay;
+    return monthlyPay + newMonthlyPay;
   }
 
   return (
@@ -79,8 +141,8 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
-              <text className="title"><span style={{ fontSize: 32 }}>ALL</span> {getTotal()}</text>
-              <text className="subtitle">Current Month: <span style={{ fontSize: 18 }}>ALL</span> {getMonthly()}</text>
+              <text className="title"><span style={{ fontSize: 32 }}>{user.currency}</span> {getTotal()}</text>
+              <text className="subtitle">Current Month: <span style={{ fontSize: 18, fontWeight: "900" }}>{user.currency}</span> {getMonthly()}</text>
             </div>
           </section>
           <section className={styles.bottomSection}>

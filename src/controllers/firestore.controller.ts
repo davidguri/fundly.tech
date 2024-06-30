@@ -9,24 +9,13 @@ export class Firestore {
   }
 
   static async getUserById(id: string) {
-    // const q = query(collection(db, "users", id));
-
-    // const querySnapshot = await getDocs(q);
-    // const data = querySnapshot.docs.map(doc => ({
-    //   id: doc.id,
-    //   ...doc.data()
-    // }))
-
-    // return data
-
     const docRef = doc(db, "users", id);
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
+      return docSnap.data();
     } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
+      alert("❌cNo such document!");
     }
   }
 

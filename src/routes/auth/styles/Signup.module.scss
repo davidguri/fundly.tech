@@ -49,6 +49,18 @@ $color: #e5e4ec;
   color: $background;
 }
 
+.select {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: $background;
+  font-size: medium;
+  font-weight: 600;
+  padding-inline: 18px;
+  margin: 0px;
+}
+
 .submitButton {
   width: calc(100% - 24px);
   padding-block: 18px;
