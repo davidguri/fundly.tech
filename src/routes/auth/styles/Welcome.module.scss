@@ -28,15 +28,23 @@ $color: #e5e4ec;
   align-items: center;
   text-align: center;
   justify-content: center;
+  gap: 24px;
 }
 
 .title {
   text-align: center;
   line-height: 1.1;
   font-weight: 900;
-  font-size: 75px;
+  font-size: 72px;
   color: $color;
-  margin-top: 12px;
+}
+
+.subtitle {
+  text-align: center;
+  font-weight: 900;
+  font-size: 24px;
+  opacity: 0.75;
+  color: $color;
 }
 
 .buttonContainer {

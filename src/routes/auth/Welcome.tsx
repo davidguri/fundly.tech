@@ -7,6 +7,7 @@ export default function WelcomePage() {
       <main className={styles.main}>
         <div className={styles.titleContainer}>
           <text className={styles.title}>Welcome To Fundly!</text>
+          <text className={styles.subtitle}>The custom tool to manage your business' cash payments!</text>
         </div>
         <div className={styles.buttonContainer}>
           <Link to="/signup" className="link" style={{ width: "100%" }}>

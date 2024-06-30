@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Transaction from "../../components/global/Transaction.component";
 
 import { IoChevronBack, IoRefresh } from "react-icons/io5";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../firebase";
 import { Firestore } from "../../controllers/firestore.controller";
 import { auth } from "../../../firebase";
 
@@ -16,14 +18,30 @@ export default function Transactions() {
 
   const [transactions, setTransactions] = React.useState([])
 
+  const getUserData = async () => {
+    const data = await Firestore.getUserById(auth.currentUser.uid)
+    return data
+  }
+
   const getTransactions = async () => {
     try {
+      const userData = await getUserData()
       setTransactions([])
-      const data = await Firestore.getTransactions(auth.currentUser.uid)
-      setTransactions(data)
-      console.log(data)
+      const q = query(collection(db, "transactions"), where("business", "==", userData.business));
+
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map(doc => ({
+        ...doc.data()
+      }))
+
+      const filteredTransactions = data.filter(transaction => {
+        return transaction.name === userData.displayName
+      })
+
+      setTransactions(filteredTransactions)
+      // console.log(transactions)
     } catch (error: any) {
-      alert(error.message)
+      alert("Error: " + error.message)
     }
   }
 

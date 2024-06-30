@@ -5,8 +5,11 @@ import { Link } from "react-router-dom";
 
 import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings, IoPeople } from "react-icons/io5";
 
-import { Firestore } from "../../controllers/firestore.controller";
 import { getAuth } from "firebase/auth";
+
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../firebase";
+import { Firestore } from "../../controllers/firestore.controller";
 
 export default function Root() {
 
@@ -16,30 +19,36 @@ export default function Root() {
   const [user, setUser]: any = React.useState([])
 
   const getUserData = async () => {
-    try {
-      const data = await Firestore.getUserById(auth.currentUser.uid)
-      setUser(data)
-      console.log(data)
-      // console.log(user.displayName)
-    } catch (error: any) {
-      alert(error.message)
-    }
+    const data = await Firestore.getUserById(auth.currentUser.uid)
+    setUser(data)
+    return data
   }
 
   React.useEffect(() => {
     const getTransactions = async () => {
       try {
+        const userData = await getUserData()
         setTransactions([])
-        const data = await Firestore.getTransactions(auth.currentUser.uid)
-        setTransactions(data)
+        const q = query(collection(db, "transactions"), where("business", "==", userData.business));
+
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map(doc => ({
+          ...doc.data()
+        }))
+
+        const filteredTransactions = data.filter(transaction => {
+          return transaction.name === userData.displayName
+        })
+
+        setTransactions(filteredTransactions)
+        // console.log(transactions)
       } catch (error: any) {
-        alert(error.message)
+        alert("Error: " + error.message)
       }
     }
-
     getTransactions()
-    getUserData()
-  }, []);
+  }, [])
+
 
   const exchangeRates = {
     USD: {
@@ -98,7 +107,7 @@ export default function Root() {
         totalPay += transaction.amount + transaction.tip
       }
     })
-    return totalPay + newTotalPay
+    return (totalPay + newTotalPay).toFixed(2);
   }
 
   function filterCurrentMonthTransactions(transactions: any) {
@@ -132,7 +141,7 @@ export default function Root() {
         monthlyPay += transaction.amount + transaction.tip
       }
     })
-    return monthlyPay + newMonthlyPay;
+    return (monthlyPay + newMonthlyPay).toFixed(2);
   }
 
   return (

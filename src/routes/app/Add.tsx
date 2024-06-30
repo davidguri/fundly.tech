@@ -9,13 +9,60 @@ import Transaction from "../../models/transaction.model";
 import { Firestore } from "../../controllers/firestore.controller";
 import { v4 as uuidv4 } from 'uuid';
 
-import { auth } from "../../../firebase"
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../firebase";
+import { getAuth } from "firebase/auth";
 
 export default function Add() {
 
+  const auth = getAuth()
+
   const nav = useNavigate();
 
-  const [name, setName] = React.useState("");
+  const [workersData, setWorkersData] = React.useState([]);
+  const [user, setUser]: any = React.useState([]);
+
+  const getUserData = async () => {
+    try {
+      const data = await Firestore.getUserById(auth.currentUser.uid)
+      setUser(data)
+      // console.log(data)
+      // console.log(user.displayName)
+    } catch (error: any) {
+      alert(error.message)
+    }
+  }
+
+  const getWorkerData = async (workerId: string): Promise<any> => {
+    const data = await Firestore.getUserById(workerId);
+    return data
+  }
+
+  const getWorkerIds = async () => {
+    try {
+      const q = query(collection(db, "businesses"), where("owner", "==", auth.currentUser.uid));
+
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map(doc => ({
+        ...doc.data()
+      }))
+      console.log(data[0].workers)
+      const userDataPromises = data[0].workers.map(workerId => getWorkerData(workerId));
+      const userDataResults = await Promise.all(userDataPromises);
+
+      const validUserData = userDataResults.filter(userData => userData !== null);
+      setWorkersData(validUserData);
+    } catch (error: any) {
+      console.log(error.message)
+    }
+  }
+
+  React.useEffect(() => {
+    getUserData()
+    getWorkerIds()
+  }, [])
+
+  const [name, setName] = React.useState("default");
   const [type, setType] = React.useState("");
   // const [incoming, setIncoming] = React.useState(true);
   const [currency, setCurrency] = React.useState("");
@@ -23,18 +70,27 @@ export default function Add() {
   const [duration, setDuration] = React.useState("");
   const [tip, setTip] = React.useState("");
 
+  const handleNameChange = (e: any) => {
+    try {
+      setName(e.target.value)
+      // console.log(role)
+    } catch (error: any) {
+      alert(error.message)
+    }
+  }
+
   const submitHandler = async () => {
 
     const id = uuidv4()
 
     const transactionData: Transaction = {
       id: id,
-      name: name,
+      name: (name === "You" ? user.displayName : name),
       type: type,
       amount: (parseFloat(amount)),
-      currency: currency || "ALL",
+      currency: (currency || "ALL"),
       tip: (tip ? parseFloat(tip) : 0),
-      userId: auth.currentUser.uid,
+      business: user.business,
       duration: (duration ? parseInt(duration) : null),
       incoming: true,
       date: new Date()
@@ -69,9 +125,19 @@ export default function Add() {
                   <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>Use Template</text>
                 </div>
               </div>
-              <input className={styles.formInput} placeholder="Worker Name" value={name} onChange={(e) => setName(e.target.value)} type="text" autoCorrect="off" />
+              <div className={styles.formInput} style={{ paddingInline: 0, width: "100%" }}>
+                <select name="Role" id="role" className={styles.select} onChange={handleNameChange} value={name}>
+                  <option value="default">Worker</option>
+                  <option value="You">You</option>
+                  {workersData.map((worker, i) => {
+                    return (
+                      <option key={i} value={worker.displayName}>{worker.displayName}</option>
+                    )
+                  })}
+                </select>
+              </div>
               <input className={styles.formInput} placeholder="Entry Type" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
-              <input className={styles.formInput} placeholder="Currency" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
+              <input className={styles.formInput} placeholder="Currency (optional)" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
               <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
               <input className={styles.formInput} placeholder="Tip (optional)" value={tip} onChange={(e) => setTip(e.target.value)} type="number" inputMode="numeric" />
               <input className={styles.formInput} placeholder="Hours (optional)" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />

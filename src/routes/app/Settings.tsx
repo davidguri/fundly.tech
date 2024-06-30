@@ -38,7 +38,7 @@ export default function Settings() {
     getUserData()
   }, []);
 
-  const [currency, setCurrency] = React.useState("ALL")
+  const [currency, setCurrency] = React.useState(user.currency)
 
   const handleCurrencyChange = (e: any) => {
     try {
@@ -52,6 +52,7 @@ export default function Settings() {
   const userData: User = {
     id: auth.currentUser.uid,
     role: user.role,
+    business: user.business,
     displayName: user.displayName,
     email: auth.currentUser.email,
     currency: currency,
@@ -84,6 +85,10 @@ export default function Settings() {
                   <text className={styles.accountInfoText}>{auth.currentUser.displayName} - {user.role}</text>
                   <text className={styles.accountInfoTextAlt}>{auth.currentUser.email}</text>
                 </div>
+              </div>
+              <div className={styles.setting}>
+                <text className={styles.settingText}>Business</text>
+                <text className={styles.settingText} style={{ color: "#533fd5" }}>{user.business}</text>
               </div>
               <div className={styles.setting}>
                 <text className={styles.settingText}>Currency</text>

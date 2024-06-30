@@ -31,6 +31,7 @@ export class Auth {
         id: uid,
         role: userModel.role,
         email: userModel.email,
+        business: userModel.business,
         displayName: userModel.displayName,
         photoUrl: userModel.photoUrl,
         currency: userModel.currency,
