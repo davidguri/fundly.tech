@@ -27,8 +27,8 @@ export default function Settings() {
     try {
       const data = await Firestore.getUserById(auth.currentUser.uid)
       setUser(data)
-      console.log(data)
-      console.log(user.displayName)
+      // console.log(data)
+      // console.log(user.displayName)
     } catch (error: any) {
       alert(error.message)
     }
@@ -41,7 +41,12 @@ export default function Settings() {
   const [currency, setCurrency] = React.useState("ALL")
 
   const handleCurrencyChange = (e: any) => {
-    setCurrency(e.target.value)
+    try {
+      setCurrency(e.target.value)
+      // console.log(currency)
+    } catch (error: any) {
+      alert(error.message)
+    }
   }
 
   const userData: User = {

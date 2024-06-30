@@ -15,6 +15,7 @@ import Login from './routes/auth/Login';
 import Root from "./routes/app/Root";
 import Transactions from './routes/app/Transactions';
 import Add from './routes/app/Add';
+import Team from './routes/app/Team';
 import Settings from './routes/app/Settings';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -83,6 +84,17 @@ const router = createBrowserRouter([
       <AuthProvider>
         <Protected>
           <Add />
+        </Protected>
+      </AuthProvider>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/team",
+    element: (
+      <AuthProvider>
+        <Protected>
+          <Team />
         </Protected>
       </AuthProvider>
     ),

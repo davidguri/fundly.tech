@@ -32,7 +32,7 @@ export default function Add() {
       name: name,
       type: type,
       amount: (parseFloat(amount)),
-      currency: currency,
+      currency: currency || "ALL",
       tip: (tip ? parseFloat(tip) : 0),
       userId: auth.currentUser.uid,
       duration: (duration ? parseInt(duration) : null),

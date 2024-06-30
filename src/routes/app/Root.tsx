@@ -3,7 +3,7 @@ import styles from "./styles/Root.module.scss";
 import Layout from "../../components/layout/Layout";
 import { Link } from "react-router-dom";
 
-import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings } from "react-icons/io5";
+import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings, IoPeople } from "react-icons/io5";
 
 import { Firestore } from "../../controllers/firestore.controller";
 import { getAuth } from "firebase/auth";
@@ -20,7 +20,7 @@ export default function Root() {
       const data = await Firestore.getUserById(auth.currentUser.uid)
       setUser(data)
       console.log(data)
-      console.log(user.displayName)
+      // console.log(user.displayName)
     } catch (error: any) {
       alert(error.message)
     }
@@ -79,7 +79,7 @@ export default function Root() {
     }
   };
 
-  function convertCurrency(fromCurrency, toCurrency, amount) {
+  function convertCurrency(fromCurrency: string, toCurrency: string, amount: number): number {
     const rate = exchangeRates[fromCurrency][toCurrency];
     const convertedAmount = amount * rate;
     return convertedAmount;
@@ -167,6 +167,15 @@ export default function Root() {
                 <IoCreate className={styles.buttonIcon} />
               </div>
             </Link>
+            {user.role === "Owner" ? (
+              <Link to="/team" className={`${styles.buttonContainer} ${"link"}`}>
+                <div className={styles.buttonContainer}>
+                  <IoPeople className={styles.buttonIcon} />
+                </div>
+              </Link>
+            ) : (
+              <div style={{ display: "none" }} />
+            )}
           </section>
         </main>
       </Layout>
