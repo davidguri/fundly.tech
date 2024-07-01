@@ -64,7 +64,6 @@ export default function Add() {
 
   const [name, setName] = React.useState("default");
   const [type, setType] = React.useState("");
-  // const [incoming, setIncoming] = React.useState(true);
   const [currency, setCurrency] = React.useState("");
   const [amount, setAmount] = React.useState("");
   const [duration, setDuration] = React.useState("");
@@ -85,14 +84,14 @@ export default function Add() {
 
     const transactionData: Transaction = {
       id: id,
-      name: (name === "You" ? user.displayName : name),
+      name: (name === "You" ? user.displayName : name === "default" ? user.displayName : name),
       type: type,
       amount: (parseFloat(amount)),
-      currency: (currency || "ALL"),
+      currency: (currency || user.currency),
       tip: (tip ? parseFloat(tip) : 0),
-      business: user.business,
+      business: (option ? user.business : user.id),
       duration: (duration ? parseInt(duration) : null),
-      incoming: true,
+      incoming: (option ? true : false),
       date: new Date()
     }
 
@@ -100,9 +99,21 @@ export default function Add() {
       const docRef = await Firestore.addTransactionDocument(id, transactionData);
       console.log("✅ Document written with ID: ", docRef)
       alert("Entry Added Successfully!");
+      setName("")
+      setType("")
+      setAmount("")
+      setCurrency("")
+      setTip("")
+      setDuration("")
     } catch (error: any) {
       alert(error.message)
     }
+  }
+
+  const [option, setOption] = React.useState(true)
+
+  const selectOptionHandler = () => {
+    setOption(!option)
   }
 
   return (
@@ -117,30 +128,50 @@ export default function Add() {
           </div>
           <div className={styles.content}>
             <div className={styles.topContainer}>
-              <div className={styles.inlineContainer}>
-                <div className={styles.button}>
-                  <text className={styles.buttonText}>Create Template</text>
+              <div className={styles.chipContainer}>
+                <div className={`${styles.chip} ${option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
+                  <text className={styles.chipText}>Work</text>
                 </div>
-                <div className={styles.button} style={{ backgroundColor: "#533fd5" }}>
-                  <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>Use Template</text>
+                <div className={`${styles.chip} ${!option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
+                  <text className={styles.chipText}>Expenses</text>
                 </div>
               </div>
-              <div className={styles.formInput} style={{ paddingInline: 0, width: "100%" }}>
-                <select name="Role" id="role" className={styles.select} onChange={handleNameChange} value={name}>
-                  <option value="default">Worker</option>
-                  <option value="You">You</option>
-                  {workersData.map((worker, i) => {
-                    return (
-                      <option key={i} value={worker.displayName}>{worker.displayName}</option>
-                    )
-                  })}
-                </select>
-              </div>
-              <input className={styles.formInput} placeholder="Entry Type" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
-              <input className={styles.formInput} placeholder="Currency (optional)" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
-              <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
-              <input className={styles.formInput} placeholder="Tip (optional)" value={tip} onChange={(e) => setTip(e.target.value)} type="number" inputMode="numeric" />
-              <input className={styles.formInput} placeholder="Hours (optional)" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
+              {
+                option ? (
+                  <>
+                    <div className={styles.buttonContainer}>
+                      <div className={styles.button} onClick={() => { }}>
+                        <text className={styles.buttonText}>Use Template</text>
+                      </div>
+                      <div className={styles.button} style={{ backgroundColor: "#533fd5", borderColor: "#533fd5" }} onClick={() => { }}>
+                        <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>Create Template</text>
+                      </div>
+                    </div>
+                    <div className={styles.formInput} style={{ paddingInline: 0, width: "100%" }}>
+                      <select name="Role" id="role" className={styles.select} onChange={handleNameChange} value={name}>
+                        <option value="default">Worker</option>
+                        <option value="You">You</option>
+                        {workersData.map((worker, i) => {
+                          return (
+                            <option key={i} value={worker.displayName}>{worker.displayName}</option>
+                          )
+                        })}
+                      </select>
+                    </div>
+                    <input className={styles.formInput} placeholder="Work Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
+                    <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
+                    <input className={styles.formInput} placeholder="Currency (optional)" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
+                    <input className={styles.formInput} placeholder="Tip (optional)" value={tip} onChange={(e) => setTip(e.target.value)} type="number" inputMode="numeric" />
+                    <input className={styles.formInput} placeholder="Hours (optional)" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
+                  </>
+                ) : (
+                  <>
+                    <input className={styles.formInput} placeholder="Expense Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
+                    <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
+                    <input className={styles.formInput} placeholder="Currency (optional)" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
+                  </>
+                )
+              }
             </div>
             <div className={styles.bottomContainer}>
               <div className={styles.submitButton} onClick={submitHandler}>

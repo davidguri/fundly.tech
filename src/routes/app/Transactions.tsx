@@ -27,14 +27,25 @@ export default function Transactions() {
     try {
       const userData = await getUserData()
       setTransactions([])
-      const q = query(collection(db, "transactions"), where("business", "==", userData.business));
+      const q1 = query(collection(db, "transactions"), where("business", "==", userData.business));
 
-      const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map(doc => ({
-        ...doc.data()
-      }))
+      const q2 = query(collection(db, "transactions"), where("business", "==", userData.id));
 
-      setTransactions(data)
+      const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+
+      // Combine the results
+      const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const transactions2 = querySnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      // Combine the two arrays and remove duplicates
+      const combinedTransactions = [...transactions1, ...transactions2].reduce((acc, transaction) => {
+        if (!acc.find(t => t.id === transaction.id)) {
+          acc.push(transaction);
+        }
+        return acc;
+      }, []);
+
+      setTransactions(combinedTransactions)
       // console.log(transactions)
     } catch (error: any) {
       alert("Error: " + error.message)
@@ -96,7 +107,7 @@ export default function Transactions() {
               const date = new Date(transaction.date.seconds * 1000)
               const formattedDate = formatTimestamp(date);
               return (
-                <Transaction key={i} incoming={true} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
+                <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
               )
             })}
           </div>

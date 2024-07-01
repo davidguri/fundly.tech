@@ -33,18 +33,29 @@ export default function Wallet() {
       try {
         const userData = await getUserData()
         setTransactions([])
-        const q = query(collection(db, "transactions"), where("business", "==", userData.business));
+        const q1 = query(collection(db, "transactions"), where("business", "==", userData.business));
 
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map(doc => ({
-          ...doc.data()
-        }))
+        const q2 = query(collection(db, "transactions"), where("business", "==", userData.id));
 
-        const filteredTransactions = data.filter(transaction => {
+        const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+
+        // Combine the results
+        const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const transactions2 = querySnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Combine the two arrays and remove duplicates
+        const combinedTransactions = [...transactions1, ...transactions2].reduce((acc, transaction) => {
+          if (!acc.find(t => t.id === transaction.id)) {
+            acc.push(transaction);
+          }
+          return acc;
+        }, []);
+
+        const filteredTransactions = combinedTransactions.filter(transaction => {
           return transaction.name === userData.displayName
         })
 
-        const workerTransactions = data.filter(transaction => {
+        const workerTransactions = combinedTransactions.filter(transaction => {
           return transaction.name !== userData.displayName
         })
 
@@ -129,9 +140,9 @@ export default function Wallet() {
       if (transaction.currency !== user.currency) {
         const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
         const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
-        newMonthlyPay += newAmount + newTip
+        transaction.incoming ? newMonthlyPay += newAmount + newTip : newMonthlyPay -= newAmount
       } else {
-        monthlyPay += transaction.amount + transaction.tip
+        transaction.incoming ? monthlyPay += transaction.amount + transaction.tip : monthlyPay = monthlyPay - transaction.amount
       }
     })
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
@@ -145,9 +156,9 @@ export default function Wallet() {
       if (transaction.currency !== user.currency) {
         const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
         const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
-        newMonthlyPay += newAmount + newTip
+        transaction.incoming ? newMonthlyPay += newAmount + newTip : newMonthlyPay -= newAmount
       } else {
-        monthlyPay += transaction.amount + transaction.tip
+        transaction.incoming ? monthlyPay += transaction.amount + transaction.tip : monthlyPay = monthlyPay - transaction.amount
       }
     })
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
@@ -191,7 +202,7 @@ export default function Wallet() {
             </div>
             <div className={styles.chipContainer}>
               <div className={`${styles.chip} ${option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
-                <text className={styles.chipText}>All Workers</text>
+                <text className={styles.chipText}>Business</text>
               </div>
               <div className={`${styles.chip} ${!option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
                 <text className={styles.chipText}>Individual</text>
@@ -216,7 +227,7 @@ export default function Wallet() {
                     {transactions.map((transaction) => (
                       <div className={styles.transaction}>
                         <text className={styles.transactionText}>{transaction.type}</text>
-                        <text className={styles.transactionText} style={{ color: "#533fd5" }}>{transaction.amount} {transaction.currency}</text>
+                        <text className={styles.transactionText} style={{ color: "#533fd5" }}>{transaction.incoming ? "+" : "-"} {transaction.amount} {transaction.currency}</text>
                       </div>
                     ))}
                   </div>

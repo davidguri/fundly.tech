@@ -1,6 +1,6 @@
 import styles from "./styles/Transaction.module.scss";
 
-import { IoCaretForward, IoCaretBack, IoTrash } from "react-icons/io5";
+import { IoTrash } from "react-icons/io5";
 
 export default function Transaction(props: any) {
 
@@ -12,13 +12,6 @@ export default function Transaction(props: any) {
     <main className={styles.main}>
       <div className={styles.topContainer}>
         <div className={styles.tLeftContainer}>
-          {
-            props.incoming ? (
-              <IoCaretForward className={styles.subtitle} size={21} style={{ color: "#533fd5" }} />
-            ) : (
-              <IoCaretBack className={styles.subtitle} size={21} style={{ color: "#533fd5" }} />
-            )
-          }
           <text className={styles.subtitle}>{props.date}</text>
         </div>
         <div className={styles.tRightContainer} onClick={props.onDelete}>
@@ -31,7 +24,7 @@ export default function Transaction(props: any) {
           <text className={styles.subtitle}>{props.name}{props.duration ? " - " + props.duration + " hours" : ""}</text>
         </div>
         <div className={styles.bRightContainer}>
-          <text className={styles.title}><span style={{ fontSize: 15 }}>{props.currency}</span> {isInt(props.amount) ? props.amount : (props.amount).toFixed(1)}</text>
+          <text className={styles.title}>{props.incoming ? "+" : "-"} {isInt(props.amount) ? props.amount : (props.amount).toFixed(1)} {props.currency}</text>
           {
             props.tip ? (
               <text className={styles.subtitle}>+ <span style={{ fontSize: 12 }}>ALL</span> {props.tip} Tip</text>
