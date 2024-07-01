@@ -150,14 +150,16 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
-              <text className="title"><span style={{ fontSize: 32 }}>{user.currency || "ALL"}</span> {getTotal()}</text>
-              <text className="subtitle">Current Month: <span style={{ fontSize: 18, fontWeight: "900" }}>{user.currency || "ALL"}</span> {getMonthly()}</text>
+              <text className="title">{getTotal()} <span style={{ fontSize: 32 }}>{user.currency || "ALL"}</span></text>
+              <text className="subtitle">Current Month: {getMonthly()} <span style={{ fontSize: 18, fontWeight: "900" }}>{user.currency || "ALL"}</span></text>
             </div>
           </section>
           <section className={styles.bottomSection}>
-            <div className={styles.buttonContainer}>
-              <IoWallet className={styles.buttonIcon} />
-            </div>
+            <Link to="/wallet" className={`${styles.buttonContainer} ${"link"}`}>
+              <div className={styles.buttonContainer}>
+                <IoWallet className={styles.buttonIcon} />
+              </div>
+            </Link>
             <div className={styles.buttonContainer}>
               <IoCalendar className={styles.buttonIcon} />
             </div>

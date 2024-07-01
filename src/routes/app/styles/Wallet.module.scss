@@ -1,0 +1,125 @@
+$primary: #aea9cb;
+$secondary: #443e6f;
+$accent: #533fd5;
+$background: #0a0a0f;
+$color: #e5e4ec;
+
+.main {
+  width: calc(100% - 32px);
+  padding-inline: 16px;
+  padding-top: 16px;
+  padding-bottom: 35px;
+  min-height: calc(100svh - 50px);
+  height: fit-content;
+  overflow: hidden !important;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.titleContainer {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleLeftContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.walletContainer {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.balanceContainer {
+  aspect-ratio: 3.37/2.125;
+  // to mimic the credit card dimensions
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: $color;
+  background: linear-gradient(-33deg, $primary 0%, $accent 100%);
+  border-radius: 12px;
+}
+
+.balanceSubtitle {
+  font-weight: 800;
+  font-size: 24px;
+  opacity: 0.5;
+}
+
+.balanceTitle {
+  font-weight: 900;
+  font-size: 48px;
+  line-height: 0.8;
+}
+
+.chipContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.chip {
+  border: 3.2px solid $color;
+  padding-inline: 24px;
+  padding-block: 12px;
+  border-radius: 12px;
+  color: $color;
+}
+
+.selectedChip {
+  background-color: $color;
+  color: $background;
+}
+
+.chipText {
+  font-weight: 800;
+  text-align: center;
+}
+
+.infoContainer,
+.transaction {
+  width: calc(100% - 36px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $color;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.infoText,
+.transactionText {
+  color: $background;
+  font-weight: 800;
+  font-size: 18px;
+  text-align: center;
+}
+
+.individualContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nameText {
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1;
+  margin-top: 12px;
+}
