@@ -107,7 +107,7 @@ export default function Root() {
         totalPay += transaction.amount + transaction.tip
       }
     })
-    return (totalPay + newTotalPay).toFixed(2);
+    return parseFloat((totalPay + newTotalPay).toFixed(2));
   }
 
   function filterCurrentMonthTransactions(transactions: any) {
@@ -141,7 +141,7 @@ export default function Root() {
         monthlyPay += transaction.amount + transaction.tip
       }
     })
-    return (monthlyPay + newMonthlyPay).toFixed(2);
+    return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
   }
 
   return (
