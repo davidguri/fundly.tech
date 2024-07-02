@@ -27,25 +27,18 @@ export default function Transactions() {
     try {
       const userData = await getUserData()
       setTransactions([])
-      const q1 = query(collection(db, "transactions"), where("business", "==", userData.business));
+      const q = query(
+        collection(db, "transactions"),
+        where("name", "==", userData.displayName)
+      );
 
-      const q2 = query(collection(db, "transactions"), where("business", "==", userData.id));
+      // Execute the query
+      const querySnapshot = await getDocs(q);
 
-      const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+      // Map the results to an array of transaction objects
+      const userTransactions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-      // Combine the results
-      const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      const transactions2 = querySnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-      // Combine the two arrays and remove duplicates
-      const combinedTransactions = [...transactions1, ...transactions2].reduce((acc, transaction) => {
-        if (!acc.find(t => t.id === transaction.id)) {
-          acc.push(transaction);
-        }
-        return acc;
-      }, []);
-
-      setTransactions(combinedTransactions)
+      setTransactions(userTransactions);
       // console.log(transactions)
     } catch (error: any) {
       alert("Error: " + error.message)
