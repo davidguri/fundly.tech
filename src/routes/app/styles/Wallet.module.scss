@@ -4,6 +4,10 @@ $accent: #533fd5;
 $background: #0a0a0f;
 $color: #e5e4ec;
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 .main {
   width: calc(100% - 32px);
   padding-inline: 16px;
@@ -71,15 +75,16 @@ $color: #e5e4ec;
   align-items: center;
   justify-content: flex-start;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .chip {
+  flex: 1;
   border: 3.2px solid $color;
   padding-inline: 24px;
   padding-block: 12px;
   border-radius: 12px;
   color: $color;
+  text-align: center;
 }
 
 .selectedChip {

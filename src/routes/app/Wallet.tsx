@@ -188,10 +188,10 @@ export default function Wallet() {
     return amount;
   }
 
-  const [option, setOption] = React.useState(true)
+  const [option, setOption] = React.useState("0")
 
-  const selectOptionHandler = () => {
-    setOption(!option)
+  const selectOptionHandler = (option: string) => {
+    setOption(option)
   }
 
   return (
@@ -232,15 +232,18 @@ export default function Wallet() {
               ) : (
                 <>
                   <div className={styles.chipContainer}>
-                    <div className={`${styles.chip} ${option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
+                    <div className={`${styles.chip} ${option === "0" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("0")}>
                       <text className={styles.chipText}>Business</text>
                     </div>
-                    <div className={`${styles.chip} ${!option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
-                      <text className={styles.chipText}>Individual</text>
+                    <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
+                      <text className={styles.chipText}>Worker</text>
+                    </div>
+                    <div className={`${styles.chip} ${option === "2" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("2")}>
+                      <text className={styles.chipText}>Expenses</text>
                     </div>
                   </div>
                   {
-                    option ? (
+                    option === "0" ? (
                       <div className={styles.infoSection}>
                         <div className={styles.infoContainer}>
                           <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly() + getMonthlyWorkers()} {user.currency}</text>
@@ -256,24 +259,28 @@ export default function Wallet() {
                         </div>
                       </div>
                     ) : (
-                      <>
-                        {
-                          transactions.length > 0 ? (
-                            <div className={styles.transaction}>
-                              <text className={styles.transactionText}>You</text>
-                              <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
+                      option === "1" ? (
+                        <>
+                          {
+                            transactions.length > 0 ? (
+                              <div className={styles.transaction}>
+                                <text className={styles.transactionText}>You</text>
+                                <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
+                              </div>
+                            ) : (
+                              <div style={{ display: "none" }} />
+                            )
+                          }
+                          {Object.keys(groupedTransactions).map((name) => (
+                            <div className={styles.transaction} key={name}>
+                              <text className={styles.transactionText}>{name}</text>
+                              <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getTransactionsByName(currentMonthWorkerTransactions, name)} {user.currency}</text>
                             </div>
-                          ) : (
-                            <div style={{ display: "none" }} />
-                          )
-                        }
-                        {Object.keys(groupedTransactions).map((name) => (
-                          <div className={styles.transaction} key={name}>
-                            <text className={styles.transactionText}>{name}</text>
-                            <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getTransactionsByName(currentMonthWorkerTransactions, name)} {user.currency}</text>
-                          </div>
-                        ))}
-                      </>
+                          ))}
+                        </>
+                      ) : (
+                        <text>expenses</text>
+                      )
                     )
                   }
                 </>
