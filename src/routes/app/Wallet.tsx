@@ -177,6 +177,17 @@ export default function Wallet() {
 
   const groupedTransactions = groupTransactionsByName(workerTransactions);
 
+  const getTransactionsByName = (transactions, name) => {
+    let amount = 0
+    transactions.forEach((transaction) => {
+      if (transaction.name === name) {
+        amount += convertCurrency(transaction.currency, user.currency, transaction.amount) + convertCurrency(transaction.currency, user.currency, transaction.tip)
+      }
+    })
+
+    return amount;
+  }
+
   const [option, setOption] = React.useState(true)
 
   const selectOptionHandler = () => {
@@ -234,28 +245,18 @@ export default function Wallet() {
                 <>
                   {
                     transactions.length > 0 ? (
-                      <div className={styles.individualContainer}>
-                        <text className={styles.nameText}>You</text>
-                        {transactions.map((transaction) => (
-                          <div className={styles.transaction}>
-                            <text className={styles.transactionText}>{transaction.type}</text>
-                            <text className={styles.transactionText} style={{ color: "#533fd5" }}>{transaction.incoming ? "+" : "-"} {transaction.amount} {transaction.currency}</text>
-                          </div>
-                        ))}
+                      <div className={styles.transaction}>
+                        <text className={styles.transactionText}>You</text>
+                        <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
                       </div>
                     ) : (
                       <div style={{ display: "none" }} />
                     )
                   }
                   {Object.keys(groupedTransactions).map((name) => (
-                    <div key={name} className={styles.individualContainer}>
-                      <text className={styles.nameText}>{name}</text>
-                      {groupedTransactions[name].map((transaction) => (
-                        <div className={styles.transaction}>
-                          <text className={styles.transactionText}>{transaction.type}</text>
-                          <text className={styles.transactionText} style={{ color: "#533fd5" }}>+ {transaction.amount} {transaction.currency}</text>
-                        </div>
-                      ))}
+                    <div className={styles.transaction} key={name}>
+                      <text className={styles.transactionText}>{name}</text>
+                      <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getTransactionsByName(currentMonthWorkerTransactions, name)} {user.currency}</text>
                     </div>
                   ))}
                 </>
