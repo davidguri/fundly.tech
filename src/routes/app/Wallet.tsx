@@ -211,54 +211,71 @@ export default function Wallet() {
               <text className={styles.balanceSubtitle}>Your Balance</text>
               <text className={styles.balanceTitle}>{getMonthly()} {user.currency}</text>
             </div>
-            <div className={styles.chipContainer}>
-              <div className={`${styles.chip} ${option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
-                <text className={styles.chipText}>Business</text>
-              </div>
-              <div className={`${styles.chip} ${!option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
-                <text className={styles.chipText}>Individual</text>
-              </div>
-            </div>
             {
-              option ? (
-                <div className={styles.infoSection}>
-                  <div className={styles.infoContainer}>
-                    <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly() + getMonthlyWorkers()} {user.currency}</text>
-                    <text className={styles.infoText}>Business</text>
-                  </div>
-                  <div className={styles.infoContainer}>
-                    <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
-                    <text className={styles.infoText}>You</text>
-                  </div>
-                  {
-                    user.role === "Worker" ? (
-                      <div style={{ display: "none" }} />
-                    ) : (
-                      <div className={styles.infoContainer}>
-                        <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthlyWorkers()} {user.currency}</text>
-                        <text className={styles.infoText}>Wages</text>
-                      </div>
-                    )
-                  }
-                </div>
-              ) : (
+              user.role === "Worker" ? (
                 <>
                   {
                     transactions.length > 0 ? (
                       <div className={styles.transaction}>
-                        <text className={styles.transactionText}>You</text>
+                        <text className={styles.transactionText}>Work</text>
                         <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
                       </div>
                     ) : (
                       <div style={{ display: "none" }} />
                     )
                   }
-                  {Object.keys(groupedTransactions).map((name) => (
-                    <div className={styles.transaction} key={name}>
-                      <text className={styles.transactionText}>{name}</text>
-                      <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getTransactionsByName(currentMonthWorkerTransactions, name)} {user.currency}</text>
+                  <div className={styles.transaction}>
+                    <text className={styles.transactionText}>Expenses</text>
+                    <text className={styles.transactionText} style={{ color: "#533fd5" }}>0</text>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className={styles.chipContainer}>
+                    <div className={`${styles.chip} ${option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
+                      <text className={styles.chipText}>Business</text>
                     </div>
-                  ))}
+                    <div className={`${styles.chip} ${!option ? styles.selectedChip : ""}`} onClick={selectOptionHandler}>
+                      <text className={styles.chipText}>Individual</text>
+                    </div>
+                  </div>
+                  {
+                    option ? (
+                      <div className={styles.infoSection}>
+                        <div className={styles.infoContainer}>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly() + getMonthlyWorkers()} {user.currency}</text>
+                          <text className={styles.infoText}>Business</text>
+                        </div>
+                        <div className={styles.infoContainer}>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
+                          <text className={styles.infoText}>You</text>
+                        </div>
+                        <div className={styles.infoContainer}>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthlyWorkers()} {user.currency}</text>
+                          <text className={styles.infoText}>Wages</text>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        {
+                          transactions.length > 0 ? (
+                            <div className={styles.transaction}>
+                              <text className={styles.transactionText}>You</text>
+                              <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
+                            </div>
+                          ) : (
+                            <div style={{ display: "none" }} />
+                          )
+                        }
+                        {Object.keys(groupedTransactions).map((name) => (
+                          <div className={styles.transaction} key={name}>
+                            <text className={styles.transactionText}>{name}</text>
+                            <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getTransactionsByName(currentMonthWorkerTransactions, name)} {user.currency}</text>
+                          </div>
+                        ))}
+                      </>
+                    )
+                  }
                 </>
               )
             }

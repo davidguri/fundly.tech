@@ -71,6 +71,7 @@ $color: #e5e4ec;
   align-items: center;
   justify-content: flex-start;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .chip {
@@ -116,7 +117,6 @@ $color: #e5e4ec;
 .transactionText {
   color: $background;
   font-weight: 800;
-  font-size: 21px;
   text-align: center;
 }
 
@@ -129,10 +129,10 @@ $color: #e5e4ec;
 }
 
 .infoTitle {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 900;
   text-align: center;
-  line-height: 1.25;
+  line-height: 1;
 }
 
 .individualContainer {
