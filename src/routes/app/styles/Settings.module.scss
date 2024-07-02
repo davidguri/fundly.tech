@@ -75,12 +75,12 @@ $color: #e5e4ec;
   flex-direction: row;
   align-items: center;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 12px;
   width: 100%;
 }
 
 .accountImageContainer {
-  height: 90px;
+  height: 80px;
 }
 
 .accountImage {
@@ -95,12 +95,12 @@ $color: #e5e4ec;
 }
 
 .accountInfoText {
-  font-size: 24px;
+  font-size: 21px;
   font-weight: 900;
 }
 
 .accountInfoTextAlt {
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 800;
   opacity: 0.5;
 }
