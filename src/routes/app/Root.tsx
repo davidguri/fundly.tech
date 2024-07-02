@@ -7,9 +7,8 @@ import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings, IoPeople } from "
 
 import { getAuth } from "firebase/auth";
 
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
-import { Firestore } from "../../controllers/firestore.controller";
 
 export default function Root() {
 
@@ -19,9 +18,16 @@ export default function Root() {
   const [user, setUser]: any = React.useState([])
 
   const getUserData = async () => {
-    const data = await Firestore.getUserById(auth.currentUser.uid)
-    setUser(data)
-    return data
+
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      setUser(docSnap.data())
+      return docSnap.data()
+    } else {
+      alert("❌ No such document user!");
+    }
   }
 
   React.useEffect(() => {

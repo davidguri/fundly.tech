@@ -210,20 +210,26 @@ export default function Wallet() {
             </div>
             {
               option ? (
-                <>
+                <div className={styles.infoSection}>
                   <div className={styles.infoContainer}>
-                    <text className={styles.infoText}>Business Total This Month</text>
-                    <text className={styles.infoText} style={{ color: "#533fd5" }}>{getMonthly() + getMonthlyWorkers()} {user.currency}</text>
+                    <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly() + getMonthlyWorkers()} {user.currency}</text>
+                    <text className={styles.infoText}>Business</text>
                   </div>
                   <div className={styles.infoContainer}>
-                    <text className={styles.infoText}>You This Month</text>
-                    <text className={styles.infoText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
+                    <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
+                    <text className={styles.infoText}>You</text>
                   </div>
-                  <div className={styles.infoContainer}>
-                    <text className={styles.infoText}>Wages This Month</text>
-                    <text className={styles.infoText} style={{ color: "#533fd5" }}>{getMonthlyWorkers()} {user.currency}</text>
-                  </div>
-                </>
+                  {
+                    user.role === "Worker" ? (
+                      <div style={{ display: "none" }} />
+                    ) : (
+                      <div className={styles.infoContainer}>
+                        <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthlyWorkers()} {user.currency}</text>
+                        <text className={styles.infoText}>Wages</text>
+                      </div>
+                    )
+                  }
+                </div>
               ) : (
                 <>
                   {
@@ -247,7 +253,7 @@ export default function Wallet() {
                       {groupedTransactions[name].map((transaction) => (
                         <div className={styles.transaction}>
                           <text className={styles.transactionText}>{transaction.type}</text>
-                          <text className={styles.transactionText} style={{ color: "#533fd5" }}>{transaction.amount} {transaction.currency}</text>
+                          <text className={styles.transactionText} style={{ color: "#533fd5" }}>+ {transaction.amount} {transaction.currency}</text>
                         </div>
                       ))}
                     </div>

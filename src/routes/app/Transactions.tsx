@@ -99,7 +99,7 @@ export default function Transactions() {
               <text className="title">All Activity</text>
             </div>
             <div onClick={getTransactions}>
-              <IoRefresh className="title" color="#533fd5" size={38} />
+              <IoRefresh className="title" color="#533fd5" size={32} />
             </div>
           </div>
           <div className={styles.transactionsContainer}>

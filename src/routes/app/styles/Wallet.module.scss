@@ -91,6 +91,15 @@ $color: #e5e4ec;
   text-align: center;
 }
 
+.infoSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .infoContainer,
 .transaction {
   width: calc(100% - 36px);
@@ -107,8 +116,23 @@ $color: #e5e4ec;
 .transactionText {
   color: $background;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 21px;
   text-align: center;
+}
+
+.infoContainer {
+  width: calc(50% - 42px);
+  flex-direction: column;
+  justify-content: center;
+  aspect-ratio: 1;
+  align-self: stretch;
+}
+
+.infoTitle {
+  font-size: 28px;
+  font-weight: 900;
+  text-align: center;
+  line-height: 1.25;
 }
 
 .individualContainer {
