@@ -198,9 +198,11 @@ export default function Root() {
                 <IoWallet className={styles.buttonIcon} />
               </div>
             </Link>
-            <div className={styles.buttonContainer}>
-              <IoCalendar className={styles.buttonIcon} />
-            </div>
+            <Link to="/calendar" className={`${styles.buttonContainer} ${"link"}`}>
+              <div className={styles.buttonContainer}>
+                <IoCalendar className={styles.buttonIcon} />
+              </div>
+            </Link>
             <Link to="/settings" className={`${styles.buttonContainer} ${"link"}`}>
               <div className={styles.buttonContainer}>
                 <IoSettings className={styles.buttonIcon} />

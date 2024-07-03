@@ -17,6 +17,7 @@ import Transactions from './routes/app/Transactions';
 import Add from './routes/app/Add';
 import Team from './routes/app/Team';
 import Wallet from './routes/app/Wallet';
+import Calendar from './routes/app/Calendar';
 import Settings from './routes/app/Settings';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -107,6 +108,17 @@ const router = createBrowserRouter([
       <AuthProvider>
         <Protected>
           <Wallet />
+        </Protected>
+      </AuthProvider>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/calendar",
+    element: (
+      <AuthProvider>
+        <Protected>
+          <Calendar />
         </Protected>
       </AuthProvider>
     ),
