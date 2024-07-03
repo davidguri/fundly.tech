@@ -31,49 +31,48 @@ export default function Root() {
     }
   }
 
+  const getExpenses = async () => {
+    try {
+      setExpenses([])
+      const q = query(
+        collection(db, "expenses"),
+        where("business", "==", auth.currentUser.uid)
+      );
+
+      // Execute the query
+      const querySnapshot = await getDocs(q);
+
+      // Map the results to an array of transaction objects
+      const userTransactions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setExpenses(userTransactions)
+    } catch (error: any) {
+      alert("Error: " + error.message)
+    }
+  }
+
+  const getTransactions = async () => {
+    try {
+      const userData = await getUserData()
+      setTransactions([])
+      const q = query(collection(db, "transactions"), where("business", "==", userData.business));
+
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map(doc => ({
+        ...doc.data()
+      }))
+
+      const filteredTransactions = data.filter(transaction => {
+        return transaction.name === userData.displayName
+      })
+
+      setTransactions(filteredTransactions)
+      // console.log(transactions)
+    } catch (error: any) {
+      alert("Error: " + error.message)
+    }
+  }
+
   React.useEffect(() => {
-
-    const getExpenses = async () => {
-      try {
-        setExpenses([])
-        const q = query(
-          collection(db, "expenses"),
-          where("business", "==", auth.currentUser.uid)
-        );
-
-        // Execute the query
-        const querySnapshot = await getDocs(q);
-
-        // Map the results to an array of transaction objects
-        const userTransactions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setExpenses(userTransactions)
-      } catch (error: any) {
-        alert("Error: " + error.message)
-      }
-    }
-
-    const getTransactions = async () => {
-      try {
-        const userData = await getUserData()
-        setTransactions([])
-        const q = query(collection(db, "transactions"), where("business", "==", userData.business));
-
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map(doc => ({
-          ...doc.data()
-        }))
-
-        const filteredTransactions = data.filter(transaction => {
-          return transaction.name === userData.displayName
-        })
-
-        setTransactions(filteredTransactions)
-        // console.log(transactions)
-      } catch (error: any) {
-        alert("Error: " + error.message)
-      }
-    }
-
     getExpenses()
     getTransactions()
   }, [])
