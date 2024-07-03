@@ -18,6 +18,7 @@ export default function Wallet() {
 
   const nav = useNavigate();
 
+  const [expenses, setExpenses] = React.useState([])
   const [transactions, setTransactions] = React.useState([]);
   const [workerTransactions, setWorkerTransactions] = React.useState([]);
   const [user, setUser]: any = React.useState([])
@@ -29,6 +30,26 @@ export default function Wallet() {
   }
 
   React.useEffect(() => {
+
+    const getExpenses = async () => {
+      try {
+        setExpenses([])
+        const q = query(
+          collection(db, "expenses"),
+          where("business", "==", auth.currentUser.uid)
+        );
+
+        // Execute the query
+        const querySnapshot = await getDocs(q);
+
+        // Map the results to an array of transaction objects
+        const userTransactions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setExpenses(userTransactions)
+      } catch (error: any) {
+        alert("Error: " + error.message)
+      }
+    }
+
     const getTransactions = async () => {
       try {
         const userData = await getUserData()
@@ -65,6 +86,7 @@ export default function Wallet() {
         alert("Error: " + error.message)
       }
     }
+    getExpenses()
     getTransactions()
   }, [])
 
@@ -132,6 +154,8 @@ export default function Wallet() {
 
   const currentMonthWorkerTransactions = filterCurrentMonthTransactions(workerTransactions)
 
+  const currentMonthExpenses = filterCurrentMonthTransactions(expenses);
+
   const getMonthly = () => {
     let monthlyPay = 0
     let newMonthlyPay = 0;
@@ -162,6 +186,15 @@ export default function Wallet() {
       }
     })
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
+  }
+
+  const getMonthlyExpenses = () => {
+    let monthlyExpenses = 0;
+    currentMonthExpenses.forEach((expense) => {
+      monthlyExpenses += convertCurrency(expense.currency, user.currency, expense.amount)
+    })
+
+    return parseFloat((monthlyExpenses).toFixed(2));
   }
 
   const groupTransactionsByName = (transactions) => {
@@ -209,7 +242,7 @@ export default function Wallet() {
           <div className={styles.walletContainer}>
             <div className={styles.balanceContainer}>
               <text className={styles.balanceSubtitle}>Your Balance</text>
-              <text className={styles.balanceTitle}>{getMonthly()} {user.currency}</text>
+              <text className={styles.balanceTitle}>{getMonthly() - getMonthlyExpenses()} {user.currency}</text>
             </div>
             {
               user.role === "Worker" ? (

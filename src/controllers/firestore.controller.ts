@@ -77,6 +77,11 @@ export class Firestore {
     return docRef
   }
 
+  static async addExpenseDocument(id: string, expenseData: Transaction): Promise<any> {
+    const docRef = await setDoc(doc(db, "expenses", id), expenseData);
+    return docRef
+  }
+
   static async getTransactions(business: string): Promise<any> {
     const q = query(collection(db, "transactions"), where("business", "==", business));
 

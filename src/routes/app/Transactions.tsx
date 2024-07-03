@@ -46,7 +46,7 @@ export default function Transactions() {
         setTransactions([])
         const q1 = query(collection(db, "transactions"), where("business", "==", userData.business));
 
-        const q2 = query(collection(db, "transactions"), where("business", "==", userData.id));
+        const q2 = query(collection(db, "expenses"), where("business", "==", userData.id));
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
 
@@ -62,7 +62,9 @@ export default function Transactions() {
           return acc;
         }, []);
 
-        setTransactions(combinedTransactions)
+        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
+
+        setTransactions(sortedTransactions)
       }
       // console.log(transactions)
     } catch (error: any) {

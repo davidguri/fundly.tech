@@ -96,8 +96,13 @@ export default function Add() {
     }
 
     try {
-      const docRef = await Firestore.addTransactionDocument(id, transactionData);
-      console.log("✅ Document written with ID: ", docRef)
+      if (option) {
+        const docRef = await Firestore.addTransactionDocument(id, transactionData);
+        console.log("✅ Document written with ID: ", docRef)
+      } else {
+        const docRef = await Firestore.addExpenseDocument(id, transactionData);
+        console.log("✅ Document written with ID: ", docRef)
+      }
       alert("Entry Added Successfully!");
       setName("")
       setType("")

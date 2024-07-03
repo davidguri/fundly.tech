@@ -14,6 +14,7 @@ export default function Root() {
 
   const auth = getAuth()
 
+  const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
   const [user, setUser]: any = React.useState([])
 
@@ -31,6 +32,26 @@ export default function Root() {
   }
 
   React.useEffect(() => {
+
+    const getExpenses = async () => {
+      try {
+        setExpenses([])
+        const q = query(
+          collection(db, "expenses"),
+          where("business", "==", auth.currentUser.uid)
+        );
+
+        // Execute the query
+        const querySnapshot = await getDocs(q);
+
+        // Map the results to an array of transaction objects
+        const userTransactions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setExpenses(userTransactions)
+      } catch (error: any) {
+        alert("Error: " + error.message)
+      }
+    }
+
     const getTransactions = async () => {
       try {
         const userData = await getUserData()
@@ -52,6 +73,8 @@ export default function Root() {
         alert("Error: " + error.message)
       }
     }
+
+    getExpenses()
     getTransactions()
   }, [])
 
@@ -100,7 +123,6 @@ export default function Root() {
     return convertedAmount;
   }
 
-
   const getTotal = () => {
     let totalPay = 0
     let newTotalPay = 0;
@@ -134,6 +156,8 @@ export default function Root() {
 
   const currentMonthTransactions = filterCurrentMonthTransactions(transactions);
 
+  const currentMonthExpenses = filterCurrentMonthTransactions(expenses);
+
   const getMonthly = () => {
     let monthlyPay = 0
     let newMonthlyPay = 0;
@@ -150,6 +174,15 @@ export default function Root() {
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
   }
 
+  const getMonthlyExpenses = () => {
+    let monthlyExpenses = 0;
+    currentMonthExpenses.forEach((expense) => {
+      monthlyExpenses += convertCurrency(expense.currency, user.currency, expense.amount)
+    })
+
+    return parseFloat((monthlyExpenses).toFixed(2));
+  }
+
   return (
     <>
       <Layout>
@@ -157,7 +190,7 @@ export default function Root() {
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
               <text className="title">{getTotal()} <span style={{ fontSize: 32 }}>{user.currency || "ALL"}</span></text>
-              <text className="subtitle">Current Month: {getMonthly()} <span style={{ fontSize: 18, fontWeight: "900" }}>{user.currency || "ALL"}</span></text>
+              <text className="subtitle">Current Month: {getMonthly() - getMonthlyExpenses()} <span style={{ fontSize: 18, fontWeight: "900" }}>{user.currency || "ALL"}</span></text>
             </div>
           </section>
           <section className={styles.bottomSection}>
