@@ -50,7 +50,9 @@ export default function Transactions() {
           return acc;
         }, []);
 
-        setAllTransactions(combinedTransactions)
+        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
+
+        setAllTransactions(sortedTransactions)
       } else {
         const q1 = query(collection(db, "transactions"), where("business", "==", userData.business));
 
@@ -70,7 +72,9 @@ export default function Transactions() {
           return acc;
         }, []);
 
-        setAllTransactions(combinedTransactions)
+        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
+
+        setAllTransactions(sortedTransactions)
       }
     } catch (error: any) {
       alert("Error: " + error.message)
@@ -90,7 +94,17 @@ export default function Transactions() {
 
       // Map the results to an array of transaction objects
       const userTransactions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setExpenses(userTransactions)
+
+      const combinedTransactions = [...userTransactions, ...userTransactions].reduce((acc, transaction) => {
+        if (!acc.find(t => t.id === transaction.id)) {
+          acc.push(transaction);
+        }
+        return acc;
+      }, []);
+
+      const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
+
+      setExpenses(sortedTransactions)
     } catch (error: any) {
       alert("Error: " + error.message)
     }
@@ -112,20 +126,31 @@ export default function Transactions() {
           return transaction.name === userData.displayName
         })
 
-        setTransactions(filteredTransactions)
+        const sortedTransactions = filteredTransactions.sort((a, b) => b.date - a.date)
+
+        setTransactions(sortedTransactions)
       } else {
-        const q = query(collection(db, "transactions"), where("business", "==", userData.business));
+        const q1 = query(collection(db, "transactions"), where("business", "==", userData.business));
 
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map(doc => ({
-          ...doc.data()
-        }))
+        const q2 = query(collection(db, "transactions"), where("business", "==", userData.id));
 
-        const filteredTransactions = data.filter(transaction => {
-          return transaction.name === userData.displayName
-        })
+        const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
 
-        setTransactions(filteredTransactions)
+        // Combine the results
+        const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const transactions2 = querySnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Combine the two arrays and remove duplicates
+        const combinedTransactions = [...transactions1, ...transactions2].reduce((acc, transaction) => {
+          if (!acc.find(t => t.id === transaction.id)) {
+            acc.push(transaction);
+          }
+          return acc;
+        }, []);
+
+        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
+
+        setTransactions(sortedTransactions)
       }
       // console.log(transactions)
     } catch (error: any) {
