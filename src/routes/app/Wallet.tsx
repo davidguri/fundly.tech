@@ -259,7 +259,7 @@ export default function Wallet() {
                   }
                   <div className={styles.transaction}>
                     <text className={styles.transactionText}>Expenses</text>
-                    <text className={styles.transactionText} style={{ color: "#533fd5" }}>0</text>
+                    <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthlyExpenses()}</text>
                   </div>
                 </>
               ) : (
@@ -271,9 +271,9 @@ export default function Wallet() {
                     <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
                       <text className={styles.chipText}>Worker</text>
                     </div>
-                    <div className={`${styles.chip} ${option === "2" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("2")}>
+                    {/* <div className={`${styles.chip} ${option === "2" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("2")}>
                       <text className={styles.chipText}>Expenses</text>
-                    </div>
+                    </div> */}
                   </div>
                   {
                     option === "0" ? (
@@ -289,6 +289,10 @@ export default function Wallet() {
                         <div className={styles.infoContainer}>
                           <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthlyWorkers()} {user.currency}</text>
                           <text className={styles.infoText}>Wages</text>
+                        </div>
+                        <div className={styles.infoContainer}>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthlyExpenses()} {user.currency}</text>
+                          <text className={styles.infoText}>Expenses</text>
                         </div>
                       </div>
                     ) : (
