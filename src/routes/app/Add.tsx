@@ -144,15 +144,15 @@ export default function Add() {
               {
                 option ? (
                   <>
-                    <div className={styles.buttonContainer}>
+                    {/* <div className={styles.buttonContainer}>
                       <div className={styles.button} onClick={() => { }}>
                         <text className={styles.buttonText}>Use Template</text>
                       </div>
                       <div className={styles.button} style={{ backgroundColor: "#533fd5", borderColor: "#533fd5" }} onClick={() => { }}>
                         <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>Create Template</text>
                       </div>
-                    </div>
-                    <div className={styles.formInput} style={{ paddingInline: 0, width: "100%" }}>
+                    </div> */}
+                    <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 16 }}>
                       <select name="Role" id="role" className={styles.select} onChange={handleNameChange} value={name}>
                         <option value="default">Worker</option>
                         <option value="You">You</option>

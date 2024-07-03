@@ -18,7 +18,7 @@ export default function Transactions() {
 
   const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
-  const [allTransactions, setAllTransactions] = React.useState([]);
+  const [myTransactions, setMyTransactions] = React.useState([]);
   const [user, setUser]: any = React.useState([])
 
   const getUserData = async () => {
@@ -27,55 +27,28 @@ export default function Transactions() {
     return data
   }
 
-  const getAllTransactions = async () => {
+  const getMyTransactions = async () => {
     try {
       const userData = await getUserData()
-      setAllTransactions([])
-      if (userData.role === "Worker") {
-        const q1 = query(collection(db, "transactions"), where("name", "==", userData.displayName));
+      setMyTransactions([])
+      const q1 = query(collection(db, "transactions"), where("name", "==", userData.displayName));
 
-        const q2 = query(collection(db, "expenses"), where("business", "==", userData.id));
+      const querySnapshot1 = await getDocs(q1);
 
-        const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+      // Combine the results
+      const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        // Combine the results
-        const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const transactions2 = querySnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // Combine the two arrays and remove duplicates
+      const combinedTransactions = [...transactions1, ...transactions1].reduce((acc, transaction) => {
+        if (!acc.find(t => t.id === transaction.id)) {
+          acc.push(transaction);
+        }
+        return acc;
+      }, []);
 
-        // Combine the two arrays and remove duplicates
-        const combinedTransactions = [...transactions1, ...transactions2].reduce((acc, transaction) => {
-          if (!acc.find(t => t.id === transaction.id)) {
-            acc.push(transaction);
-          }
-          return acc;
-        }, []);
+      const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
 
-        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
-
-        setAllTransactions(sortedTransactions)
-      } else {
-        const q1 = query(collection(db, "transactions"), where("business", "==", userData.business));
-
-        const q2 = query(collection(db, "expenses"), where("business", "==", userData.id));
-
-        const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
-
-        // Combine the results
-        const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const transactions2 = querySnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-        // Combine the two arrays and remove duplicates
-        const combinedTransactions = [...transactions1, ...transactions2].reduce((acc, transaction) => {
-          if (!acc.find(t => t.id === transaction.id)) {
-            acc.push(transaction);
-          }
-          return acc;
-        }, []);
-
-        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
-
-        setAllTransactions(sortedTransactions)
-      }
+      setMyTransactions(sortedTransactions)
     } catch (error: any) {
       alert("Error: " + error.message)
     }
@@ -148,7 +121,11 @@ export default function Transactions() {
           return acc;
         }, []);
 
-        const sortedTransactions = combinedTransactions.sort((a, b) => b.date - a.date)
+        const filteredTransactios = combinedTransactions.filter((transaction) => {
+          return transaction.name !== userData.displayName
+        })
+
+        const sortedTransactions = filteredTransactios.sort((a, b) => b.date - a.date)
 
         setTransactions(sortedTransactions)
       }
@@ -161,7 +138,7 @@ export default function Transactions() {
   React.useEffect(() => {
     getExpenses()
     getTransactions()
-    getAllTransactions()
+    getMyTransactions()
   }, [])
 
   function formatTimestamp(timestamp: any) {
@@ -194,13 +171,13 @@ export default function Transactions() {
     await Firestore.deleteTransaction(id)
     getExpenses()
     getTransactions()
-    getAllTransactions()
+    getMyTransactions()
   }
 
   const handleReload = () => {
     getExpenses()
     getTransactions()
-    getAllTransactions()
+    getMyTransactions()
   }
 
   const [option, setOption] = React.useState("0")
@@ -226,11 +203,17 @@ export default function Transactions() {
           <div className={styles.transactionsContainer}>
             <div className={styles.chipContainer}>
               <div className={`${styles.chip} ${option === "0" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("0")}>
-                <text className={styles.chipText}>All</text>
+                <text className={styles.chipText}>You</text>
               </div>
-              <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
-                <text className={styles.chipText}>Work</text>
-              </div>
+              {
+                user.role === "Worker" ? (
+                  <div style={{ display: "none" }} />
+                ) : (
+                  <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
+                    <text className={styles.chipText}>Workers</text>
+                  </div>
+                )
+              }
               <div className={`${styles.chip} ${option === "2" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("2")}>
                 <text className={styles.chipText}>Expenses</text>
               </div>
@@ -238,11 +221,11 @@ export default function Transactions() {
             {
               option === "0" ? (
                 <>
-                  {allTransactions.map((transaction, i) => {
+                  {myTransactions.map((transaction, i) => {
                     const date = new Date(transaction.date.seconds * 1000)
                     const formattedDate = formatTimestamp(date);
                     return (
-                      <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={user.displayName === transaction.name && user.role === "Worker" ? "" : transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
+                      <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
                     )
                   })}
                 </>
@@ -255,7 +238,7 @@ export default function Transactions() {
                           const date = new Date(transaction.date.seconds * 1000)
                           const formattedDate = formatTimestamp(date);
                           return (
-                            <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={user.displayName === transaction.name && user.role === "Worker" ? "" : transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
+                            <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
                           )
                         })}
                       </>
@@ -265,7 +248,7 @@ export default function Transactions() {
                           const date = new Date(expense.date.seconds * 1000)
                           const formattedDate = formatTimestamp(date);
                           return (
-                            <Transaction key={i} incoming={expense.incoming} date={formattedDate} type={expense.type} name={""} amount={expense.amount} tip={expense.tip} duration={expense.duration} onDelete={() => handleDelete(expense.id)} currency={expense.currency} />
+                            <Transaction key={i} incoming={expense.incoming} date={formattedDate} type={expense.type} amount={expense.amount} onDelete={() => handleDelete(expense.id)} currency={expense.currency} />
                           )
                         })}
                       </>

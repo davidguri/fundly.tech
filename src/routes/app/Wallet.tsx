@@ -269,11 +269,8 @@ export default function Wallet() {
                       <text className={styles.chipText}>Business</text>
                     </div>
                     <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
-                      <text className={styles.chipText}>Worker</text>
+                      <text className={styles.chipText}>Individual</text>
                     </div>
-                    {/* <div className={`${styles.chip} ${option === "2" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("2")}>
-                      <text className={styles.chipText}>Expenses</text>
-                    </div> */}
                   </div>
                   {
                     option === "0" ? (
