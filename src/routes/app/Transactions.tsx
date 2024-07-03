@@ -192,7 +192,9 @@ export default function Transactions() {
 
   const handleDelete = async (id: string) => {
     await Firestore.deleteTransaction(id)
+    getExpenses()
     getTransactions()
+    getAllTransactions()
   }
 
   const [option, setOption] = React.useState("0")
