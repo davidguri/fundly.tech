@@ -189,7 +189,7 @@ export default function Root() {
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
               <text className="title">{getTotal()} {user.currency || "ALL"}</text>
-              <text className="subtitle">Current Month: {getMonthly() - getMonthlyExpenses()} {user.currency || "ALL"}</text>
+              <text className="subtitle">Current Month: {(getMonthly() - getMonthlyExpenses()).toFixed(2)} {user.currency || "ALL"}</text>
             </div>
           </section>
           <section className={styles.bottomSection}>

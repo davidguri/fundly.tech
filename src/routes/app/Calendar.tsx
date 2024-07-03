@@ -83,6 +83,7 @@ export default function Calendar() {
   }
 
   const [user, setUser]: any = React.useState([])
+  console.log(user.displayName)
 
   const getUserData = async () => {
     const data = await Firestore.getUserById(auth.currentUser.uid)
@@ -104,8 +105,13 @@ export default function Calendar() {
           ...doc.data()
         }))
 
-        const filteredTransactions = data.filter(transaction => {
-          return transaction.name === userData.displayName
+        const filteredTransactions = data.filter((transaction) => {
+          const timestamp = new Date(transaction.date.seconds * 1000)
+          if (timestamp.getMonth() === date.getMonth() && timestamp.getDate() === date.getDate() && timestamp.getFullYear() === date.getFullYear()
+          ) {
+            console.log(transaction)
+            return transaction
+          }
         })
 
         const sortedTransactions = filteredTransactions.sort((a, b) => b.date - a.date)
@@ -132,16 +138,16 @@ export default function Calendar() {
 
         console.log(combinedTransactions)
 
-        const filteredTransactios = combinedTransactions.filter((transaction) => {
+        const filteredTransactions = combinedTransactions.filter((transaction) => {
           const timestamp = new Date(transaction.date.seconds * 1000)
-          if (timestamp.getMonth() === date.getMonth() && timestamp.getDay() === date.getDay() && timestamp.getFullYear() === date.getFullYear()
+          if (timestamp.getMonth() === date.getMonth() && timestamp.getDate() === date.getDate() && timestamp.getFullYear() === date.getFullYear()
           ) {
             console.log(transaction)
             return transaction
           }
         })
 
-        const sortedTransactions = filteredTransactios.sort((a, b) => b.date - a.date)
+        const sortedTransactions = filteredTransactions.sort((a, b) => b.date - a.date)
 
         setTransactions(sortedTransactions)
       }
