@@ -180,8 +180,8 @@ export default function Calendar() {
             </div>
             <text className="title">{date}</text>
           </div>
-          <div className={styles.calendar}>
-            <CalendarComponent onChange={(value) => { setValue(value); getTransactions(value) }} value={value} view="month" className={styles.calendar} showNavigation={false} />
+          <div className={styles.calendarContainer}>
+            <CalendarComponent onChange={(value) => { setValue(value); getTransactions(value) }} value={value} view="month" className={styles.calendar} showNavigation={false} tileClassName={styles.tile} />
           </div>
           <div className={styles.content}>
             <text className={styles.title}>Activity for {resultDate}</text>

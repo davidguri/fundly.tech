@@ -182,6 +182,14 @@ export default function Root() {
     return parseFloat((monthlyExpenses).toFixed(2));
   }
 
+  function formatNumber(number) {
+    if (number % 1 === 0) {
+      return number.toString();
+    } else {
+      return number.toFixed(2);
+    }
+  }
+
   return (
     <>
       <Layout>
@@ -189,7 +197,7 @@ export default function Root() {
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
               <text className="title">{getTotal()} {user.currency || "ALL"}</text>
-              <text className="subtitle">Current Month: {(getMonthly() - getMonthlyExpenses()).toFixed(2)} {user.currency || "ALL"}</text>
+              <text className="subtitle">Current Month: {formatNumber(getMonthly() - getMonthlyExpenses())} {user.currency || "ALL"}</text>
             </div>
           </section>
           <section className={styles.bottomSection}>

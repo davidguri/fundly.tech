@@ -11,7 +11,6 @@ $color: #e5e4ec;
   padding-bottom: 35px;
   min-height: calc(100svh - 50px);
   height: fit-content;
-  overflow: hidden !important;
 
   display: flex;
   flex-direction: column;
@@ -35,4 +34,22 @@ $color: #e5e4ec;
 .title {
   font-weight: 900;
   font-size: 28px;
+}
+
+.calendar {
+  text-align: center;
+}
+
+abbr[title] {
+  color: $accent;
+}
+
+.tile {
+  background-color: transparent;
+  border: 0px;
+  padding: 10px;
+  color: $color;
+  font-size: 18px;
+  font-weight: 900;
+  text-align: center;
 }
