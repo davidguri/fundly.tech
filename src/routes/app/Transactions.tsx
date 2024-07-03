@@ -197,6 +197,12 @@ export default function Transactions() {
     getAllTransactions()
   }
 
+  const handleReload = () => {
+    getExpenses()
+    getTransactions()
+    getAllTransactions()
+  }
+
   const [option, setOption] = React.useState("0")
 
   const selectOptionHandler = (option: string) => {
@@ -213,7 +219,7 @@ export default function Transactions() {
               </div>
               <text className="title">All Activity</text>
             </div>
-            <div onClick={getTransactions}>
+            <div onClick={handleReload}>
               <IoRefresh className="title" color="#533fd5" size={32} />
             </div>
           </div>
