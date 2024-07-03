@@ -97,4 +97,8 @@ export class Firestore {
   static async deleteTransaction(id: string): Promise<any> {
     await deleteDoc(doc(db, "transactions", id))
   }
+
+  static async deleteExpense(id: string): Promise<any> {
+    await deleteDoc(doc(db, "expenses", id))
+  }
 }

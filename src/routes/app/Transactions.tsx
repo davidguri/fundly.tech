@@ -167,8 +167,12 @@ export default function Transactions() {
     return formattedDate;
   }
 
-  const handleDelete = async (id: string) => {
-    await Firestore.deleteTransaction(id)
+  const handleDelete = async (id: string, type: string) => {
+    if (type === "expenses") {
+      await Firestore.deleteExpense(id)
+    } else {
+      await Firestore.deleteTransaction(id)
+    }
     getExpenses()
     getTransactions()
     getMyTransactions()
@@ -225,7 +229,7 @@ export default function Transactions() {
                     const date = new Date(transaction.date.seconds * 1000)
                     const formattedDate = formatTimestamp(date);
                     return (
-                      <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
+                      <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id, "transactions")} currency={transaction.currency} />
                     )
                   })}
                 </>
@@ -238,7 +242,7 @@ export default function Transactions() {
                           const date = new Date(transaction.date.seconds * 1000)
                           const formattedDate = formatTimestamp(date);
                           return (
-                            <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id)} currency={transaction.currency} />
+                            <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id, "transactions")} currency={transaction.currency} />
                           )
                         })}
                       </>
@@ -248,7 +252,7 @@ export default function Transactions() {
                           const date = new Date(expense.date.seconds * 1000)
                           const formattedDate = formatTimestamp(date);
                           return (
-                            <Transaction key={i} incoming={expense.incoming} date={formattedDate} type={expense.type} amount={expense.amount} onDelete={() => handleDelete(expense.id)} currency={expense.currency} />
+                            <Transaction key={i} incoming={expense.incoming} date={formattedDate} type={expense.type} amount={expense.amount} onDelete={() => handleDelete(expense.id, "expenses")} currency={expense.currency} />
                           )
                         })}
                       </>

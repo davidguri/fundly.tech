@@ -12,7 +12,6 @@ $color: #e5e4ec;
   min-height: calc(100svh - 50px);
   height: fit-content;
   overflow: hidden !important;
-  position: fixed;
 
   display: flex;
   flex-direction: column;
@@ -24,4 +23,16 @@ $color: #e5e4ec;
   flex-direction: row;
   align-items: center;
   gap: 12px;
+}
+
+.content {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 28px;
 }
