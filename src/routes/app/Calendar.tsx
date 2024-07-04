@@ -13,6 +13,8 @@ import { db } from "../../../firebase";
 import { Firestore } from "../../controllers/firestore.controller";
 import { auth } from "../../../firebase";
 
+import { differenceInCalendarDays, differenceInCalendarMonths } from 'date-fns';
+
 export default function Calendar() {
 
   const nav = useNavigate();
@@ -170,6 +172,22 @@ export default function Calendar() {
     getTransactions(value)
   }
 
+  function isSameMonth(a, b) {
+    return differenceInCalendarMonths(a, b) === 0
+  }
+
+  function isSameDay(a, b) {
+    return differenceInCalendarDays(a, b) === 0
+  }
+
+  function tileClass({ date }) {
+    if (isSameMonth(date, value)) {
+      return isSameDay(date, value) ? styles.tileCurrent : styles.tile
+    } else {
+      return styles.inactiveTile
+    }
+  }
+
   return (
     <>
       <Layout>
@@ -181,10 +199,10 @@ export default function Calendar() {
             <text className="title">{date}</text>
           </div>
           <div className={styles.calendarContainer}>
-            <CalendarComponent onChange={(value) => { setValue(value); getTransactions(value) }} value={value} view="month" className={styles.calendar} showNavigation={false} tileClassName={styles.tile} />
+            <CalendarComponent onChange={(value) => { setValue(value); getTransactions(value) }} value={value} view="month" className={styles.calendar} showNavigation={false} tileClassName={tileClass} />
           </div>
           <div className={styles.content}>
-            <text className={styles.title}>Activity for {resultDate}</text>
+            <text className={styles.title}>Activity for {resultDate}:</text>
             {transactions.map((transaction, i) => {
               const date = new Date(transaction.date.seconds * 1000)
               const formattedDate = formatTimestamp(date);

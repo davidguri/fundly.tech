@@ -41,15 +41,28 @@ $color: #e5e4ec;
 }
 
 abbr[title] {
-  color: $accent;
+  color: $secondary;
+  font-size: 21px;
+  font-weight: 900;
 }
 
-.tile {
+.tile,
+.inactiveTile,
+.tileCurrent {
   background-color: transparent;
   border: 0px;
   padding: 10px;
   color: $color;
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 800;
   text-align: center;
+}
+
+.tileCurrent {
+  color: $accent;
+}
+
+.inactiveTile {
+  opacity: 0.25;
+  pointer-events: none;
 }
