@@ -10,6 +10,8 @@ import { Firestore } from "../../controllers/firestore.controller"
 import { getAuth } from "firebase/auth"
 import User from "../../models/user.model"
 
+import { IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5";
+
 export default function Settings() {
 
   const auth = getAuth()
@@ -61,9 +63,12 @@ export default function Settings() {
 
   const handleUpdate = async () => {
     await Firestore.updateUserData(auth.currentUser.uid, userData)
-    alert("Changes Saved!")
+    setShow(!show)
     getUserData()
   }
+
+  const [show, setShow] = React.useState(false);
+  const [status, setStatus] = React.useState("question");
 
   return (
     <>
@@ -102,7 +107,7 @@ export default function Settings() {
               </div>
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={handleUpdate}>
+              <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={() => { setShow(true); setStatus("question") }}>
                 <text className={styles.buttonText} style={{ color: "#0a0a0f" }}>Save Changes</text>
               </div>
               <div className={styles.button} onClick={handleSignOut}>
@@ -112,6 +117,26 @@ export default function Settings() {
             </div>
           </div>
         </main>
+        <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+          <div className={styles.footerTopContainer}>
+            <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
+            <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
+          </div>
+          <div className={styles.footerMiddleContainer}>
+            {
+              status === "question" ? (
+                <IoHelpCircle size={104} color="#533fd5" />
+              ) : (
+                <IoCheckmarkCircle size={96} color="#533fd5" />
+              )
+            }
+          </div>
+          <div className={styles.footerBottomContainer}>
+            <div className={styles.footerButton} onClick={handleUpdate}>
+              <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+            </div>
+          </div>
+        </section>
       </Layout>
     </>
   );

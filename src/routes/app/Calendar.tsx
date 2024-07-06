@@ -181,9 +181,10 @@ export default function Calendar() {
   }
 
   function tileClass({ date }) {
+    const today = new Date()
     if (isSameMonth(date, value)) {
       return isSameDay(date, value) ? styles.tileCurrent : styles.tile
-    } else if (isSameDay(date, new Date())) {
+    } else if (isSameDay(date, today)) {
       return styles.currentDay
     } else {
       return styles.inactiveTile
