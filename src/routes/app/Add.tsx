@@ -180,7 +180,7 @@ export default function Add() {
             </div>
             <div className={styles.bottomContainer}>
               <div className={styles.submitButton} onClick={submitHandler}>
-                <text className={styles.submitButtonText}>Submit</text>
+                <text className={styles.submitButtonText}>Add Entry</text>
               </div>
             </div>
           </div>

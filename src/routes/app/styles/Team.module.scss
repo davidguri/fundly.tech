@@ -103,6 +103,13 @@ $color: #e5e4ec;
   justify-content: space-between;
 }
 
+.pendingWorkerBottomContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .pendingWorkerTitle {
   color: $background;
   font-weight: 900;
