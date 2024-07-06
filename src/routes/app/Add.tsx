@@ -85,10 +85,10 @@ export default function Add() {
     const transactionData: Transaction = {
       id: id,
       name: (name === "You" ? user.displayName : name === "default" ? user.displayName : name),
-      type: type,
-      amount: (parseFloat(amount)),
+      type: (type),
+      amount: ((parseFloat(amount)).toString()),
       currency: (currency || user.currency),
-      tip: (tip ? parseFloat(tip) : 0),
+      tip: ((tip ? parseFloat(tip) : 0).toString()),
       business: (option ? user.business : user.id),
       duration: (duration ? parseInt(duration) : null),
       incoming: (option ? true : false),

@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@everapi/freecurrencyapi-js": "^1.0.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
+    "dotenv": "^16.4.5",
     "firebase": "^10.12.2",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",

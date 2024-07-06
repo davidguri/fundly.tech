@@ -1,12 +1,12 @@
 type Transaction = {
   id: string;
   name: string;
-  amount: number;
+  amount: any;
   currency: string;
   business: string;
-  tip: number;
+  tip: any;
   date: Date;
-  duration: number;
+  duration: any;
   type: string;
   incoming: boolean;
 }
