@@ -189,6 +189,7 @@ export default function Transactions() {
   const selectOptionHandler = (option: string) => {
     setOption(option)
   }
+
   return (
     <>
       <Layout>

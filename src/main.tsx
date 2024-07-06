@@ -16,6 +16,7 @@ import Root from "./routes/app/Root";
 import Transactions from './routes/app/Transactions';
 import Add from './routes/app/Add';
 import Team from './routes/app/Team';
+import AddMember from './routes/app/AddMember';
 import Wallet from './routes/app/Wallet';
 import Calendar from './routes/app/Calendar';
 import Settings from './routes/app/Settings';
@@ -97,6 +98,17 @@ const router = createBrowserRouter([
       <AuthProvider>
         <Protected>
           <Team />
+        </Protected>
+      </AuthProvider>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/add_member",
+    element: (
+      <AuthProvider>
+        <Protected>
+          <AddMember />
         </Protected>
       </AuthProvider>
     ),

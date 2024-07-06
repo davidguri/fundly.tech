@@ -32,11 +32,39 @@ $color: #e5e4ec;
   gap: 12px;
 }
 
+.chipContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.chip {
+  border: 3.2px solid $color;
+  padding-inline: 24px;
+  padding-block: 12px;
+  border-radius: 12px;
+  color: $color;
+}
+
+.selectedChip {
+  background-color: $color;
+  color: $background;
+}
+
+.chipText {
+  font-weight: 800;
+  text-align: center;
+}
+
 .workersContainer {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 }
 
 .worker {
@@ -52,7 +80,39 @@ $color: #e5e4ec;
 
 .workerTitle {
   color: $background;
-  font-weight: 800;
+  font-weight: 900;
   font-size: 18px;
+  text-align: center;
+}
+
+.pendingWorker {
+  width: calc(100% - 36px);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background-color: $color;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+.pendingWorkerTopContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pendingWorkerTitle {
+  color: $background;
+  font-weight: 900;
+  font-size: 18px;
+  text-align: center;
+}
+
+.pendingWorkerText {
+  color: $background;
+  font-weight: 800;
+  opacity: 0.5;
   text-align: center;
 }
