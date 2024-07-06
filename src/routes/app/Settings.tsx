@@ -105,6 +105,7 @@ export default function Settings() {
                   <option value="GBP">GBP</option>
                 </select>
               </div>
+              <text className={styles.explainText}>Note: This app is still in development, and you are among the few testing it. We aim to provide the best experience, so please reach out via <a href="mailto:david@davidguri.com" style={{ color: "#533fd5", textDecoration: "none" }}>email</a> with any issues.</text>
             </div>
             <div className={styles.bottomContainer}>
               <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={() => { setShow(true); setStatus("question") }}>
