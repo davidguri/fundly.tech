@@ -62,8 +62,8 @@ export default function Settings() {
   }
 
   const handleUpdate = async () => {
+    setShow(false)
     await Firestore.updateUserData(auth.currentUser.uid, userData)
-    setShow(!show)
     getUserData()
   }
 
@@ -108,7 +108,7 @@ export default function Settings() {
               <text className={styles.explainText}>Note: This app is still in development, and you are among the few testing it. We aim to provide the best experience, so please reach out via <a href="mailto:david@davidguri.com" style={{ color: "#533fd5", textDecoration: "none" }}>email</a> with any issues.</text>
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={() => { setShow(true); setStatus("question") }}>
+              <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={() => { (currency !== user.currency) ? setShow(true) : setStatus("question") }}>
                 <text className={styles.buttonText} style={{ color: "#0a0a0f" }}>Save Changes</text>
               </div>
               <div className={styles.button} onClick={handleSignOut}>

@@ -127,11 +127,11 @@ export default function Root() {
     let newTotalPay = 0;
     transactions.forEach((transaction) => {
       if (transaction.currency !== user.currency) {
-        const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
-        const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
+        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
         newTotalPay += newAmount + newTip
       } else {
-        totalPay += transaction.amount + transaction.tip
+        totalPay += parseFloat(transaction.amount) + parseFloat(transaction.tip)
       }
     })
     return parseFloat((totalPay + newTotalPay).toFixed(2));
@@ -163,11 +163,11 @@ export default function Root() {
 
     currentMonthTransactions.forEach((transaction) => {
       if (transaction.currency !== user.currency) {
-        const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
-        const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
+        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
         newMonthlyPay += newAmount + newTip
       } else {
-        monthlyPay += transaction.amount + transaction.tip
+        monthlyPay += parseFloat(transaction.amount) + parseFloat(transaction.tip)
       }
     })
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
@@ -176,7 +176,7 @@ export default function Root() {
   const getMonthlyExpenses = () => {
     let monthlyExpenses = 0;
     currentMonthExpenses.forEach((expense) => {
-      monthlyExpenses += convertCurrency(expense.currency, user.currency, expense.amount)
+      monthlyExpenses += convertCurrency(expense.currency, user.currency, parseFloat(expense.amount))
     })
 
     return parseFloat((monthlyExpenses).toFixed(2));

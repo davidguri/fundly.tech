@@ -162,11 +162,11 @@ export default function Wallet() {
 
     currentMonthTransactions.forEach((transaction) => {
       if (transaction.currency !== user.currency) {
-        const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
-        const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
+        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
         transaction.incoming ? newMonthlyPay += newAmount + newTip : newMonthlyPay -= newAmount
       } else {
-        transaction.incoming ? monthlyPay += transaction.amount + transaction.tip : monthlyPay = monthlyPay - transaction.amount
+        transaction.incoming ? monthlyPay += parseFloat(transaction.amount) + parseFloat(transaction.tip) : monthlyPay = monthlyPay - parseFloat(transaction.amount)
       }
     })
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
@@ -178,11 +178,11 @@ export default function Wallet() {
 
     currentMonthWorkerTransactions.forEach((transaction) => {
       if (transaction.currency !== user.currency) {
-        const newAmount = convertCurrency(transaction.currency, user.currency, transaction.amount);
-        const newTip = convertCurrency(transaction.currency, user.currency, transaction.tip);
+        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
         transaction.incoming ? newMonthlyPay += newAmount + newTip : newMonthlyPay -= newAmount
       } else {
-        transaction.incoming ? monthlyPay += transaction.amount + transaction.tip : monthlyPay = monthlyPay - transaction.amount
+        transaction.incoming ? monthlyPay += parseFloat(transaction.amount) + parseFloat(transaction.tip) : monthlyPay = monthlyPay - parseFloat(transaction.amount)
       }
     })
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
@@ -191,7 +191,7 @@ export default function Wallet() {
   const getMonthlyExpenses = () => {
     let monthlyExpenses = 0;
     currentMonthExpenses.forEach((expense) => {
-      monthlyExpenses += convertCurrency(expense.currency, user.currency, expense.amount)
+      monthlyExpenses += convertCurrency(expense.currency, user.currency, parseFloat(expense.amount))
     })
 
     return parseFloat((monthlyExpenses).toFixed(2));
@@ -214,7 +214,7 @@ export default function Wallet() {
     let amount = 0
     transactions.forEach((transaction) => {
       if (transaction.name === name) {
-        amount += convertCurrency(transaction.currency, user.currency, transaction.amount) + convertCurrency(transaction.currency, user.currency, transaction.tip)
+        amount += convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount)) + convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip))
       }
     })
 
