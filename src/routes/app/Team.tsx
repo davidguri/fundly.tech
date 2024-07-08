@@ -118,6 +118,10 @@ export default function Team() {
             {
               option === "0" ? (
                 <>
+                  <div className={styles.worker}>
+                    <text className={styles.workerTitle}>You - {user.displayName}</text>
+                    <text className={styles.workerTitle} style={{ color: "#533fd5" }}>Active</text>
+                  </div>
                   {workersData.map((worker, i) => {
                     return (
                       <div className={styles.worker} key={i}>
@@ -143,6 +147,10 @@ export default function Team() {
               ) : (
                 option === "1" ? (
                   <>
+                    <div className={styles.worker}>
+                      <text className={styles.workerTitle}>You - {user.displayName}</text>
+                      <text className={styles.workerTitle} style={{ color: "#533fd5" }}>Active</text>
+                    </div>
                     {workersData.map((worker, i) => {
                       return (
                         <div className={styles.worker} key={i}>

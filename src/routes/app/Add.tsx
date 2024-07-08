@@ -78,6 +78,14 @@ export default function Add() {
     }
   }
 
+  const handleCurrencyChange = (e: any) => {
+    try {
+      setCurrency(e.target.value)
+    } catch (error: any) {
+      alert(error.message)
+    }
+  }
+
   const submitHandler = async () => {
 
     const id = uuidv4()
@@ -153,7 +161,7 @@ export default function Add() {
                       </div>
                     </div> */}
                     <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 16 }}>
-                      <select name="Role" id="role" className={styles.select} onChange={handleNameChange} value={name}>
+                      <select name="Worker" id="worker" className={styles.select} onChange={handleNameChange} value={name}>
                         <option value="default">Worker</option>
                         <option value="You">You</option>
                         {workersData.map((worker, i) => {
@@ -165,7 +173,15 @@ export default function Add() {
                     </div>
                     <input className={styles.formInput} placeholder="Work Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
                     <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
-                    <input className={styles.formInput} placeholder="Currency (optional)" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
+                    <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 16 }}>
+                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency}>
+                        <option value="ALL">ALL</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="CAD">CAD</option>
+                        <option value="GBP">GBP</option>
+                      </select>
+                    </div>
                     <input className={styles.formInput} placeholder="Tip (optional)" value={tip} onChange={(e) => setTip(e.target.value)} type="number" inputMode="numeric" />
                     <input className={styles.formInput} placeholder="Hours (optional)" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
                   </>
@@ -173,7 +189,15 @@ export default function Add() {
                   <>
                     <input className={styles.formInput} placeholder="Expense Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
                     <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
-                    <input className={styles.formInput} placeholder="Currency (optional)" value={currency} onChange={(e) => setCurrency(e.target.value)} type="text" autoCorrect="off" />
+                    <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 16 }}>
+                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency}>
+                        <option value="ALL">ALL</option>
+                        <option value="EUR">EUR</option>
+                        <option value="USD">USD</option>
+                        <option value="CAD">CAD</option>
+                        <option value="GBP">GBP</option>
+                      </select>
+                    </div>
                   </>
                 )
               }
