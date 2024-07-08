@@ -113,6 +113,21 @@ export default function Root() {
     return parseFloat((totalPay + newTotalPay).toFixed(2));
   }
 
+  const getTotalExpenses = () => {
+    let totalPay = 0
+    let newTotalPay = 0;
+    expenses.forEach((expense) => {
+      if (expense.currency !== user.currency) {
+        const newAmount = convertCurrency(expense.currency, user.currency, parseFloat(expense.amount));
+        const newTip = convertCurrency(expense.currency, user.currency, parseFloat(expense.tip));
+        newTotalPay += newAmount + newTip
+      } else {
+        totalPay += parseFloat(expense.amount) + parseFloat(expense.tip)
+      }
+    })
+    return parseFloat((totalPay + newTotalPay).toFixed(2));
+  } // TODO: MAKE A WEB WORKER FOR THESE TWO
+
   function filterCurrentMonthTransactions(transactions: any) {
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -172,7 +187,7 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
-              <text className="title">{getTotal()} {user.currency || "ALL"}</text>
+              <text className="title">{getTotal() - getTotalExpenses()} {user.currency || "ALL"}</text>
               <text className="subtitle">Current Month: {formatNumber(getMonthly() - getMonthlyExpenses())} {user.currency || "ALL"}</text>
             </div>
           </section>

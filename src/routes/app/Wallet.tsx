@@ -12,6 +12,8 @@ import { getAuth } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 
+import { createWorker } from "../../utils/workerLoader.util";
+
 export default function Wallet() {
 
   const auth = getAuth()
@@ -30,6 +32,20 @@ export default function Wallet() {
   }
 
   React.useEffect(() => {
+    function filterTransactions(transactions) {
+      const worker = createWorker(new URL('../../workers/filterCurrentMonthTransactions.worker.ts', import.meta.url));
+
+      worker.onmessage = (event) => {
+        console.log(event.data)
+        // return event.data;
+      };
+
+      worker.postMessage(transactions);
+
+      return () => {
+        worker.terminate();
+      };
+    }
 
     const getExpenses = async () => {
       try {
@@ -77,6 +93,7 @@ export default function Wallet() {
         })
 
         setTransactions(filteredTransactions)
+        filterTransactions(filteredTransactions)
         setWorkerTransactions(workerTransactions)
       } catch (error: any) {
         alert("Error: " + error.message)
@@ -105,6 +122,36 @@ export default function Wallet() {
       });
     const convertedAmount = amount * rate;
     return convertedAmount;
+  } // TODO: MAKE THIS A SEPERATE COMPONENT
+
+  const getTotal = () => {
+    let totalPay = 0
+    let newTotalPay = 0;
+    transactions.forEach((transaction) => {
+      if (transaction.currency !== user.currency) {
+        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
+        newTotalPay += newAmount + newTip
+      } else {
+        totalPay += parseFloat(transaction.amount) + parseFloat(transaction.tip)
+      }
+    })
+    return parseFloat((totalPay + newTotalPay).toFixed(2));
+  }
+
+  const getTotalExpenses = () => {
+    let totalPay = 0
+    let newTotalPay = 0;
+    expenses.forEach((expense) => {
+      if (expense.currency !== user.currency) {
+        const newAmount = convertCurrency(expense.currency, user.currency, parseFloat(expense.amount));
+        const newTip = convertCurrency(expense.currency, user.currency, parseFloat(expense.tip));
+        newTotalPay += newAmount + newTip
+      } else {
+        totalPay += parseFloat(expense.amount) + parseFloat(expense.tip)
+      }
+    })
+    return parseFloat((totalPay + newTotalPay).toFixed(2));
   }
 
   function filterCurrentMonthTransactions(transactions: any) {
@@ -121,7 +168,7 @@ export default function Wallet() {
     });
 
     return filteredTransactions;
-  }
+  } // TODO: USE WEB WORKER HERE
 
   const currentMonthTransactions = filterCurrentMonthTransactions(transactions);
 
@@ -183,7 +230,7 @@ export default function Wallet() {
 
   const groupedTransactions = groupTransactionsByName(workerTransactions);
 
-  const getTransactionsByName = (transactions, name) => {
+  const getTransactionsByName = (transactions, name: string) => {
     let amount = 0
     transactions.forEach((transaction) => {
       if (transaction.name === name) {
@@ -192,7 +239,7 @@ export default function Wallet() {
     })
 
     return amount;
-  }
+  } // TODO: USE WEB WORKER HERE
 
   const [option, setOption] = React.useState("0")
 
@@ -215,8 +262,8 @@ export default function Wallet() {
           <div className={styles.walletContainer}>
             <div className={styles.balanceContainer}>
               <text className={styles.balanceSubtitle}>Your Balance</text>
-              <text className={styles.balanceTitle}>{getMonthly() - getMonthlyExpenses()} {user.currency}</text>
-            </div>
+              <text className={styles.balanceTitle}>{getTotal() - getTotalExpenses()} {user.currency}</text>
+            </div> {/* //TODO: GET TOTAL HERE, NOT MONTHLY */}
             {
               user.role === "Worker" ? (
                 <>
