@@ -60,13 +60,14 @@ $color: #e5e4ec;
   text-align: center;
   background-color: $accent;
   padding: 18px;
+  padding-block: 16px;
   border-radius: 12px;
 }
 
 .buttonText {
   color: $color;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -113,13 +114,14 @@ $color: #e5e4ec;
   justify-content: space-between;
   background-color: $color;
   padding: 18px;
+  padding-block: 16px;
   border-radius: 12px;
 }
 
 .settingText {
   color: $background;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -139,7 +141,7 @@ $color: #e5e4ec;
   width: 100%;
   text-align: center;
   font-weight: 800;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .footer {
@@ -221,7 +223,7 @@ $color: #e5e4ec;
 
 .explainText {
   margin-top: 12px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 1.8;
   opacity: 0.5;

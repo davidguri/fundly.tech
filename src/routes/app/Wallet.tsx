@@ -39,10 +39,8 @@ export default function Wallet() {
           where("business", "==", auth.currentUser.uid)
         );
 
-        // Execute the query
         const querySnapshot = await getDocs(q);
 
-        // Map the results to an array of transaction objects
         const userTransactions = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setExpenses(userTransactions)
       } catch (error: any) {
