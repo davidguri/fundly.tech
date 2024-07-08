@@ -15,7 +15,6 @@ import { IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5";
 export default function Settings() {
 
   const auth = getAuth()
-  // console.log(auth.currentUser.email)
 
   const nav = useNavigate()
 
@@ -26,14 +25,8 @@ export default function Settings() {
   }
 
   const getUserData = async () => {
-    try {
-      const data = await Firestore.getUserById(auth.currentUser.uid)
-      setUser(data)
-      // console.log(data)
-      // console.log(user.displayName)
-    } catch (error: any) {
-      alert(error.message)
-    }
+    const data = await Firestore.getUserById(auth.currentUser.uid)
+    setUser(data);
   }
 
   React.useEffect(() => {
@@ -140,6 +133,7 @@ export default function Settings() {
             <div className={styles.footerButton} onClick={handleUpdate}>
               <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
             </div>
+            <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
           </div>
         </section>
       </Layout>

@@ -117,6 +117,14 @@ $color: #e5e4ec;
   border-radius: 12px;
 }
 
+.transaction {
+  padding-block: 16px;
+}
+
+.transactionText {
+  font-size: 16px;
+}
+
 .infoText,
 .transactionText {
   color: $background;

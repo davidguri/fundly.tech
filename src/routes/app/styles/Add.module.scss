@@ -100,6 +100,7 @@ $color: #e5e4ec;
 .formInput {
   width: calc(100% - 36px);
   padding: 18px;
+  padding-block: 16px;
   border-radius: 12px;
   background-color: $color;
   font-size: medium;
@@ -115,16 +116,15 @@ $color: #e5e4ec;
   border: none;
   outline: none;
   color: $background;
-  font-size: medium;
+  font-size: 16px;
   font-weight: 600;
   padding-inline: 18px;
   margin: 0px;
 }
 
 .submitButton {
-  width: calc(100% - 24px);
-  padding-block: 18px;
-  padding-inline: 12px;
+  width: 100%;
+  padding-block: 16px;
   border-radius: 12px;
   background-color: $accent;
   display: flex;
@@ -135,6 +135,6 @@ $color: #e5e4ec;
 .submitButtonText {
   color: $color;
   font-weight: 900;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }

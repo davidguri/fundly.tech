@@ -193,10 +193,16 @@ $color: #e5e4ec;
   justify-content: center;
 }
 
+.footerBottomContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
 .footerButton {
-  width: calc(100% - 24px);
-  padding-block: 18px;
-  padding-inline: 12px;
+  width: 100%;
+  padding-block: 16px;
   background-color: $primary;
   border-radius: 12px;
   display: flex;
@@ -204,10 +210,11 @@ $color: #e5e4ec;
   justify-content: center;
 }
 
-.footerButtonText {
+.footerButtonText,
+.footerCancelText {
   color: $background;
   font-weight: 800;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 

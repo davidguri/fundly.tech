@@ -58,11 +58,9 @@ export default function Wallet() {
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([getDocs(q1), getDocs(q2)]);
 
-        // Combine the results
         const transactions1 = querySnapshot1.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const transactions2 = querySnapshot2.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-        // Combine the two arrays and remove duplicates
         const combinedTransactions = [...transactions1, ...transactions2].reduce((acc, transaction) => {
           if (!acc.find(t => t.id === transaction.id)) {
             acc.push(transaction);
@@ -124,7 +122,7 @@ export default function Wallet() {
       EUR: 0.0083,
       ALL: 1,
     }
-  };
+  }; // TODO: get these values from an API
 
   function convertCurrency(fromCurrency: string, toCurrency: string, amount: number): number {
     const rate = exchangeRates[fromCurrency][toCurrency];
@@ -291,28 +289,24 @@ export default function Wallet() {
                         </div>
                       </div>
                     ) : (
-                      option === "1" ? (
-                        <>
-                          {
-                            transactions.length > 0 ? (
-                              <div className={styles.transaction}>
-                                <text className={styles.transactionText}>You</text>
-                                <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
-                              </div>
-                            ) : (
-                              <div style={{ display: "none" }} />
-                            )
-                          }
-                          {Object.keys(groupedTransactions).map((name) => (
-                            <div className={styles.transaction} key={name}>
-                              <text className={styles.transactionText}>{name}</text>
-                              <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getTransactionsByName(currentMonthWorkerTransactions, name)} {user.currency}</text>
+                      <>
+                        {
+                          transactions.length > 0 ? (
+                            <div className={styles.transaction}>
+                              <text className={styles.transactionText}>You</text>
+                              <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
                             </div>
-                          ))}
-                        </>
-                      ) : (
-                        <text>expenses</text>
-                      )
+                          ) : (
+                            <div style={{ display: "none" }} />
+                          )
+                        }
+                        {Object.keys(groupedTransactions).map((name) => (
+                          <div className={styles.transaction} key={name}>
+                            <text className={styles.transactionText}>{name}</text>
+                            <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getTransactionsByName(currentMonthWorkerTransactions, name)} {user.currency}</text>
+                          </div>
+                        ))}
+                      </>
                     )
                   }
                 </>

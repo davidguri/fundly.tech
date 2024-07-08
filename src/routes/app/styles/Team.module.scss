@@ -75,13 +75,14 @@ $color: #e5e4ec;
   justify-content: space-between;
   background-color: $color;
   padding: 18px;
+  padding-block: 16px;
   border-radius: 12px;
 }
 
 .workerTitle {
   color: $background;
   font-weight: 900;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -89,9 +90,10 @@ $color: #e5e4ec;
   width: calc(100% - 36px);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   background-color: $color;
   padding: 18px;
+  padding-block: 16px;
   border-radius: 12px;
 }
 
@@ -113,7 +115,7 @@ $color: #e5e4ec;
 .pendingWorkerTitle {
   color: $background;
   font-weight: 900;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -121,5 +123,6 @@ $color: #e5e4ec;
   color: $background;
   font-weight: 800;
   opacity: 0.5;
+  font-size: 14px;
   text-align: center;
 }
