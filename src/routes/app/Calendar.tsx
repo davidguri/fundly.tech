@@ -3,7 +3,7 @@ import styles from "./styles/Calendar.module.scss";
 import Layout from "../../components/layout/Layout";
 
 import { useNavigate } from "react-router-dom"
-import { IoChevronBack } from "react-icons/io5"
+import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
 
 import { Calendar as CalendarComponent } from 'react-calendar';
 import Transaction from "../../components/global/Transaction.component";
@@ -164,6 +164,7 @@ export default function Calendar() {
   }, [])
 
   const handleDelete = async (id: string, type: string) => {
+    setShow(false)
     if (type === "expenses") {
       await Firestore.deleteExpense(id)
     } else {
@@ -191,6 +192,9 @@ export default function Calendar() {
     }
   }
 
+  const [show, setShow] = React.useState(false);
+  const status = "question"
+
   return (
     <>
       <Layout>
@@ -210,7 +214,30 @@ export default function Calendar() {
               const date = new Date(transaction.date.seconds * 1000)
               const formattedDate = formatTimestamp(date);
               return (
-                <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => handleDelete(transaction.id, transaction.incoming ? "transactions" : "expenses")} currency={transaction.currency} />
+                <>
+                  <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+                    <div className={styles.footerTopContainer}>
+                      <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
+                      <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
+                    </div>
+                    <div className={styles.footerMiddleContainer}>
+                      {
+                        status === "question" ? (
+                          <IoHelpCircle size={104} color="#533fd5" />
+                        ) : (
+                          <IoCheckmarkCircle size={96} color="#533fd5" />
+                        )
+                      }
+                    </div>
+                    <div className={styles.footerBottomContainer}>
+                      <div className={styles.footerButton} onClick={() => handleDelete(transaction.id, transaction.incoming ? "transactions" : "expenses")}>
+                        <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                      </div>
+                      <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+                    </div>
+                  </section>
+                  <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => setShow(true)} currency={transaction.currency} />
+                </>
               )
             })}
           </div>
