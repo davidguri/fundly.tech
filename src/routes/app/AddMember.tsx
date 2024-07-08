@@ -63,7 +63,7 @@ export default function AddMember() {
           <div className={styles.topContainer}>
             <input className={styles.formInput} placeholder="Worker Name" value={name} onChange={(e) => setName(e.target.value)} type="text" autoCorrect="off" />
             <input className={styles.formInput} placeholder="Worker Email" value={email} onChange={(e) => setEmail(e.target.value)} type="text" autoCorrect="off" autoCapitalize="off" />
-            <text className={styles.explainText}>For security and privacy, the business owner must create the initial worker account. The worker will complete their profile during sign-up, serving as their invitation to join the business.</text>
+            <text className={styles.explainText}>For security and privacy, the business owner must create the initial worker account. The worker will complete their profile during sign-up. This serves as their invitation to join the business.</text>
           </div>
           <div className={styles.bottomContainer}>
             <div className={styles.submitButton} onClick={() => name && email ? setShow(true) : {}}>

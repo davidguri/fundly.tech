@@ -102,7 +102,7 @@ export default function Settings() {
                 <text className={styles.settingText}>About The Dev</text>
                 <text className={styles.settingText} style={{ color: "#533fd5" }}><a href="https://www.buymeacoffee.com/davidguri" target="_blank" className="link">Site</a></text>
               </div>
-              <text className={styles.explainText}>Note: This app is still in development, and you are among the few testing it. We aim to provide the best experience, so please reach out via <a href="mailto:david@davidguri.com" style={{ color: "#533fd5", textDecoration: "none" }}>email</a> with any issues.</text>
+              <text className={styles.explainText}>Note: This app is still in development, and you are among the few testing it. I aim to provide the best experience, so please reach out via <a href="mailto:david@davidguri.com" style={{ color: "#533fd5", textDecoration: "none" }}>email</a> with any issues.</text>
             </div>
             <div className={styles.bottomContainer}>
               <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={() => { (currency !== user.currency) ? setShow(true) : setStatus("question") }}>
