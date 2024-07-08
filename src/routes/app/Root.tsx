@@ -77,47 +77,23 @@ export default function Root() {
     getTransactions()
   }, [])
 
-
-  const exchangeRates = {
-    USD: {
-      USD: 1,
-      CAD: 1.25,
-      GBP: 0.75,
-      EUR: 0.85,
-      ALL: 102.5,
-    },
-    CAD: {
-      USD: 0.8,
-      CAD: 1,
-      GBP: 0.6,
-      EUR: 0.68,
-      ALL: 82,
-    },
-    GBP: {
-      USD: 1.33,
-      CAD: 1.67,
-      GBP: 1,
-      EUR: 1.13,
-      ALL: 136.67,
-    },
-    EUR: {
-      USD: 1.18,
-      CAD: 1.47,
-      GBP: 0.88,
-      EUR: 1,
-      ALL: 120.85,
-    },
-    ALL: {
-      USD: 0.0098,
-      CAD: 0.0122,
-      GBP: 0.0073,
-      EUR: 0.0083,
-      ALL: 1,
-    }
-  };
+  const [rate, setRate] = React.useState<number>()
 
   function convertCurrency(fromCurrency: string, toCurrency: string, amount: number): number {
-    const rate = exchangeRates[fromCurrency][toCurrency];
+    fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency.toLowerCase()}.json`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const rate = data[`${fromCurrency.toLowerCase()}`][`${toCurrency.toLowerCase()}`];
+        setRate(rate)
+      })
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
     const convertedAmount = amount * rate;
     return convertedAmount;
   }
