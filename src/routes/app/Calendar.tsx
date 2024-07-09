@@ -3,7 +3,7 @@ import styles from "./styles/Calendar.module.scss";
 import Layout from "../../components/layout/Layout";
 
 import { useNavigate } from "react-router-dom"
-import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
+import { IoChevronBack, IoChevronForward, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
 
 import { Calendar as CalendarComponent } from 'react-calendar';
 import Transaction from "../../components/global/Transaction.component";
@@ -20,7 +20,6 @@ export default function Calendar() {
   const nav = useNavigate();
 
   const [value, setValue] = React.useState<any>(new Date());
-  console.log(value);
 
   let months = [
     "Jan",
@@ -111,7 +110,6 @@ export default function Calendar() {
           const timestamp = new Date(transaction.date.seconds * 1000)
           if (timestamp.getMonth() === date.getMonth() && timestamp.getDate() === date.getDate() && timestamp.getFullYear() === date.getFullYear()
           ) {
-            console.log(transaction)
             return transaction
           }
         })
@@ -138,13 +136,10 @@ export default function Calendar() {
           return acc;
         }, []);
 
-        console.log(combinedTransactions)
-
         const filteredTransactions = combinedTransactions.filter((transaction) => {
           const timestamp = new Date(transaction.date.seconds * 1000)
           if (timestamp.getMonth() === date.getMonth() && timestamp.getDate() === date.getDate() && timestamp.getFullYear() === date.getFullYear()
           ) {
-            console.log(transaction)
             return transaction
           }
         })
@@ -195,6 +190,51 @@ export default function Calendar() {
   const [show, setShow] = React.useState(false);
   const status = "question"
 
+  const [rate, setRate] = React.useState<number>()
+
+  function convertCurrency(fromCurrency: string, toCurrency: string, amount: number): number {
+    fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency.toLowerCase()}.json`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const rate = data[`${fromCurrency.toLowerCase()}`][`${toCurrency.toLowerCase()}`];
+        setRate(rate)
+      })
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
+    const convertedAmount = amount * rate;
+    return convertedAmount;
+  }
+
+  const [currentMonth, setCurrentMonth] = React.useState<any>(value)
+
+  function getTotalMonth(date: any) {
+    const monthTransactions = transactions.filter((transaction) => {
+      const timestamp = new Date(transaction.date.seconds * 1000)
+      if (timestamp.getMonth() === date.getMonth() && timestamp.getFullYear() === date.getFullYear()
+      ) {
+        return transaction
+      }
+    })
+    let totalPay = 0
+    let newTotalPay = 0;
+    monthTransactions.forEach((transaction) => {
+      if (transaction.currency !== user.currency) {
+        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
+        newTotalPay += newAmount + newTip
+      } else {
+        totalPay += parseFloat(transaction.amount) + parseFloat(transaction.tip)
+      }
+    })
+    return parseFloat((totalPay + newTotalPay).toFixed(2));
+  }
+
   return (
     <>
       <Layout>
@@ -206,7 +246,20 @@ export default function Calendar() {
             <text className="title">{date}</text>
           </div>
           <div className={styles.calendarContainer}>
-            <CalendarComponent onChange={(value) => { setValue(value); getTransactions(value) }} value={value} view="month" className={styles.calendar} showNavigation={false} tileClassName={tileClass} />
+            <div className={styles.overlay} style={{ display: `${currentMonth.getMonth() !== value.getMonth() ? "flex" : "none"}` }}>
+              <text className={styles.overlayText}>{getTotalMonth(currentMonth)} {user.currency}</text>
+            </div>
+            <CalendarComponent
+              onChange={(value) => { setValue(value); getTransactions(value) }}
+              value={value}
+              view="month"
+              className={styles.calendar}
+              showNavigation={true}
+              tileClassName={tileClass}
+              nextLabel={<IoChevronForward style={{ margin: 0, padding: 0 }} size={18} color="#533fd5" />}
+              prevLabel={<IoChevronBack style={{ margin: 0, padding: 0 }} size={18} color="#533fd5" />}
+              onActiveStartDateChange={({ activeStartDate }) => { setCurrentMonth(activeStartDate); console.log(activeStartDate); }}
+            />
           </div>
           <div className={styles.content}>
             <text className={styles.title}>Activity for {resultDate}:</text>
