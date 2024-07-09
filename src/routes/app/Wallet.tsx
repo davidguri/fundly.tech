@@ -36,8 +36,8 @@ export default function Wallet() {
       const worker = createWorker(new URL('../../workers/filterCurrentMonthTransactions.worker.ts', import.meta.url));
 
       worker.onmessage = (event) => {
-        console.log(event.data)
-        // return event.data;
+        // console.log(event.data)
+        return event.data;
       };
 
       worker.postMessage(transactions);
