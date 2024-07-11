@@ -16,9 +16,6 @@ export default function Root() {
 
   const auth = getAuth()
 
-  const [loading, setLoading] = React.useState(false);
-  setLoading(false);
-
   const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
   const [user, setUser]: any = React.useState([])
@@ -191,9 +188,7 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
-              {
-                loading ? <SkeletonText /> : <text className="title">{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
-              }
+              <text className="title">{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
               <text className="subtitle">Current Month: {formatNumber(getMonthly() - getMonthlyExpenses())} {user.currency || "ALL"}</text>
             </div>
           </section>
