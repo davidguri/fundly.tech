@@ -1,13 +1,17 @@
 export const sendEmail = async (to: any, business: string, authCode: string) => {
+
   const url = 'https://send.api.mailtrap.io/api/send';
   const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      'Api-Token': 'a9f226b00cd5cdc74d1ef564641701fa'
+      'Api-Token': 'a9f226b00cd5cdc74d1ef564641701fa',
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PATCH"
     },
-    body: `{"to":[{"email":"${to.email}","name":"${to.name}"}],"from":{"email":"contact@fundly.tech","name":"David Guri"},"headers":{"X-Message-Source":"app.fundly.tech"},"subject":"Welcome To Fundly!","text":"You've been invited to join Fundly from ${business}. Here's your auth code: ${authCode}"`
+    body: `{"to":[{"email":"${to.email}","name":"${to.name}"}],"from":{"email":"contact@fundly.tech","name":"David Guri"},"headers":{"X-Message-Source":"app.fundly.tech"},"subject":"Welcome To Fundly!","text":"You've been invited to join Fundly from ${business}. Here's your auth code: ${authCode}","category":"API Test"}`
   };
 
   try {

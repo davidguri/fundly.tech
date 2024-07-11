@@ -10,16 +10,19 @@ import { getAuth } from "firebase/auth";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 
+import SkeletonText from "../../components/global/Loader.component";
+
 export default function Root() {
 
   const auth = getAuth()
+
+  const [loading, setLoading] = React.useState(false);
 
   const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
   const [user, setUser]: any = React.useState([])
 
   const getUserData = async () => {
-
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef)
 
@@ -187,7 +190,9 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
-              <text className="title">{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
+              {
+                loading ? <SkeletonText /> : <text className="title">{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
+              }
               <text className="subtitle">Current Month: {formatNumber(getMonthly() - getMonthlyExpenses())} {user.currency || "ALL"}</text>
             </div>
           </section>

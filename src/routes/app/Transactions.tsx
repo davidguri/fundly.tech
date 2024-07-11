@@ -12,9 +12,13 @@ import { db } from "../../../firebase";
 import { Firestore } from "../../controllers/firestore.controller";
 import { auth } from "../../../firebase";
 
+import Loader from "../../components/global/Loader.component";
+
 export default function Transactions() {
 
   const nav = useNavigate();
+
+  const [loading, setLoading] = React.useState(true);
 
   const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
@@ -28,6 +32,7 @@ export default function Transactions() {
   }
 
   const getMyTransactions = async () => {
+    setLoading(true);
     try {
       const userData = await getUserData()
       setMyTransactions([])
@@ -51,10 +56,13 @@ export default function Transactions() {
       setMyTransactions(sortedTransactions)
     } catch (error: any) {
       alert("Error: " + error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   const getExpenses = async () => {
+    setLoading(true)
     try {
       setExpenses([])
       const q = query(
@@ -80,10 +88,13 @@ export default function Transactions() {
       setExpenses(sortedTransactions)
     } catch (error: any) {
       alert("Error: " + error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   const getTransactions = async () => {
+    setLoading(true)
     try {
       const userData = await getUserData()
       setTransactions([])
@@ -132,12 +143,12 @@ export default function Transactions() {
       // console.log(transactions)
     } catch (error: any) {
       alert("Error: " + error.message)
+    } finally {
+      setLoading(false)
     }
   }
 
   React.useEffect(() => {
-    getExpenses()
-    getTransactions()
     getMyTransactions()
   }, [])
 
@@ -177,7 +188,7 @@ export default function Transactions() {
     getExpenses()
     getTransactions()
     getMyTransactions()
-  }
+  } // ! WATCH OUT THIS CODE DELETES STUFF FROM THE BOTTOM TO THE TOP
 
   const handleReload = () => {
     getExpenses()
@@ -189,6 +200,11 @@ export default function Transactions() {
 
   const selectOptionHandler = (option: string) => {
     setOption(option)
+    if (option === "1") {
+      getTransactions()
+    } else if (option === "2") {
+      getExpenses()
+    }
   }
 
   const [show, setShow] = React.useState(false);
@@ -230,106 +246,118 @@ export default function Transactions() {
             {
               option === "0" ? (
                 <>
-                  {myTransactions.map((transaction, i) => {
-                    const date = new Date(transaction.date.seconds * 1000)
-                    const formattedDate = formatTimestamp(date);
-                    return (
-                      // TODO: make this a seperate component
-                      <>
-                        <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
-                          <div className={styles.footerTopContainer}>
-                            <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
-                            <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
-                          </div>
-                          <div className={styles.footerMiddleContainer}>
-                            {
-                              status === "question" ? (
-                                <IoHelpCircle size={104} color="#533fd5" />
-                              ) : (
-                                <IoCheckmarkCircle size={96} color="#533fd5" />
-                              )
-                            }
-                          </div>
-                          <div className={styles.footerBottomContainer}>
-                            <div className={styles.footerButton} onClick={() => handleDelete(transaction.id, "transactions")}>
-                              <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
-                            </div>
-                            <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
-                          </div>
-                        </section>
-                        <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => setShow(true)} currency={transaction.currency} />
-                      </>
+                  {
+                    loading ? (
+                      <Loader />
+                    ) : (
+                      myTransactions.map((transaction, i) => {
+                        const date = new Date(transaction.date.seconds * 1000)
+                        const formattedDate = formatTimestamp(date);
+                        return (
+                          // TODO: make this a seperate component
+                          <>
+                            <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+                              <div className={styles.footerTopContainer}>
+                                <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
+                                <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
+                              </div>
+                              <div className={styles.footerMiddleContainer}>
+                                {
+                                  status === "question" ? (
+                                    <IoHelpCircle size={104} color="#533fd5" />
+                                  ) : (
+                                    <IoCheckmarkCircle size={96} color="#533fd5" />
+                                  )
+                                }
+                              </div>
+                              <div className={styles.footerBottomContainer}>
+                                <div className={styles.footerButton} onClick={() => handleDelete(transaction.id, "transactions")}>
+                                  <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                                </div>
+                                <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+                              </div>
+                            </section>
+                            <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => setShow(true)} currency={transaction.currency} />
+                          </>
+                        )
+                      })
                     )
-                  })}
+                  }
                 </>
               ) : (
                 <>
                   {
                     option === "1" ? (
                       <>
-                        {transactions.map((transaction, i) => {
-                          const date = new Date(transaction.date.seconds * 1000)
-                          const formattedDate = formatTimestamp(date);
-                          return (
-                            <>
-                              <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
-                                <div className={styles.footerTopContainer}>
-                                  <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
-                                  <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
-                                </div>
-                                <div className={styles.footerMiddleContainer}>
-                                  {
-                                    status === "question" ? (
-                                      <IoHelpCircle size={104} color="#533fd5" />
-                                    ) : (
-                                      <IoCheckmarkCircle size={96} color="#533fd5" />
-                                    )
-                                  }
-                                </div>
-                                <div className={styles.footerBottomContainer}>
-                                  <div className={styles.footerButton} onClick={() => handleDelete(transaction.id, "transactions")}>
-                                    <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                        {loading ? (
+                          <Loader />
+                        ) : (
+                          transactions.map((transaction, i) => {
+                            const date = new Date(transaction.date.seconds * 1000)
+                            const formattedDate = formatTimestamp(date);
+                            return (
+                              <>
+                                <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+                                  <div className={styles.footerTopContainer}>
+                                    <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
+                                    <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
                                   </div>
-                                  <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
-                                </div>
-                              </section>
-                              <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => setShow(true)} currency={transaction.currency} />
-                            </>
-                          )
-                        })}
+                                  <div className={styles.footerMiddleContainer}>
+                                    {
+                                      status === "question" ? (
+                                        <IoHelpCircle size={104} color="#533fd5" />
+                                      ) : (
+                                        <IoCheckmarkCircle size={96} color="#533fd5" />
+                                      )
+                                    }
+                                  </div>
+                                  <div className={styles.footerBottomContainer}>
+                                    <div className={styles.footerButton} onClick={() => handleDelete(transaction.id, "transactions")}>
+                                      <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                                    </div>
+                                    <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+                                  </div>
+                                </section>
+                                <Transaction key={i} incoming={transaction.incoming} date={formattedDate} type={transaction.type} name={transaction.name} amount={transaction.amount} tip={transaction.tip} duration={transaction.duration} onDelete={() => setShow(true)} currency={transaction.currency} />
+                              </>
+                            )
+                          }))}
                       </>
                     ) : (
                       <>
-                        {expenses.map((expense, i) => {
-                          const date = new Date(expense.date.seconds * 1000)
-                          const formattedDate = formatTimestamp(date);
-                          return (
-                            <>
-                              <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
-                                <div className={styles.footerTopContainer}>
-                                  <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
-                                  <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
-                                </div>
-                                <div className={styles.footerMiddleContainer}>
-                                  {
-                                    status === "question" ? (
-                                      <IoHelpCircle size={104} color="#533fd5" />
-                                    ) : (
-                                      <IoCheckmarkCircle size={96} color="#533fd5" />
-                                    )
-                                  }
-                                </div>
-                                <div className={styles.footerBottomContainer}>
-                                  <div className={styles.footerButton} onClick={() => handleDelete(expense.id, "expenses")}>
-                                    <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                        {loading ? (
+                          <Loader />
+                        ) : (
+                          expenses.map((expense, i) => {
+                            const date = new Date(expense.date.seconds * 1000)
+                            const formattedDate = formatTimestamp(date);
+                            return (
+                              <>
+                                <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+                                  <div className={styles.footerTopContainer}>
+                                    <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
+                                    <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
                                   </div>
-                                  <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
-                                </div>
-                              </section>
-                              <Transaction key={i} incoming={expense.incoming} date={formattedDate} type={expense.type} amount={expense.amount} onDelete={() => setShow(true)} currency={expense.currency} />
-                            </>
-                          )
-                        })}
+                                  <div className={styles.footerMiddleContainer}>
+                                    {
+                                      status === "question" ? (
+                                        <IoHelpCircle size={104} color="#533fd5" />
+                                      ) : (
+                                        <IoCheckmarkCircle size={96} color="#533fd5" />
+                                      )
+                                    }
+                                  </div>
+                                  <div className={styles.footerBottomContainer}>
+                                    <div className={styles.footerButton} onClick={() => handleDelete(expense.id, "expenses")}>
+                                      <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                                    </div>
+                                    <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+                                  </div>
+                                </section>
+                                <Transaction key={i} incoming={expense.incoming} date={formattedDate} type={expense.type} amount={expense.amount} onDelete={() => setShow(true)} currency={expense.currency} />
+                              </>
+                            )
+                          }))}
                       </>
                     )
                   }

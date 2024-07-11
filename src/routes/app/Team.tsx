@@ -12,9 +12,13 @@ import { getAuth } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 
+import Loader from "../../components/global/Loader.component";
+
 export default function Team() {
 
-  const auth = getAuth()
+  const auth = getAuth();
+
+  const [loading, setLoading] = React.useState(true);
 
   const nav = useNavigate();
 
@@ -34,6 +38,7 @@ export default function Team() {
   }
 
   const getWorkerIds = async () => {
+    setLoading(true);
     try {
       const q = query(collection(db, "businesses"), where("owner", "==", auth.currentUser.uid));
 
@@ -49,10 +54,13 @@ export default function Team() {
       setWorkersData(validUserData);
     } catch (error: any) {
       console.log(error.message)
+    } finally {
+      setLoading(false);
     }
   }
 
   const getPendingWorkers = async () => {
+    setLoading(true);
     try {
       const businessesSnapshot = await getDocs(collection(db, "businesses"));
       let pendingWorkers = [];
@@ -67,6 +75,8 @@ export default function Team() {
       setPendingWorkersData(pendingWorkers);
     } catch (error: any) {
       console.log(error.message)
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -101,15 +111,9 @@ export default function Team() {
             <div className={`${styles.chip} ${option === "0" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("0")}>
               <text className={styles.chipText}>All</text>
             </div>
-            {
-              user.role === "Worker" ? (
-                <div style={{ display: "none" }} />
-              ) : (
-                <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
-                  <text className={styles.chipText}>Active</text>
-                </div>
-              )
-            }
+            <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
+              <text className={styles.chipText}>Active</text>
+            </div>
             <div className={`${styles.chip} ${option === "2" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("2")}>
               <text className={styles.chipText}>Pending</text>
             </div>
@@ -122,6 +126,9 @@ export default function Team() {
                     <text className={styles.workerTitle}>You - {user.displayName}</text>
                     <text className={styles.workerTitle} style={{ color: "#533fd5" }}>Active</text>
                   </div>
+                  {
+                    loading && <Loader />
+                  }
                   {workersData.map((worker, i) => {
                     return (
                       <div className={styles.worker} key={i}>
