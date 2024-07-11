@@ -14,7 +14,8 @@ export default function Transaction(props: any) {
         <div className={styles.tLeftContainer}>
           <text className={styles.subtitle}>{props.date}</text>
         </div>
-        <div className={styles.tRightContainer} onClick={props.onDelete}>
+        {/* <div className={styles.tRightContainer} onClick={props.onDelete}> */}
+        <div className={styles.tRightContainer} onClick={() => { }}>
           <IoTrash className={styles.subtitle} size={24} style={{ color: "#533fd5" }} />
         </div>
       </div>
