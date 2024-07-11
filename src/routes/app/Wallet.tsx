@@ -247,10 +247,18 @@ export default function Wallet() {
     setOption(option)
   }
 
+  function formatNumber(number) {
+    if (number % 1 === 0) {
+      return number.toString();
+    } else {
+      return number.toFixed(2);
+    }
+  }
+
   return (
     <>
       <Layout>
-        <main className={styles.main} style={{ position: `${option ? "fixed" : "relative"}` }}>
+        <main className={styles.main} style={{ position: `${option ? "fixed" : "inherit"}` }}>
           <div className={styles.titleContainer}>
             <div className={styles.titleLeftContainer}>
               <div onClick={() => nav(-1)}>
@@ -262,8 +270,8 @@ export default function Wallet() {
           <div className={styles.walletContainer}>
             <div className={styles.balanceContainer}>
               <text className={styles.balanceSubtitle}>Your Balance</text>
-              <text className={styles.balanceTitle}>{getTotal() - getTotalExpenses()} {user.currency}</text>
-            </div> {/* //TODO: GET TOTAL HERE, NOT MONTHLY */}
+              <text className={styles.balanceTitle}>{formatNumber(getTotal() - getTotalExpenses())} {user.currency}</text>
+            </div>
             {
               user.role === "Worker" ? (
                 <>
@@ -315,13 +323,11 @@ export default function Wallet() {
                     ) : (
                       <>
                         {
-                          transactions.length > 0 ? (
+                          transactions && (
                             <div className={styles.transaction}>
                               <text className={styles.transactionText}>You</text>
                               <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
                             </div>
-                          ) : (
-                            <div style={{ display: "none" }} />
                           )
                         }
                         {Object.keys(groupedTransactions).map((name) => (

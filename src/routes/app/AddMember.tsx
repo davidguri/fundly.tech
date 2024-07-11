@@ -9,6 +9,8 @@ import { db } from "../../../firebase";
 import { getAuth } from "firebase/auth";
 import { Firestore } from "../../controllers/firestore.controller";
 
+import { sendEmail } from "../../api/email.api";
+
 export default function AddMember() {
 
   const auth = getAuth();
@@ -29,7 +31,11 @@ export default function AddMember() {
     try {
       const pendingWorkersRef = collection(db, "businesses", businessId, "pendingWorkers");
 
-      await addDoc(pendingWorkersRef, worker);
+      const authCode = (Math.floor(100000000 + Math.random() * 900000000)).toString();
+
+      await addDoc(pendingWorkersRef, { ...worker, authCode })
+
+      sendEmail(worker, businessId, authCode)
 
       setName("")
       setEmail("")
@@ -40,7 +46,7 @@ export default function AddMember() {
 
   const worker = {
     name: name,
-    email: email
+    email: email,
   }
 
   React.useEffect(() => {

@@ -10,6 +10,7 @@ import Protected from './context/Protected';
 
 import WelcomePage from "./routes/auth/Welcome";
 import Signup from './routes/auth/Signup';
+import Info from './routes/auth/Info';
 import Login from './routes/auth/Login';
 
 import Root from "./routes/app/Root";
@@ -20,6 +21,7 @@ import AddMember from './routes/app/AddMember';
 import Wallet from './routes/app/Wallet';
 import Calendar from './routes/app/Calendar';
 import Settings from './routes/app/Settings';
+import Vote from './routes/app/Vote';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
@@ -37,6 +39,14 @@ const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <Signup />
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/info",
+    element: (
+      <AuthProvider>
+        <Info />
       </AuthProvider>
     ),
   },
@@ -65,6 +75,17 @@ const router = createBrowserRouter([
       <AuthProvider>
         <Protected>
           <Settings />
+        </Protected>
+      </AuthProvider>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/vote",
+    element: (
+      <AuthProvider>
+        <Protected>
+          <Vote />
         </Protected>
       </AuthProvider>
     ),

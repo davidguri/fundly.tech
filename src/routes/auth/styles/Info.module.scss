@@ -33,72 +33,33 @@ $color: #e5e4ec;
   font-weight: 900;
   font-size: 72px;
   color: $color;
+  margin-bottom: 24px;
 }
 
-.subtitle {
-  text-align: center;
-  font-weight: 900;
-  font-size: 24px;
-  opacity: 0.75;
-  color: $color;
-  margin-bottom: 64px;
-}
-
-.selectSection {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 12px;
-}
-
-.selectContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  background-color: $color;
-  flex: 1;
+.formInput {
+  width: calc(100% - 36px);
   padding: 18px;
   border-radius: 12px;
-  aspect-ratio: 1;
+  background-color: $color;
+  font-size: medium;
+  font-weight: 600;
+  outline: none;
+  border: 0px;
+  transition: 0.25s ease-in-out;
   color: $background;
 }
 
-.selectedContainer {
-  background-color: $accent;
-  color: $color;
+.select {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: $background;
+  font-size: medium;
+  font-weight: 600;
+  padding-inline: 18px;
+  margin: 0px;
 }
-
-.selectTitle {
-  font-weight: 900;
-}
-
-// .formInput {
-//   width: calc(100% - 36px);
-//   padding: 18px;
-//   border-radius: 12px;
-//   background-color: $color;
-//   font-size: medium;
-//   font-weight: 600;
-//   outline: none;
-//   border: 0px;
-//   transition: 0.25s ease-in-out;
-//   color: $background;
-// }
-
-// .select {
-//   width: 100%;
-//   background-color: transparent;
-//   border: none;
-//   outline: none;
-//   color: $background;
-//   font-size: medium;
-//   font-weight: 600;
-//   padding-inline: 18px;
-//   margin: 0px;
-// }
 
 .submitButton {
   width: calc(100% - 24px);

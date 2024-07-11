@@ -3,7 +3,7 @@ import styles from "./styles/Add.module.scss";
 import Layout from "../../components/layout/Layout";
 
 import { useNavigate } from "react-router-dom"
-import { IoChevronBack } from "react-icons/io5"
+import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
 
 import Transaction from "../../models/transaction.model";
 import { Firestore } from "../../controllers/firestore.controller";
@@ -87,6 +87,7 @@ export default function Add() {
   }
 
   const submitHandler = async () => {
+    setShow(false)
 
     const id = uuidv4()
 
@@ -111,7 +112,6 @@ export default function Add() {
         const docRef = await Firestore.addExpenseDocument(id, transactionData);
         console.log("✅ Document written with ID: ", docRef)
       }
-      alert("Entry Added Successfully!");
       setName("")
       setType("")
       setAmount("")
@@ -128,6 +128,9 @@ export default function Add() {
   const selectOptionHandler = () => {
     setOption(!option)
   }
+
+  const [show, setShow] = React.useState(false);
+  const status = "question"
 
   return (
     <>
@@ -203,10 +206,31 @@ export default function Add() {
               }
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.submitButton} onClick={submitHandler}>
+              <div className={styles.submitButton} onClick={() => setShow(true)}>
                 <text className={styles.submitButtonText}>Add Entry</text>
               </div>
             </div>
+            <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+              <div className={styles.footerTopContainer}>
+                <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
+                <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
+              </div>
+              <div className={styles.footerMiddleContainer}>
+                {
+                  status === "question" ? (
+                    <IoHelpCircle size={104} color="#533fd5" />
+                  ) : (
+                    <IoCheckmarkCircle size={96} color="#533fd5" />
+                  )
+                }
+              </div>
+              <div className={styles.footerBottomContainer}>
+                <div className={styles.footerButton} onClick={submitHandler}>
+                  <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                </div>
+                <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+              </div>
+            </section>
           </div>
         </main>
       </Layout>

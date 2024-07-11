@@ -1,4 +1,4 @@
-$primary: rgb(174, 169, 203);
+$primary: #aea9cb;
 $secondary: #443e6f;
 $accent: #533fd5;
 $background: #0a0a0f;
@@ -12,7 +12,6 @@ $color: #e5e4ec;
   min-height: calc(100svh - 50px);
   height: fit-content;
   overflow: hidden !important;
-  position: fixed;
 
   display: flex;
   flex-direction: column;
@@ -31,127 +30,73 @@ $color: #e5e4ec;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
-
-.topContainer {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: fit-content;
   gap: 12px;
 }
 
-.bottomContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-
-.button {
+.featureContainer {
   width: calc(100% - 36px);
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  text-align: center;
-  background-color: $accent;
-  padding: 18px;
-  padding-block: 16px;
-  border-radius: 12px;
-}
-
-.buttonText {
-  color: $color;
-  font-weight: 800;
-  font-size: 16px;
-  text-align: center;
-}
-
-.accountContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
-  width: 100%;
-}
-
-.accountImageContainer {
-  height: 80px;
-}
-
-.accountImage {
-  height: 100%;
-  aspect-ratio: 1;
-  border-radius: 100px;
-  background-color: rgb(174, 169, 203);
-}
-
-.accountInfoContainer {
-  display: flex;
-  flex-direction: column;
-}
-
-.accountInfoText {
-  font-size: 21px;
-  font-weight: 900;
-}
-
-.accountInfoTextAlt {
-  font-size: 18px;
-  font-weight: 800;
-  opacity: 0.5;
-}
-
-.setting {
-  width: calc(100% - 36px);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
   background-color: $color;
-  padding: 18px;
-  padding-block: 16px;
   border-radius: 12px;
-}
-
-.settingText {
   color: $background;
-  font-weight: 800;
-  font-size: 16px;
-  text-align: center;
+  padding: 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.select {
-  background-color: transparent;
-  border: none;
-  outline: none;
-  color: $accent;
-  font-size: 18px;
-  font-weight: 800;
-  padding: 0px;
-  margin: 0px;
-  text-align: right;
+.featureLeftContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.supportText {
-  width: 100%;
-  text-align: center;
-  font-weight: 800;
-  font-size: 14px;
+.featureTitle {
+  font-weight: 900;
+  font-size: 21px;
+}
+
+.featureSubtitle {
+  font-weight: 600;
+  width: 90%;
+}
+
+.featureRightContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.featureCount {
+  font-weight: 900;
+  font-size: 28px;
+}
+
+.featureVoteContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  background-color: $accent;
+  border-radius: 12px;
+  padding: 14px;
+  padding-inline: 16px;
+  aspect-ratio: 1;
+}
+
+.featureVoteContainer {
+  font-size: 24px;
+  color: $color;
 }
 
 .footer {
   position: fixed;
   top: 52vh;
+  left: 0px;
   padding-top: 34px;
   padding-bottom: 34px;
   height: calc(48vh - 68px);
-  width: calc(100% - 36px);
+  width: calc(100vw - 36px);
   padding-inline: 18px;
   background-color: $color;
   display: flex;
@@ -159,6 +104,7 @@ $color: #e5e4ec;
   align-items: center;
   justify-content: space-between;
   border-radius: 25px;
+  margin: 0px;
   animation: show 500ms cubic-bezier(0.13, 0.53, 0.38, 0.97) 1;
 }
 
@@ -230,9 +176,7 @@ $color: #e5e4ec;
 }
 
 .explainText {
-  margin-top: 12px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
-  line-height: 1.8;
-  opacity: 0.5;
+  opacity: 0.64;
 }
