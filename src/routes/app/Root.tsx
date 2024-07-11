@@ -17,6 +17,7 @@ export default function Root() {
   const auth = getAuth()
 
   const [loading, setLoading] = React.useState(false);
+  setLoading(false);
 
   const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
