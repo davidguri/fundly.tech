@@ -39,6 +39,7 @@ export class Auth {
       try {
         const docRef = await Firestore.addUserDocument(uid, userData)
         console.log("✅ Document written with ID: ", docRef);
+        localStorage.setItem("userData", JSON.stringify(userData))
       } catch (error: any) {
         alert(error.message)
       };
