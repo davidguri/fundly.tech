@@ -9,7 +9,7 @@ import { IoChevronBack, IoAddCircle } from "react-icons/io5";
 import { Firestore } from "../../controllers/firestore.controller";
 import { getAuth } from "firebase/auth";
 
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 import Loader from "../../components/global/Loader.component";
@@ -33,8 +33,15 @@ export default function Team() {
   const [user, setUser]: any = React.useState([])
 
   const getUserData = async (): Promise<any> => {
-    const data = await Firestore.getUserById(auth.currentUser.uid);
-    setUser(data);
+    const docRef = doc(db, "users", auth.currentUser.uid);
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      setUser(docSnap.data())
+      return docSnap.data()
+    } else {
+      alert("❌ No such document user!");
+    }
   }
 
   const getWorkerIds = async () => {

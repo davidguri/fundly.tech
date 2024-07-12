@@ -113,7 +113,7 @@ export default function Info() {
   return (
     <>
       <main className={styles.main}>
-        <text className={styles.title}>Create An Account.</text>
+        <text className={styles.title}>Create An Account</text>
         <input className={styles.formInput} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} type="text" />
         <input className={styles.formInput} placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
         {/* <div className={styles.formInput} style={{ paddingInline: 0, width: "100%" }}>

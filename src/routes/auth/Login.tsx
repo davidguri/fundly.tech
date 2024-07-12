@@ -20,7 +20,7 @@ export default function Login() {
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && (localStorage.getItem("owner") === "true" ? JSON.parse(localStorage.getItem("paymen_complete")) === true : true)) {
+      if (user && ((localStorage.getItem("owner") === "true" ? JSON.parse(localStorage.getItem("paymen_complete")) === true : true) || true)) {
         nav('/');
       }
     });
