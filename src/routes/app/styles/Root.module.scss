@@ -69,3 +69,12 @@ $color: #e5e4ec;
 .buttonIcon {
   font-size: 36px;
 }
+
+.skeletonText {
+  width: 40vw;
+  height: 36px;
+  border-radius: 6px;
+  background-color: $secondary;
+  background-size: 200% 100%;
+  margin-right: 6px;
+}

@@ -104,6 +104,10 @@ export default function Add() {
       date: new Date()
     }
 
+    if (!id || !amount || !name || !type) {
+      return;
+    }
+
     try {
       if (option) {
         const docRef = await Firestore.addTransactionDocument(id, transactionData);
@@ -130,7 +134,7 @@ export default function Add() {
   }
 
   const [show, setShow] = React.useState(false);
-  const status = "question"
+  const status: string = "success";
 
   return (
     <>
@@ -206,7 +210,7 @@ export default function Add() {
               }
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.submitButton} onClick={() => setShow(true)}>
+              <div className={styles.submitButton} onClick={() => !amount || !name || !type ? {} : setShow(true)}>
                 <text className={styles.submitButtonText}>Add Entry</text>
               </div>
             </div>
@@ -228,7 +232,9 @@ export default function Add() {
                 <div className={styles.footerButton} onClick={submitHandler}>
                   <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
                 </div>
-                <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+                {
+                  status === "question" && <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+                }
               </div>
             </section>
           </div>

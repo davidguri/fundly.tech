@@ -1,12 +1,11 @@
 import { getAuth } from "firebase/auth";
-
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
-self.onmessage = function () {
-  const result = getUserData();
-  self.postMessage(result);
-};
+onmessage = async function () {
+  const result = await getUserData();
+  postMessage(result);
+}
 
 const auth = getAuth()
 
@@ -16,7 +15,8 @@ const getUserData = async () => {
   const docSnap = await getDoc(docRef)
 
   if (docSnap.exists()) {
-    return docSnap.data()
+    localStorage.setItem("user", JSON.stringify(docSnap.data()));
+    return docSnap.data();
   } else {
     alert("❌ No such document user!");
   }

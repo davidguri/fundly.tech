@@ -12,13 +12,13 @@ import { getAuth } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase";
 
-import { createWorker } from "../../utils/workerLoader.util";
-
 export default function Wallet() {
 
   const auth = getAuth()
 
   const nav = useNavigate();
+
+  const [loading, setLoading] = React.useState(true);
 
   const [expenses, setExpenses] = React.useState([])
   const [transactions, setTransactions] = React.useState([]);
@@ -32,20 +32,7 @@ export default function Wallet() {
   }
 
   React.useEffect(() => {
-    function filterTransactions(transactions) {
-      const worker = createWorker(new URL('../../workers/filterCurrentMonthTransactions.worker.ts', import.meta.url));
-
-      worker.onmessage = (event) => {
-        // console.log(event.data)
-        return event.data;
-      };
-
-      worker.postMessage(transactions);
-
-      return () => {
-        worker.terminate();
-      };
-    }
+    setLoading(true);
 
     const getExpenses = async () => {
       try {
@@ -93,8 +80,8 @@ export default function Wallet() {
         })
 
         setTransactions(filteredTransactions)
-        filterTransactions(filteredTransactions)
         setWorkerTransactions(workerTransactions)
+        setLoading(false)
       } catch (error: any) {
         alert("Error: " + error.message)
       }
@@ -247,7 +234,7 @@ export default function Wallet() {
     setOption(option)
   }
 
-  function formatNumber(number) {
+  function formatNumber(number: number) {
     if (number % 1 === 0) {
       return number.toString();
     } else {
@@ -270,19 +257,17 @@ export default function Wallet() {
           <div className={styles.walletContainer}>
             <div className={styles.balanceContainer}>
               <text className={styles.balanceSubtitle}>Your Balance</text>
-              <text className={styles.balanceTitle}>{formatNumber(getTotal() - getTotalExpenses())} {user.currency}</text>
+              <text className={styles.balanceTitle} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>{loading ? (<div className={styles.skeletonText} style={{ height: 36 }} />) : formatNumber(getTotal() - getTotalExpenses())} {user.currency}</text>
             </div>
             {
               user.role === "Worker" ? (
                 <>
                   {
-                    transactions.length > 0 ? (
+                    transactions && (
                       <div className={styles.transaction}>
                         <text className={styles.transactionText}>Work</text>
                         <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
                       </div>
-                    ) : (
-                      <div style={{ display: "none" }} />
                     )
                   }
                   <div className={styles.transaction}>
@@ -304,19 +289,19 @@ export default function Wallet() {
                     option === "0" ? (
                       <div className={styles.infoSection}>
                         <div className={styles.infoContainer}>
-                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly() + getMonthlyWorkers()} {user.currency}</text>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5", display: "flex", flexDirection: "row", alignItems: "center" }}>{loading ? (<div className={styles.skeletonText} style={{ height: 24, width: "20vw" }} />) : getMonthly() + getMonthlyWorkers()} {user.currency}</text>
                           <text className={styles.infoText}>Business</text>
                         </div>
                         <div className={styles.infoContainer}>
-                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthly()} {user.currency}</text>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5", display: "flex", flexDirection: "row", alignItems: "center" }}>{loading ? (<div className={styles.skeletonText} style={{ height: 24, width: "20vw" }} />) : getMonthly()} {user.currency}</text>
                           <text className={styles.infoText}>You</text>
                         </div>
                         <div className={styles.infoContainer}>
-                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthlyWorkers()} {user.currency}</text>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5", display: "flex", flexDirection: "row", alignItems: "center" }}>{loading ? (<div className={styles.skeletonText} style={{ height: 24, width: "20vw" }} />) : getMonthlyWorkers()} {user.currency}</text>
                           <text className={styles.infoText}>Wages</text>
                         </div>
                         <div className={styles.infoContainer}>
-                          <text className={styles.infoTitle} style={{ color: "#533fd5" }}>{getMonthlyExpenses()} {user.currency}</text>
+                          <text className={styles.infoTitle} style={{ color: "#533fd5", display: "flex", flexDirection: "row", alignItems: "center" }}>{loading ? (<div className={styles.skeletonText} style={{ height: 24, width: "20vw" }} />) : getMonthlyExpenses()} {user.currency}</text>
                           <text className={styles.infoText}>Expenses</text>
                         </div>
                       </div>

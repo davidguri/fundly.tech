@@ -10,8 +10,6 @@ import { getAuth } from "firebase/auth";
 import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 
-import SkeletonText from "../../components/global/Loader.component";
-
 export default function Root() {
 
   const auth = getAuth()
@@ -19,6 +17,8 @@ export default function Root() {
   const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
   const [user, setUser]: any = React.useState([])
+
+  const [loading, setLoading] = React.useState(true);
 
   const getUserData = async () => {
     const docRef = doc(db, "users", auth.currentUser.uid);
@@ -67,6 +67,7 @@ export default function Root() {
       })
 
       setTransactions(filteredTransactions)
+      setLoading(false);
       // console.log(transactions)
     } catch (error: any) {
       alert("Error: " + error.message)
@@ -74,6 +75,7 @@ export default function Root() {
   }
 
   React.useEffect(() => {
+    setLoading(true)
     getExpenses()
     getTransactions()
   }, [])
@@ -188,8 +190,26 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.titleContainer}>
-              <text className="title">{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
-              <text className="subtitle">Current Month: {formatNumber(getMonthly() - getMonthlyExpenses())} {user.currency || "ALL"}</text>
+              {
+                loading ? (
+                  <div className={styles.skeletonText} />
+                ) : (
+                  <text className="title">{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
+                )
+              }
+              <text
+                className="subtitle"
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center"
+                }}>
+                Current Month: {loading ? (
+                  <div className={styles.skeletonText} style={{ width: "20vw", height: 21 }} />
+                ) : (
+                  formatNumber(getMonthly() - getMonthlyExpenses())
+                )} {" " + user.currency || " ALL"}
+              </text>
             </div>
           </section>
           <section className={styles.bottomSection}>

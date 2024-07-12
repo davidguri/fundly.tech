@@ -159,3 +159,12 @@ $color: #e5e4ec;
   line-height: 1;
   margin-top: 12px;
 }
+
+.skeletonText {
+  width: 40vw;
+  height: 36px;
+  border-radius: 6px;
+  background-color: $primary;
+  background-size: 200% 100%;
+  margin-right: 4px;
+}
