@@ -36,7 +36,7 @@ export default function Info() {
     role: role,
     displayName: name,
     email: email,
-    business: type !== "1" ? business : "",
+    business: type !== "2" ? business : "",
     photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true",
     currency: "ALL"
   }
@@ -58,15 +58,17 @@ export default function Info() {
         let pendingWorkers = businessData.pendingWorkers || [];
 
         const updatedPendingWorkers = pendingWorkers.filter(worker => {
-          return !(worker.email === email && worker.authCode === authCode);
+          return worker.email !== email && worker.authCode !== authCode;
         });
 
-        await signUp().then(async () => {
-          await updateDoc(businessDocRef, {
-            pendingWorkers: updatedPendingWorkers
-          });
-          // console.log("Matching pending workers deleted successfully.");
-        })
+        console.log(updatedPendingWorkers);
+        console.log(pendingWorkers);
+
+        await updateDoc(businessDocRef, {
+          pendingWorkers: updatedPendingWorkers
+        });
+
+        await signUp()
       } else {
         console.log("No such business document!");
       }
