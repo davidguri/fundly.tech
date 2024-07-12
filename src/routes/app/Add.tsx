@@ -167,17 +167,19 @@ export default function Add() {
                         <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>Create Template</text>
                       </div>
                     </div> */}
-                    <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
-                      <select name="Worker" id="worker" className={styles.select} onChange={handleNameChange} value={name}>
-                        <option value="default">Worker</option>
-                        <option value="You">You</option>
-                        {workersData.map((worker, i) => {
-                          return (
-                            <option key={i} value={worker.displayName}>{worker.displayName}</option>
-                          )
-                        })}
-                      </select>
-                    </div>
+                    {
+                      user.role === "Owner" && <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
+                        <select name="Worker" id="worker" className={styles.select} onChange={handleNameChange} value={name}>
+                          <option value="default">Worker</option>
+                          <option value="You">You</option>
+                          {workersData.map((worker, i) => {
+                            return (
+                              <option key={i} value={worker.displayName}>{worker.displayName}</option>
+                            )
+                          })}
+                        </select>
+                      </div>
+                    }
                     <input className={styles.formInput} placeholder="Work Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
                     <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
                     <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>

@@ -84,10 +84,18 @@ export default function Settings() {
                   <text className={styles.accountInfoTextAlt}>{auth.currentUser.email}</text>
                 </div>
               </div>
-              <div className={styles.setting}>
-                <text className={styles.settingText}>Business</text>
-                <text className={styles.settingText} style={{ color: "#533fd5" }}>{user.business || "Freelance"}</text>
-              </div>
+              {
+                user.role !== "Freelancer" && <div className={styles.setting}>
+                  <text className={styles.settingText}>Business</text>
+                  <text className={styles.settingText} style={{ color: "#533fd5" }}>{user.business}</text>
+                </div>
+              }
+              {
+                user.role !== "Worker" && <div className={styles.setting}>
+                  <text className={styles.settingText}>Membership Plan</text>
+                  <text className={styles.settingText} style={{ color: "#533fd5" }}>{user.royalty ? "Royalty" : user.membership ? user.membership : "Freelancer"}</text>
+                </div>
+              }
               <div className={styles.setting}>
                 <text className={styles.settingText}>Currency</text>
                 <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency}>

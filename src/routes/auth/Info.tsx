@@ -6,6 +6,9 @@ import { Auth } from "../../controllers/auth.controller";
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../../firebase';
 
+import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
+
 export default function Info() {
 
   function useQuery() {
@@ -22,8 +25,9 @@ export default function Info() {
   const [email, setEmail] = React.useState("");
   const [business, setBusiness] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [code, setCode] = React.useState<number>();
 
-  const role = type === "0" ? "Owner" : type === "1" ? "Freelance" : "Worker"
+  const role = type === "0" ? "Owner" : type === "1" ? "Worker" : "Freelancer";
 
   const nav = useNavigate()
 
@@ -32,7 +36,7 @@ export default function Info() {
     role: role,
     displayName: name,
     email: email,
-    business: business,
+    business: type !== "1" ? business : "",
     photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true",
     currency: "ALL"
   }
@@ -43,9 +47,37 @@ export default function Info() {
     })
   }
 
+  const checkPendingWorkers = async (email: string, authCode: number, businessId: string) => {
+    try {
+      // Get a reference to the specific business document
+      const businessDocRef = doc(db, "businesses", businessId);
+      const businessDocSnap = await getDoc(businessDocRef);
+
+      if (businessDocSnap.exists()) {
+        const businessData = businessDocSnap.data();
+        let pendingWorkers = businessData.pendingWorkers || [];
+
+        const updatedPendingWorkers = pendingWorkers.filter(worker => {
+          return !(worker.email === email && worker.authCode === authCode);
+        });
+
+        await signUp().then(async () => {
+          await updateDoc(businessDocRef, {
+            pendingWorkers: updatedPendingWorkers
+          });
+          // console.log("Matching pending workers deleted successfully.");
+        })
+      } else {
+        console.log("No such business document!");
+      }
+    } catch (error) {
+      console.error("Error checking and deleting pending workers:", error);
+    }
+  };
+
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user && type !== "0" || JSON.parse(localStorage.getItem("paymen_complete")) === true) {
         nav('/');
       }
     });
@@ -55,7 +87,25 @@ export default function Info() {
   }, [nav]);
 
   const handleContinue = async () => {
-    type === "0" ? {} : await signUp()
+    await signUp().then(() => {
+      localStorage.setItem("owner", JSON.stringify(false));
+    })
+  }
+
+  const handleWorkerContinue = async () => {
+    await checkPendingWorkers(email, code, business);
+  }
+
+  const handleOwnerContinue = async () => {
+    if (!name || !email || !business || !password) {
+      return;
+    } else {
+      await signUp().then(() => {
+        localStorage.setItem("payment_complete", JSON.stringify(false));
+        localStorage.setItem("owner", JSON.stringify(true));
+        nav("/payment")
+      });
+    }
   }
 
   return (
@@ -79,20 +129,23 @@ export default function Info() {
           ) : (
             <>
               {
-                type === "1" && <text className={styles.formText}>Put the auth code here bruh</text>
+                type === "1" && (
+                  <>
+                    <input className={styles.formInput} placeholder="Business Name" value={business} onChange={(e) => setBusiness(e.target.value)} type="text" />
+                    <input className={styles.formInput} placeholder="Code" value={code} onChange={(e) => setCode(parseInt(e.target.value))} type="number" inputMode="numeric" />
+                  </>
+                )
               }
             </>
           )
         }
         {
           type === "0" ? (
-            <a href="https://www.paypal.com/ncp/payment/8D2KU8HBG3M2S" className="link" target="_blank">
-              <div className={styles.submitButton}>
-                <text className={styles.submitButtonText}>Continue To Payment</text>
-              </div>
-            </a>
+            <div className={styles.submitButton} onClick={handleOwnerContinue}>
+              <text className={styles.submitButtonText}>Continue To Payment</text>
+            </div>
           ) : (
-            <div className={styles.submitButton} onClick={handleContinue}>
+            <div className={styles.submitButton} onClick={type === "1" ? handleWorkerContinue : handleContinue}>
               <text className={styles.submitButtonText}>Continue</text>
             </div>
           )

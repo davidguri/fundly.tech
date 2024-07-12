@@ -1,0 +1,46 @@
+$primary: #aea9cb;
+$secondary: #443e6f;
+$accent: #533fd5;
+$background: #0a0a0f;
+$color: #e5e4ec;
+
+::placeholder {
+  color: #0a0a0f;
+}
+
+.main {
+  width: calc(100% - 32px);
+  padding-inline: 16px;
+  padding-bottom: 34px;
+  height: calc(100svh - 34px);
+  overflow: hidden !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  background: $color;
+  background: linear-gradient(0deg, $color 5%, $accent 50%, $background 100%);
+}
+
+.title {
+  text-align: center;
+  line-height: 1.1;
+  font-weight: 900;
+  font-size: 72px;
+  color: $color;
+  margin-bottom: 12px;
+}
+
+.subscriptionSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionTitle {
+  font-weight: 800;
+  font-size: 18px;
+}

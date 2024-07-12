@@ -4,7 +4,7 @@ import styles from "./styles/AddMember.module.scss";
 import { useNavigate } from "react-router-dom"
 import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
 
-import { collection, addDoc } from "firebase/firestore";
+import { updateDoc, arrayUnion, doc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { getAuth } from "firebase/auth";
 import { Firestore } from "../../controllers/firestore.controller";
@@ -29,11 +29,19 @@ export default function AddMember() {
   const addPendingWorker = async (businessId: string, worker) => {
     setShow(false);
     try {
-      const pendingWorkersRef = collection(db, "businesses", businessId, "pendingWorkers");
+      const businessDocRef = doc(db, "businesses", businessId);
 
       const authCode = (Math.floor(100000000 + Math.random() * 900000000)).toString();
 
-      await addDoc(pendingWorkersRef, { ...worker, authCode })
+      const newPendingWorker = {
+        name: name,
+        email: email,
+        authCode: authCode
+      };
+
+      await updateDoc(businessDocRef, {
+        pendingWorkers: arrayUnion(newPendingWorker)
+      });
 
       sendEmail(worker, businessId, authCode)
 

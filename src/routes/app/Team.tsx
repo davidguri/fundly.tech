@@ -62,19 +62,24 @@ export default function Team() {
   const getPendingWorkers = async () => {
     setLoading(true);
     try {
-      const businessesSnapshot = await getDocs(collection(db, "businesses"));
-      let pendingWorkers = [];
+      const businessesQuery = query(
+        collection(db, "businesses"),
+        where("owner", "==", auth.currentUser.uid)
+      );
+      let pendingWorkersData = []
 
-      for (const businessDoc of businessesSnapshot.docs) {
-        const pendingWorkersSnapshot = await getDocs(collection(businessDoc.ref, "pendingWorkers"));
-        pendingWorkersSnapshot.forEach(doc => {
-          pendingWorkers.push({ businessId: businessDoc.id, ...doc.data() });
-        });
-      }
+      const businessesSnapshot = await getDocs(businessesQuery);
 
-      setPendingWorkersData(pendingWorkers);
-    } catch (error: any) {
-      console.log(error.message)
+      businessesSnapshot.forEach(businessDoc => {
+        const businessData = businessDoc.data();
+        const pendingWorkers = businessData.pendingWorkers;
+
+        pendingWorkersData.push(...pendingWorkers);
+      });
+      console.log(pendingWorkersData);
+      setPendingWorkersData(pendingWorkersData)
+    } catch (error) {
+      console.error(error.message);
     } finally {
       setLoading(false);
     }

@@ -12,6 +12,7 @@ import WelcomePage from "./routes/auth/Welcome";
 import Signup from './routes/auth/Signup';
 import Info from './routes/auth/Info';
 import Login from './routes/auth/Login';
+import Payment from './routes/auth/Payment';
 
 import Root from "./routes/app/Root";
 import Transactions from './routes/app/Transactions';
@@ -47,6 +48,14 @@ const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <Info />
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/payment",
+    element: (
+      <AuthProvider>
+        <Payment />
       </AuthProvider>
     ),
   },

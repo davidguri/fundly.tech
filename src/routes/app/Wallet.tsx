@@ -260,7 +260,7 @@ export default function Wallet() {
               <text className={styles.balanceTitle} style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>{loading ? (<div className={styles.skeletonText} style={{ height: 36 }} />) : formatNumber(getTotal() - getTotalExpenses())} {user.currency}</text>
             </div>
             {
-              user.role === "Worker" ? (
+              user.role === "Worker" || user.role === "Freelancer" ? (
                 <>
                   {
                     transactions && (
@@ -272,7 +272,7 @@ export default function Wallet() {
                   }
                   <div className={styles.transaction}>
                     <text className={styles.transactionText}>Expenses</text>
-                    <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthlyExpenses()}</text>
+                    <text className={styles.transactionText} style={{ color: "#533fd5" }}>{getMonthlyExpenses()} {user.currency}</text>
                   </div>
                 </>
               ) : (

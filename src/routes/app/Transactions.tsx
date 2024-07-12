@@ -231,13 +231,9 @@ export default function Transactions() {
                 <text className={styles.chipText}>You</text>
               </div>
               {
-                user.role === "Worker" ? (
-                  <div style={{ display: "none" }} />
-                ) : (
-                  <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
-                    <text className={styles.chipText}>Workers</text>
-                  </div>
-                )
+                user.role === "Owner" && <div className={`${styles.chip} ${option === "1" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("1")}>
+                  <text className={styles.chipText}>Workers</text>
+                </div>
               }
               <div className={`${styles.chip} ${option === "2" ? styles.selectedChip : ""}`} onClick={() => selectOptionHandler("2")}>
                 <text className={styles.chipText}>Expenses</text>
