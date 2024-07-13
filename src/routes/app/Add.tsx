@@ -159,14 +159,6 @@ export default function Add() {
               {
                 option ? (
                   <>
-                    {/* <div className={styles.buttonContainer}>
-                      <div className={styles.button} onClick={() => { }}>
-                        <text className={styles.buttonText}>Use Template</text>
-                      </div>
-                      <div className={styles.button} style={{ backgroundColor: "#533fd5", borderColor: "#533fd5" }} onClick={() => { }}>
-                        <text className={styles.buttonText} style={{ color: "#e5e4ec" }}>Create Template</text>
-                      </div>
-                    </div> */}
                     {
                       user.role === "Owner" && <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
                         <select name="Worker" id="worker" className={styles.select} onChange={handleNameChange} value={name}>
@@ -183,7 +175,7 @@ export default function Add() {
                     <input className={styles.formInput} placeholder="Work Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
                     <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
                     <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
-                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency}>
+                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={user.currency}>
                         <option value="ALL">ALL</option>
                         <option value="EUR">EUR</option>
                         <option value="USD">USD</option>
@@ -199,7 +191,7 @@ export default function Add() {
                     <input className={styles.formInput} placeholder="Expense Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
                     <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
                     <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
-                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency}>
+                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={user.currency}>
                         <option value="ALL">ALL</option>
                         <option value="EUR">EUR</option>
                         <option value="USD">USD</option>
@@ -212,6 +204,14 @@ export default function Add() {
               }
             </div>
             <div className={styles.bottomContainer}>
+              {/* <div className={styles.buttonContainer}>
+                <div className={styles.button} onClick={() => { }}>
+                  <text className={styles.buttonText}>Use Template</text>
+                </div>
+                <div className={styles.button} onClick={() => { }}>
+                  <text className={styles.buttonText}>New Template</text>
+                </div>
+              </div> */}
               <div className={styles.submitButton} onClick={() => !amount || !name || !type ? {} : setShow(true)}>
                 <text className={styles.submitButtonText}>Add Entry</text>
               </div>

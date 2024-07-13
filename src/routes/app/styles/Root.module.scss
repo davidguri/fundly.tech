@@ -29,20 +29,39 @@ $color: #e5e4ec;
 .topSection {
   flex: 1;
   flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 24px;
 }
 
-.topContainer {
-  width: calc(100% - 20px);
-  margin-inline: 10px;
+.greetingContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
 
+.accountImage {
+  height: 48px;
+  aspect-ratio: 1;
+  border-radius: 100px;
+  background-color: rgb(174, 169, 203);
+}
+
 .titleContainer {
   display: flex;
   flex-direction: column;
+}
+
+.subtitle {
+  font-weight: 800;
+  font-size: 24px;
+  opacity: 0.8;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 42px;
+  line-height: 1.2;
 }
 
 .bottomSection {

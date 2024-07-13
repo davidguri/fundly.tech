@@ -3,7 +3,7 @@ import styles from "./styles/Settings.module.scss"
 import Layout from "../../components/layout/Layout"
 
 import { useNavigate, Link } from "react-router-dom"
-import { IoChevronBack } from "react-icons/io5"
+import { IoChevronBack, IoSave } from "react-icons/io5"
 
 import { Auth } from "../../controllers/auth.controller"
 import { Firestore } from "../../controllers/firestore.controller"
@@ -76,10 +76,15 @@ export default function Settings() {
       <Layout>
         <main className={styles.main}>
           <div className={styles.titleContainer}>
-            <div onClick={() => nav(-1)}>
-              <IoChevronBack className="title" color="#533fd5" />
+            <div className={styles.leftTitleContainer}>
+              <div onClick={() => nav(-1)}>
+                <IoChevronBack className="title" color="#533fd5" />
+              </div>
+              <text className="title">Settings</text>
             </div>
-            <text className="title">Settings</text>
+            <div style={{ textDecoration: "none", color: "inherit" }} onClick={() => { (currency !== user.currency) ? setShow(true) : setStatus("question") }}>
+              <IoSave className="title" color="#533fd5" size={30} />
+            </div>
           </div>
           <div className={styles.content}>
             <div className={styles.topContainer}>
@@ -98,6 +103,10 @@ export default function Settings() {
                   <text className={styles.settingText} style={{ color: "#533fd5" }}>{user.business}</text>
                 </div>
               }
+              <div className={styles.setting}>
+                <text className={styles.settingText}>Team Members</text>
+                <text className={styles.settingText} style={{ color: "#533fd5" }}><Link to="/team" className="link">View</Link></text>
+              </div>
               {
                 user.role !== "Worker" && <div className={styles.setting}>
                   <text className={styles.settingText}>Membership Plan</text>
@@ -106,7 +115,7 @@ export default function Settings() {
               }
               <div className={styles.setting}>
                 <text className={styles.settingText}>Currency</text>
-                <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency}>
+                <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={user.currency}>
                   <option value="ALL">ALL</option>
                   <option value="EUR">EUR</option>
                   <option value="USD">USD</option>
@@ -124,9 +133,6 @@ export default function Settings() {
               </div>
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.button} style={{ backgroundColor: "#aea9cb" }} onClick={() => { (currency !== user.currency) ? setShow(true) : setStatus("question") }}>
-                <text className={styles.buttonText} style={{ color: "#0a0a0f" }}>Save Changes</text>
-              </div>
               <div className={styles.button} onClick={handleSignOut}>
                 <text className={styles.buttonText}>Log Out</text>
               </div>

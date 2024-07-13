@@ -23,6 +23,13 @@ $color: #e5e4ec;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+}
+
+.leftTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   gap: 12px;
 }
 
@@ -39,7 +46,7 @@ $color: #e5e4ec;
   display: flex;
   flex-direction: column;
   height: fit-content;
-  gap: 12px;
+  gap: 8px;
 }
 
 .bottomContainer {
@@ -76,7 +83,7 @@ $color: #e5e4ec;
   flex-direction: row;
   align-items: center;
   gap: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 28px;
   width: 100%;
 }
 
@@ -116,7 +123,17 @@ $color: #e5e4ec;
   background-color: $color;
   padding: 18px;
   padding-block: 16px;
-  border-radius: 12px;
+  border-radius: 8px;
+}
+
+.setting:nth-child(2) {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.setting:nth-last-child(1) {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 .settingText {

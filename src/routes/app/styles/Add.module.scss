@@ -76,7 +76,7 @@ $color: #e5e4ec;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
+  gap: 12px;
 }
 
 .chip {
@@ -95,6 +95,12 @@ $color: #e5e4ec;
 .chipText {
   font-weight: 800;
   text-align: center;
+}
+
+.bottomContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .formInput {

@@ -3,7 +3,7 @@ import styles from "./styles/Root.module.scss";
 import Layout from "../../components/layout/Layout";
 import { Link } from "react-router-dom";
 
-import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings, IoPeople } from "react-icons/io5";
+import { IoCreate, IoCalendar, IoRepeat, IoWallet, IoSettings, IoStatsChart } from "react-icons/io5";
 
 import { getAuth } from "firebase/auth";
 
@@ -184,21 +184,28 @@ export default function Root() {
     }
   }
 
+  const hours = new Date().getHours();
+  const greeting = hours >= 5 && hours < 12 ? "Morning" : hours >= 12 && hours < 18 ? "'Noon" : "Evening"
+
   return (
     <>
       <Layout>
         <main className={styles.main}>
           <section className={styles.topSection}>
+            <div className={styles.greetingContainer}>
+              <text className={styles.subtitle} style={{ lineHeight: 1 }}>Good {greeting}, {user.displayName}!</text>
+              {/* <img src={user.photoUrl} className={styles.accountImage} /> */}
+            </div>
             <div className={styles.titleContainer}>
               {
                 loading ? (
                   <div className={styles.skeletonText} />
                 ) : (
-                  <text className="title">{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
+                  <text className={styles.title}>{formatNumber(getTotal() - getTotalExpenses())} {user.currency || "ALL"}</text>
                 )
               }
               <text
-                className="subtitle"
+                className={styles.subtitle}
                 style={{
                   display: "flex",
                   flexDirection: "row",
@@ -223,9 +230,9 @@ export default function Root() {
                 <IoCalendar className={styles.buttonIcon} />
               </div>
             </Link>
-            <Link to="/settings" className={`${styles.buttonContainer} ${"link"}`}>
+            <Link to="/analytics" className={`${styles.buttonContainer} ${"link"}`}>
               <div className={styles.buttonContainer}>
-                <IoSettings className={styles.buttonIcon} />
+                <IoStatsChart className={styles.buttonIcon} />
               </div>
             </Link>
             <Link to="/transactions" className={`${styles.buttonContainer} ${"link"}`}>
@@ -238,15 +245,11 @@ export default function Root() {
                 <IoCreate className={styles.buttonIcon} />
               </div>
             </Link>
-            {user.role === "Owner" ? (
-              <Link to="/team" className={`${styles.buttonContainer} ${"link"}`}>
-                <div className={styles.buttonContainer}>
-                  <IoPeople className={styles.buttonIcon} />
-                </div>
-              </Link>
-            ) : (
-              <div style={{ display: "none" }} />
-            )}
+            <Link to="/settings" className={`${styles.buttonContainer} ${"link"}`}>
+              <div className={styles.buttonContainer}>
+                <IoSettings className={styles.buttonIcon} />
+              </div>
+            </Link>
           </section>
         </main>
       </Layout>

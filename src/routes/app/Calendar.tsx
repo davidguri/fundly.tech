@@ -3,7 +3,7 @@ import styles from "./styles/Calendar.module.scss";
 import Layout from "../../components/layout/Layout";
 
 import { useNavigate } from "react-router-dom"
-import { IoChevronBack, IoChevronForward, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
+import { IoChevronBack, IoChevronForward, IoHelpCircle, IoCheckmarkCircle, IoToday } from "react-icons/io5"
 
 import { Calendar as CalendarComponent } from 'react-calendar';
 import Transaction from "../../components/global/Transaction.component";
@@ -165,34 +165,15 @@ export default function Calendar() {
     getTransactions(value)
   }, [])
 
-  const handleDelete = async (id: string, type: string) => {
-    setShow(false)
-    if (type === "expenses") {
-      await Firestore.deleteExpense(id)
-    } else {
-      await Firestore.deleteTransaction(id)
-    }
-    getTransactions(value)
-  }
-
-  function isSameMonth(a, b) {
-    return differenceInCalendarMonths(a, b) === 0
-  }
-
-  function isSameDay(a, b) {
-    return differenceInCalendarDays(a, b) === 0
-  }
-
-  function tileClass({ date }) {
-    const today = new Date()
-    if (isSameMonth(date, value)) {
-      return isSameDay(date, value) ? styles.tileCurrent : styles.tile
-    } else if (isSameDay(date, today)) {
-      return styles.currentDay
-    } else {
-      return styles.inactiveTile
-    }
-  }
+  // const handleDelete = async (id: string, type: string) => {
+  //   setShow(false)
+  //   if (type === "expenses") {
+  //     await Firestore.deleteExpense(id)
+  //   } else {
+  //     await Firestore.deleteTransaction(id)
+  //   }
+  //   getTransactions(value)
+  // }
 
   const [show, setShow] = React.useState(false);
   const status = "question"
@@ -242,15 +223,39 @@ export default function Calendar() {
     return parseFloat((totalPay + newTotalPay).toFixed(2));
   }
 
+  function isSameMonth(a, b) {
+    return differenceInCalendarMonths(a, b) === 0
+  }
+
+  function isSameDay(a, b) {
+    return differenceInCalendarDays(a, b) === 0
+  }
+
+  function tileClass({ date }) {
+    const today = new Date()
+    if (isSameMonth(date, value)) {
+      return isSameDay(date, value) ? styles.tileCurrent : styles.tile
+    } else if (isSameDay(date, today)) {
+      return styles.currentDay
+    } else {
+      return styles.inactiveTile
+    }
+  }
+
   return (
     <>
       <Layout>
         <main className={styles.main}>
           <div className={styles.titleContainer}>
-            <div onClick={() => nav(-1)}>
-              <IoChevronBack className="title" color="#533fd5" />
+            <div className={styles.leftTitleContainer}>
+              <div onClick={() => nav(-1)}>
+                <IoChevronBack className="title" color="#533fd5" />
+              </div>
+              <text className="title">{date}</text>
             </div>
-            <text className="title">{date}</text>
+            <div style={{ textDecoration: "none", color: "inherit" }} onClick={() => setValue(new Date())}>
+              <IoToday className="title" color="#533fd5" size={30} />
+            </div>
           </div>
           <div className={styles.calendarContainer}>
             <div className={styles.overlay} style={{ display: `${currentMonth.getMonth() !== value.getMonth() ? "flex" : "none"}` }}>
@@ -265,7 +270,7 @@ export default function Calendar() {
               tileClassName={tileClass}
               nextLabel={<IoChevronForward style={{ margin: 0, padding: 0 }} size={18} color="#533fd5" />}
               prevLabel={<IoChevronBack style={{ margin: 0, padding: 0 }} size={18} color="#533fd5" />}
-              onActiveStartDateChange={({ activeStartDate }) => { setCurrentMonth(activeStartDate); console.log(activeStartDate); }}
+              onActiveStartDateChange={({ activeStartDate }) => { setCurrentMonth(activeStartDate) }}
             />
           </div>
           <div className={styles.content}>
@@ -294,7 +299,10 @@ export default function Calendar() {
                           }
                         </div>
                         <div className={styles.footerBottomContainer}>
-                          <div className={styles.footerButton} onClick={() => handleDelete(transaction.id, transaction.incoming ? "transactions" : "expenses")}>
+                          {/* <div className={styles.footerButton} onClick={() => handleDelete(transaction.id, transaction.incoming ? "transactions" : "expenses")}>
+                            <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                          </div> */}
+                          <div className={styles.footerButton} onClick={() => { }}>
                             <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
                           </div>
                           <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
