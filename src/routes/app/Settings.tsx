@@ -90,7 +90,7 @@ export default function Settings() {
             <div className={styles.topContainer}>
               <div className={styles.accountContainer}>
                 <div className={styles.accountImageContainer}>
-                  <img src={user.photoUrl} className={styles.accountImage} />
+                  <img src={auth.currentUser.photoURL} className={styles.accountImage} />
                 </div>
                 <div className={styles.accountInfoContainer}>
                   <text className={styles.accountInfoText}>{auth.currentUser.displayName} - {user.role}</text>

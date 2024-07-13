@@ -193,7 +193,7 @@ export default function Root() {
         <main className={styles.main}>
           <section className={styles.topSection}>
             <div className={styles.greetingContainer}>
-              <text className={styles.subtitle} style={{ lineHeight: 1 }}>Good {greeting}, {user.displayName}!</text>
+              <text className={styles.subtitle} style={{ lineHeight: 1 }}>Good {greeting}, {auth.currentUser.displayName}!</text>
               {/* <img src={user.photoUrl} className={styles.accountImage} /> */}
             </div>
             <div className={styles.titleContainer}>
