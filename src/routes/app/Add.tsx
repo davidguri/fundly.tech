@@ -64,7 +64,7 @@ export default function Add() {
 
   const [name, setName] = React.useState("default");
   const [type, setType] = React.useState("");
-  const [currency, setCurrency] = React.useState("");
+  const [currency, setCurrency] = React.useState<string>();
   const [amount, setAmount] = React.useState("");
   const [duration, setDuration] = React.useState("");
   const [tip, setTip] = React.useState("");
@@ -175,7 +175,7 @@ export default function Add() {
                     <input className={styles.formInput} placeholder="Work Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
                     <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
                     <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
-                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={user.currency}>
+                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency || user.currency}>
                         <option value="ALL">ALL</option>
                         <option value="EUR">EUR</option>
                         <option value="USD">USD</option>
@@ -191,7 +191,7 @@ export default function Add() {
                     <input className={styles.formInput} placeholder="Expense Name" value={type} onChange={(e) => setType(e.target.value)} type="text" autoCorrect="off" />
                     <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
                     <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
-                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={user.currency}>
+                      <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency || user.currency}>
                         <option value="ALL">ALL</option>
                         <option value="EUR">EUR</option>
                         <option value="USD">USD</option>

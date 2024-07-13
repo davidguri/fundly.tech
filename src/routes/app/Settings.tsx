@@ -33,7 +33,7 @@ export default function Settings() {
     getUserData()
   }, []);
 
-  const [currency, setCurrency] = React.useState(user.currency)
+  const [currency, setCurrency] = React.useState<string>()
 
   const handleCurrencyChange = (e: any) => {
     try {
@@ -115,7 +115,7 @@ export default function Settings() {
               }
               <div className={styles.setting}>
                 <text className={styles.settingText}>Currency</text>
-                <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={user.currency}>
+                <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency || user.currency}>
                   <option value="ALL">ALL</option>
                   <option value="EUR">EUR</option>
                   <option value="USD">USD</option>
