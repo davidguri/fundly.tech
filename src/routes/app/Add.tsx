@@ -2,14 +2,14 @@ import React from "react";
 import styles from "./styles/Add.module.scss";
 import Layout from "../../components/layout/Layout";
 
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
 
 import Transaction from "../../models/transaction.model";
 import { Firestore } from "../../controllers/firestore.controller";
 import { v4 as uuidv4 } from 'uuid';
 
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query, where, doc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 import { getAuth } from "firebase/auth";
 
@@ -21,6 +21,7 @@ export default function Add() {
 
   const [workersData, setWorkersData] = React.useState([]);
   const [user, setUser]: any = React.useState([]);
+  const [templates, setTemplates] = React.useState([]);
 
   const getUserData = async () => {
     try {
@@ -57,9 +58,33 @@ export default function Add() {
     }
   }
 
+  async function fetchUserTemplates() {
+    try {
+      const docRef = doc(db, "users", auth.currentUser.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const userTemplates = data.templates || {}; // Access the templates map field
+
+        // Convert the templates object to an array
+        const templateData = Object.keys(userTemplates).map((templateName) => ({
+          templateContent: userTemplates[templateName],
+        }));
+
+        setTemplates(templateData);
+      } else {
+        console.log("No such document!");
+      }
+    } catch (error) {
+      console.error("Error fetching templates: ", error);
+    }
+  }
+
   React.useEffect(() => {
     getUserData()
     getWorkerIds()
+    fetchUserTemplates();
   }, [])
 
   const [name, setName] = React.useState("default");
@@ -136,6 +161,14 @@ export default function Add() {
   const [show, setShow] = React.useState(false);
   const status: string = "success";
 
+  const handleTemplateChange = (e) => {
+    const templateObj = templates.find(template => template.templateContent.workName === e.target.value)
+    setType(templateObj.templateContent.workName);
+    setAmount(templateObj.templateContent.amount);
+    setCurrency(templateObj.templateContent.currency);
+    setDuration(templateObj.templateContent.hours);
+  }
+
   return (
     <>
       <Layout>
@@ -204,14 +237,25 @@ export default function Add() {
               }
             </div>
             <div className={styles.bottomContainer}>
-              {/* <div className={styles.buttonContainer}>
-                <div className={styles.button} onClick={() => { }}>
-                  <text className={styles.buttonText}>Use Template</text>
+              <div className={styles.buttonContainer}>
+                <div className={styles.button}>
+                  <select name="Template" id="template" className={styles.templateSelect} onChange={handleTemplateChange} defaultValue={"default"}>
+                    <option value="default">Use Template</option>
+                    {
+                      templates.map((template, i) => {
+                        return (
+                          <option value={template.templateContent.workName} key={i}>{template.templateContent.workName}</option>
+                        )
+                      })
+                    }
+                  </select>
                 </div>
-                <div className={styles.button} onClick={() => { }}>
-                  <text className={styles.buttonText}>New Template</text>
-                </div>
-              </div> */}
+                <Link to="/add_template" className="link">
+                  <div className={styles.button} onClick={() => { }}>
+                    <text className={styles.buttonText}>New Template</text>
+                  </div>
+                </Link>
+              </div>
               <div className={styles.submitButton} onClick={() => !amount || !name || !type ? {} : setShow(true)}>
                 <text className={styles.submitButtonText}>Add Entry</text>
               </div>

@@ -34,72 +34,11 @@ $color: #e5e4ec;
   justify-content: space-between;
 }
 
-.inlineContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-}
-
 .topContainer {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 12px;
-}
-
-.button {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background-color: $color;
-  border: 3.2px solid $color;
-  padding-inline: 24px;
-  padding-block: 12px;
-  border-radius: 12px;
-}
-
-.buttonText {
-  color: $background;
-  font-weight: 800;
-  text-align: center;
-}
-
-.chipContainer,
-.buttonContainer {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
-}
-
-.chip {
-  border: 3.2px solid $color;
-  padding-inline: 24px;
-  padding-block: 12px;
-  border-radius: 12px;
-  color: $color;
-}
-
-.selectedChip {
-  background-color: $color;
-  color: $background;
-}
-
-.chipText {
-  font-weight: 800;
-  text-align: center;
-}
-
-.bottomContainer {
-  display: flex;
-  flex-direction: column;
   gap: 12px;
 }
 
@@ -109,43 +48,11 @@ $color: #e5e4ec;
   padding-block: 16px;
   border-radius: 12px;
   background-color: $color;
-  font-size: medium;
+  font-size: 16px;
   font-weight: 600;
   outline: none;
   border: 0px;
   color: $background;
-}
-
-.select {
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  color: $background;
-  font-size: 16px;
-  font-weight: 600;
-  padding-inline: 18px;
-  margin: 0px;
-}
-
-.templateSelect {
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  color: $background;
-  font-weight: 800;
-  margin: 0px;
-  font-size: 16px;
-  padding-block: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  text-align-last: center;
-  -moz-text-align-last: center;
-  -webkit-appearance: none;
-  appearance: none;
 }
 
 .submitButton {
@@ -163,6 +70,26 @@ $color: #e5e4ec;
   font-weight: 900;
   font-size: 16px;
   text-align: center;
+}
+
+.explainText {
+  margin-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.8;
+  opacity: 0.5;
+}
+
+.select {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: $background;
+  font-size: 16px;
+  font-weight: 600;
+  padding-inline: 18px;
+  margin: 0px;
 }
 
 .footer {

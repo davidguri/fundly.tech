@@ -230,9 +230,11 @@ export default function Root() {
                 <IoCalendar className={styles.buttonIcon} />
               </div>
             </Link>
-            <div className={styles.buttonContainer}>
-              <IoStatsChart className={styles.buttonIcon} />
-            </div>
+            <Link to="/analytics" className={`${styles.buttonContainer} ${"link"}`}>
+              <div className={styles.buttonContainer}>
+                <IoStatsChart className={styles.buttonIcon} />
+              </div>
+            </Link>
             <Link to="/transactions" className={`${styles.buttonContainer} ${"link"}`}>
               <div className={styles.buttonContainer}>
                 <IoRepeat className={styles.buttonIcon} />

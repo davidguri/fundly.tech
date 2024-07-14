@@ -17,12 +17,14 @@ import Payment from './routes/auth/Payment';
 import Root from "./routes/app/Root";
 import Transactions from './routes/app/Transactions';
 import Add from './routes/app/Add';
+import AddTemplate from './routes/app/AddTemplate';
 import Team from './routes/app/Team';
 import AddMember from './routes/app/AddMember';
 import Wallet from './routes/app/Wallet';
 import Calendar from './routes/app/Calendar';
 import Settings from './routes/app/Settings';
 import Vote from './routes/app/Vote';
+import Analytics from './routes/app/Analytics';
 
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
@@ -123,6 +125,17 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: "/add_template",
+    element: (
+      <AuthProvider>
+        <Protected>
+          <AddTemplate />
+        </Protected>
+      </AuthProvider>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/team",
     element: (
       <AuthProvider>
@@ -161,6 +174,17 @@ const router = createBrowserRouter([
       <AuthProvider>
         <Protected>
           <Calendar />
+        </Protected>
+      </AuthProvider>
+    ),
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/analytics",
+    element: (
+      <AuthProvider>
+        <Protected>
+          <Analytics />
         </Protected>
       </AuthProvider>
     ),

@@ -1,0 +1,42 @@
+$primary: rgb(174, 169, 203);
+$secondary: #443e6f;
+$accent: #533fd5;
+$background: #0a0a0f;
+$color: #e5e4ec;
+
+.main {
+  width: calc(100% - 32px);
+  padding-inline: 16px;
+  padding-top: 16px;
+  padding-bottom: 35px;
+  min-height: calc(100svh - 50px);
+  height: fit-content;
+  overflow: hidden !important;
+  position: fixed;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.titleContainer {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leftTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.content {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
