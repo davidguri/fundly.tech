@@ -7,7 +7,7 @@ import { IoChevronBack } from "react-icons/io5"
 
 export default function Analytics() {
 
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   return (
     <>
