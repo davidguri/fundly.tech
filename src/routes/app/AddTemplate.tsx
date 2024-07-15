@@ -4,8 +4,8 @@ import styles from "./styles/AddTemplate.module.scss";
 import { useNavigate } from "react-router-dom"
 import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
 
-// import { updateDoc, arrayUnion, doc } from "firebase/firestore";
-// import { db } from "../../../firebase";
+import { updateDoc, doc, arrayUnion } from "firebase/firestore";
+import { db } from "../../../firebase";
 import { getAuth } from "firebase/auth";
 import { Firestore } from "../../controllers/firestore.controller";
 
@@ -17,6 +17,7 @@ export default function AddTemplate() {
   const getUserData = async (): Promise<any> => {
     const data = await Firestore.getUserById(auth.currentUser.uid);
     setUser(data);
+    return data;
   }
 
   const nav = useNavigate()
@@ -26,26 +27,29 @@ export default function AddTemplate() {
   const [amount, setAmount] = React.useState("");
   const [duration, setDuration] = React.useState("");
 
-  const addTemplate = async () => {
+  async function addTemplate() {
     setShow(false);
+    const userData = await getUserData()
     try {
-      // const userRef = doc(db, "users", auth.currentUser.uid);
+      const templateRef = doc(db, "businesses", userData.business);
 
-      // const newTemplate = {
-      //   name: name,
-      //   amount: amount,
-      //   currency: currency,
-      //   hours: duration,
-      // };
+      const newTemplate = {
+        workName: name,
+        amount: amount,
+        currency: currency || user.currency,
+        hours: duration,
+      };
 
-      // await updateDoc(userRef, {
-      //   templates: {
-      //     ...userRef['templates'],
-      //     name: newTemplate
-      //   }
-      // });
+      await updateDoc(templateRef, {
+        templates: arrayUnion(newTemplate)
+      });
     } catch (error) {
       console.error("Error adding template:", error);
+    } finally {
+      setName("")
+      setCurrency("")
+      setAmount("")
+      setDuration("")
     }
   };
 
@@ -89,7 +93,7 @@ export default function AddTemplate() {
             <input className={styles.formInput} placeholder="Hours" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
           </div>
           <div className={styles.bottomContainer}>
-            <div className={styles.submitButton} onClick={() => name && amount && currency && duration ? setShow(true) : {}}>
+            <div className={styles.submitButton} onClick={() => name && amount && duration ? setShow(true) : {}}>
               <text className={styles.submitButtonText}>Add Template</text>
             </div>
           </div>

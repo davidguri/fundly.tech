@@ -22,6 +22,7 @@ export default function Analytics() {
             </div>
           </div>
           <div className={styles.content}>
+            <text>This feature is still under development. Thank you for waiting patiently!</text>
           </div>
         </main>
       </Layout>

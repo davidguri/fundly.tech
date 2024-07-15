@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./styles/Add.module.scss";
 import Layout from "../../components/layout/Layout";
 
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
 
 import Transaction from "../../models/transaction.model";
@@ -27,6 +27,7 @@ export default function Add() {
     try {
       const data = await Firestore.getUserById(auth.currentUser.uid)
       setUser(data)
+      return data
       // console.log(data)
       // console.log(user.displayName)
     } catch (error: any) {
@@ -47,7 +48,7 @@ export default function Add() {
       const data = querySnapshot.docs.map(doc => ({
         ...doc.data()
       }))
-      console.log(data[0].workers)
+      // console.log(data[0].workers)
       const userDataPromises = data[0].workers.map(workerId => getWorkerData(workerId));
       const userDataResults = await Promise.all(userDataPromises);
 
@@ -58,21 +59,18 @@ export default function Add() {
     }
   }
 
-  async function fetchUserTemplates() {
+  async function fetchBusinessTemplates() {
+    const userData = await getUserData();
     try {
-      const docRef = doc(db, "users", auth.currentUser.uid);
+      const docRef = doc(db, "businesses", userData.business);
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        const userTemplates = data.templates || {}; // Access the templates map field
+        const businessTemplates = data.templates || [];
 
-        // Convert the templates object to an array
-        const templateData = Object.keys(userTemplates).map((templateName) => ({
-          templateContent: userTemplates[templateName],
-        }));
-
-        setTemplates(templateData);
+        setTemplates(businessTemplates);
+        // console.log(businessTemplates)
       } else {
         console.log("No such document!");
       }
@@ -84,7 +82,7 @@ export default function Add() {
   React.useEffect(() => {
     getUserData()
     getWorkerIds()
-    fetchUserTemplates();
+    fetchBusinessTemplates();
   }, [])
 
   const [name, setName] = React.useState("default");
@@ -93,6 +91,8 @@ export default function Add() {
   const [amount, setAmount] = React.useState("");
   const [duration, setDuration] = React.useState("");
   const [tip, setTip] = React.useState("");
+
+  const [templateName, setTemplateName] = React.useState("default");
 
   const handleNameChange = (e: any) => {
     try {
@@ -124,7 +124,7 @@ export default function Add() {
       currency: (currency || user.currency),
       tip: ((tip ? parseFloat(tip) : 0)),
       business: (option ? user.business : user.id),
-      duration: (duration ? parseInt(duration) : null),
+      duration: (duration ? parseFloat(duration) : null),
       incoming: (option ? true : false),
       date: new Date()
     }
@@ -162,11 +162,12 @@ export default function Add() {
   const status: string = "success";
 
   const handleTemplateChange = (e) => {
-    const templateObj = templates.find(template => template.templateContent.workName === e.target.value)
-    setType(templateObj.templateContent.workName);
-    setAmount(templateObj.templateContent.amount);
-    setCurrency(templateObj.templateContent.currency);
-    setDuration(templateObj.templateContent.hours);
+    setTemplateName(e.target.value)
+    const templateObj = templates.find(template => template.workName === e.target.value)
+    setType(templateObj.workName);
+    setAmount(templateObj.amount);
+    setCurrency(templateObj.currency);
+    setDuration(templateObj.hours);
   }
 
   return (
@@ -237,25 +238,31 @@ export default function Add() {
               }
             </div>
             <div className={styles.bottomContainer}>
-              <div className={styles.buttonContainer}>
-                <div className={styles.button}>
-                  <select name="Template" id="template" className={styles.templateSelect} onChange={handleTemplateChange} defaultValue={"default"}>
-                    <option value="default">Use Template</option>
+              {
+                option && (
+                  <div className={styles.buttonContainer}>
+                    <div className={styles.button}>
+                      <select name="Template" id="template" className={styles.templateSelect} onChange={handleTemplateChange} value={templateName}>
+                        <option value="default">Use Template</option>
+                        {
+                          templates.map((template, i) => {
+                            return (
+                              <option value={template.workName} key={i}>{template.workName}</option>
+                            )
+                          })
+                        }
+                      </select>
+                    </div>
                     {
-                      templates.map((template, i) => {
-                        return (
-                          <option value={template.templateContent.workName} key={i}>{template.templateContent.workName}</option>
-                        )
-                      })
+                      user.role !== "Worker" && (
+                        <div className={styles.button} onClick={() => nav("/add_template")}>
+                          <text className={styles.buttonText}>New Template</text>
+                        </div>
+                      )
                     }
-                  </select>
-                </div>
-                <Link to="/add_template" className="link">
-                  <div className={styles.button} onClick={() => { }}>
-                    <text className={styles.buttonText}>New Template</text>
                   </div>
-                </Link>
-              </div>
+                )
+              }
               <div className={styles.submitButton} onClick={() => !amount || !name || !type ? {} : setShow(true)}>
                 <text className={styles.submitButtonText}>Add Entry</text>
               </div>
