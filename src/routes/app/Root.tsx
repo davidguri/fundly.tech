@@ -156,9 +156,13 @@ export default function Root() {
     let newMonthlyPay = 0;
 
     currentMonthTransactions.forEach((transaction) => {
-      const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
-      const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
-      newMonthlyPay += newAmount + newTip
+      if (transaction.currency !== user.currency) {
+        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
+        newMonthlyPay += newAmount + newTip
+      } else {
+        monthlyPay += parseFloat(transaction.amount) + parseFloat(transaction.tip)
+      }
     })
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
   }
@@ -172,7 +176,7 @@ export default function Root() {
     return parseFloat((monthlyExpenses).toFixed(2));
   }
 
-  function formatNumber(number: number) {
+  function formatNumber(number) {
     if (number % 1 === 0) {
       return number.toString();
     } else {
