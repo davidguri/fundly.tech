@@ -79,7 +79,7 @@ export default function Info() {
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && type !== "0" || JSON.parse(localStorage.getItem("paymen_complete")) === true) {
+      if (user) {
         nav('/');
       }
     });
@@ -99,15 +99,9 @@ export default function Info() {
   }
 
   const handleOwnerContinue = async () => {
-    if (!name || !email || !business || !password) {
-      return;
-    } else {
-      await signUp().then(() => {
-        localStorage.setItem("payment_complete", JSON.stringify(false));
-        localStorage.setItem("owner", JSON.stringify(true));
-        nav("/payment")
-      });
-    }
+    await signUp().then(() => {
+      localStorage.setItem("owner", JSON.stringify(true));
+    });
   }
 
   return (
