@@ -110,14 +110,6 @@ export default function Info() {
         <text className={styles.title}>Create An Account</text>
         <input className={styles.formInput} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} type="text" />
         <input className={styles.formInput} placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
-        {/* <div className={styles.formInput} style={{ paddingInline: 0, width: "100%" }}>
-          <select name="Role" id="role" className={styles.select} onChange={handleRoleChange} value={role}>
-            <option value="default">Role</option>
-            <option value="Worker">Worker</option>
-            <option value="Owner">Owner</option>
-            <option value="Freelance">Freelance</option>
-          </select>
-        </div> */}
         <input className={styles.formInput} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
         {
           type === "0" ? (
@@ -138,7 +130,7 @@ export default function Info() {
         {
           type === "0" ? (
             <div className={styles.submitButton} onClick={handleOwnerContinue}>
-              <text className={styles.submitButtonText}>Continue To Payment</text>
+              <text className={styles.submitButtonText}>Continue</text>
             </div>
           ) : (
             <div className={styles.submitButton} onClick={type === "1" ? handleWorkerContinue : handleContinue}>
