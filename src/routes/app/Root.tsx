@@ -74,16 +74,10 @@ export default function Root() {
     }
   }
 
-  React.useEffect(() => {
-    setLoading(true)
-    getExpenses()
-    getTransactions()
-  }, [])
+  const [rate, setRate] = React.useState<any>()
 
-  const [rate, setRate] = React.useState<number>()
-
-  function convertCurrency(fromCurrency: string, toCurrency: string, amount: number): number {
-    fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency.toLowerCase()}.json`)
+  const getRate = (toCurrency: string): any => {
+    fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${(user.currency).toLowerCase()}.json`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok ' + response.statusText);
@@ -91,13 +85,29 @@ export default function Root() {
         return response.json();
       })
       .then(data => {
-        const rate = data[`${fromCurrency.toLowerCase()}`][`${toCurrency.toLowerCase()}`];
-        setRate(rate)
+        setRate(data[`${(user.currency).toLowerCase()}`][`${toCurrency.toLowerCase()}`])
       })
-      .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-      });
-    const convertedAmount = amount * rate;
+  }
+
+  React.useEffect(() => {
+    setLoading(true)
+    getExpenses()
+    getTransactions()
+  }, [])
+
+  function convertCurrency(toCurrency: string, amount: number): number {
+    // fetch(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${fromCurrency.toLowerCase()}.json`)
+    //   .then(response => {
+    //     if (!response.ok) {
+    //       throw new Error('Network response was not ok ' + response.statusText);
+    //     }
+    //     return response.json();
+    //   })
+    //   .catch(error => {
+    //     console.error('There has been a problem with your fetch operation:', error);
+    //   });
+    getRate(toCurrency)
+    const convertedAmount = amount / rate;
     return convertedAmount;
   }
 
@@ -106,8 +116,8 @@ export default function Root() {
     let newTotalPay = 0;
     transactions.forEach((transaction) => {
       if (transaction.currency !== user.currency) {
-        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
-        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
+        const newAmount = convertCurrency(transaction.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, parseFloat(transaction.tip));
         newTotalPay += newAmount + newTip
       } else {
         totalPay += parseFloat(transaction.amount) + parseFloat(transaction.tip)
@@ -121,8 +131,8 @@ export default function Root() {
     let newTotalPay = 0;
     expenses.forEach((expense) => {
       if (expense.currency !== user.currency) {
-        const newAmount = convertCurrency(expense.currency, user.currency, parseFloat(expense.amount));
-        const newTip = convertCurrency(expense.currency, user.currency, parseFloat(expense.tip));
+        const newAmount = convertCurrency(expense.currency, parseFloat(expense.amount));
+        const newTip = convertCurrency(expense.currency, parseFloat(expense.tip));
         newTotalPay += newAmount + newTip
       } else {
         totalPay += parseFloat(expense.amount) + parseFloat(expense.tip)
@@ -157,8 +167,8 @@ export default function Root() {
 
     currentMonthTransactions.forEach((transaction) => {
       if (transaction.currency !== user.currency) {
-        const newAmount = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.amount));
-        const newTip = convertCurrency(transaction.currency, user.currency, parseFloat(transaction.tip));
+        const newAmount = convertCurrency(transaction.currency, parseFloat(transaction.amount));
+        const newTip = convertCurrency(transaction.currency, parseFloat(transaction.tip));
         newMonthlyPay += newAmount + newTip
       } else {
         monthlyPay += parseFloat(transaction.amount) + parseFloat(transaction.tip)
@@ -170,7 +180,7 @@ export default function Root() {
   const getMonthlyExpenses = () => {
     let monthlyExpenses = 0;
     currentMonthExpenses.forEach((expense) => {
-      monthlyExpenses += convertCurrency(expense.currency, user.currency, parseFloat(expense.amount))
+      monthlyExpenses += convertCurrency(expense.currency, parseFloat(expense.amount))
     })
 
     return parseFloat((monthlyExpenses).toFixed(2));
