@@ -120,7 +120,7 @@ export default function Info() {
                 type === "1" && (
                   <>
                     <input className={styles.formInput} placeholder="Business Name" value={business} onChange={(e) => setBusiness(e.target.value)} type="text" />
-                    <input className={styles.formInput} placeholder="Code" value={code} onChange={(e) => setCode(parseInt(e.target.value))} type="number" inputMode="numeric" />
+                    <input className={styles.formInput} placeholder="Code (from business owner)" value={code} onChange={(e) => setCode(parseInt(e.target.value))} type="number" inputMode="numeric" />
                   </>
                 )
               }
