@@ -115,7 +115,6 @@ export default function Vote() {
                     <div className={styles.footerButton} onClick={() => { setShow(false); setStatus(false); manipulateCount(feature.id, feature.count + 1) }}>
                       <text className={styles.footerButtonText}>Done</text>
                     </div>
-                    <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
                   </div>
                 </section>
               </>
