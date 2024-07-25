@@ -30,6 +30,10 @@ export default function Settings() {
     setUser(data);
   };
 
+  React.useEffect(() => {
+    getUserData();
+  }, []);
+
   const [currency, setCurrency] = React.useState<string>();
 
   const handleCurrencyChange = (e: any) => {
