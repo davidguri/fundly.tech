@@ -1,26 +1,29 @@
 import React from "react";
 import styles from "./styles/AddTemplate.module.scss";
 
-import { useNavigate } from "react-router-dom"
-import { IoChevronBack, IoHelpCircle, IoCheckmarkCircle } from "react-icons/io5"
+import {
+  IoCheckmarkCircle,
+  IoChevronBack,
+  IoHelpCircle,
+} from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
-import { updateDoc, doc, arrayUnion } from "firebase/firestore";
-import { db } from "../../../firebase";
 import { getAuth } from "firebase/auth";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { db } from "../../../firebase";
 import { Firestore } from "../../controllers/firestore.controller";
 
 export default function AddTemplate() {
-
   const auth = getAuth();
-  const [user, setUser]: any = React.useState([])
+  const [user, setUser]: any = React.useState([]);
 
   const getUserData = async (): Promise<any> => {
     const data = await Firestore.getUserById(auth.currentUser.uid);
     setUser(data);
     return data;
-  }
+  };
 
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   const [name, setName] = React.useState("");
   const [currency, setCurrency] = React.useState<string>();
@@ -29,7 +32,7 @@ export default function AddTemplate() {
 
   async function addTemplate() {
     setShow(false);
-    const userData = await getUserData()
+    const userData = await getUserData();
     try {
       const templateRef = doc(db, "businesses", userData.business);
 
@@ -41,32 +44,32 @@ export default function AddTemplate() {
       };
 
       await updateDoc(templateRef, {
-        templates: arrayUnion(newTemplate)
+        templates: arrayUnion(newTemplate),
       });
     } catch (error) {
       console.error("Error adding template:", error);
     } finally {
-      setName("")
-      setCurrency("")
-      setAmount("")
-      setDuration("")
+      setName("");
+      setCurrency("");
+      setAmount("");
+      setDuration("");
     }
-  };
+  }
 
   React.useEffect(() => {
-    getUserData()
-  }, [])
+    getUserData();
+  }, []);
 
   const [show, setShow] = React.useState(false);
   const status = "question";
 
   const handleCurrencyChange = (e: any) => {
     try {
-      setCurrency(e.target.value)
+      setCurrency(e.target.value);
     } catch (error: any) {
-      alert(error.message)
+      alert(error.message);
     }
-  }
+  };
 
   return (
     <>
@@ -79,10 +82,33 @@ export default function AddTemplate() {
         </div>
         <div className={styles.content}>
           <div className={styles.topContainer}>
-            <input className={styles.formInput} placeholder="Work Name" value={name} onChange={(e) => setName(e.target.value)} type="text" autoCorrect="off" />
-            <input className={styles.formInput} placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} type="number" inputMode="numeric" />
-            <div className={styles.formInput} style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}>
-              <select name="Currency" id="currency" className={styles.select} onChange={handleCurrencyChange} value={currency || user.currency}>
+            <input
+              className={styles.formInput}
+              placeholder="Work Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              type="text"
+              autoCorrect="off"
+            />
+            <input
+              className={styles.formInput}
+              placeholder="Amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              type="number"
+              inputMode="numeric"
+            />
+            <div
+              className={styles.formInput}
+              style={{ paddingInline: 0, width: "100%", paddingBlock: 14 }}
+            >
+              <select
+                name="Currency"
+                id="currency"
+                className={styles.select}
+                onChange={handleCurrencyChange}
+                value={currency || user.currency}
+              >
                 <option value="ALL">ALL</option>
                 <option value="EUR">EUR</option>
                 <option value="USD">USD</option>
@@ -90,36 +116,61 @@ export default function AddTemplate() {
                 <option value="GBP">GBP</option>
               </select>
             </div>
-            <input className={styles.formInput} placeholder="Hours" value={duration} onChange={(e) => setDuration(e.target.value)} type="number" inputMode="numeric" />
+            <input
+              className={styles.formInput}
+              placeholder="Hours"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+              type="number"
+              inputMode="numeric"
+            />
           </div>
           <div className={styles.bottomContainer}>
-            <div className={styles.submitButton} onClick={() => name && amount && duration ? setShow(true) : {}}>
+            <div
+              className={styles.submitButton}
+              onClick={() => (name && amount && duration ? setShow(true) : {})}
+            >
               <text className={styles.submitButtonText}>Add Template</text>
             </div>
           </div>
-          <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+          <section
+            className={styles.footer}
+            style={{ display: `${show ? "flex" : "none" || "none"}` }}
+          >
             <div className={styles.footerTopContainer}>
-              <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
-              <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>
+              <text className={styles.footerTitle}>
+                {status === "question" ? "Confirm Operation?" : "Success!"}
+              </text>
+              <text className={styles.footerSubtitle}>
+                {status === "question"
+                  ? "Are you sure you want to continue?"
+                  : "Operation completed successfully!"}
+              </text>
             </div>
             <div className={styles.footerMiddleContainer}>
-              {
-                status === "question" ? (
-                  <IoHelpCircle size={104} color="#533fd5" />
-                ) : (
-                  <IoCheckmarkCircle size={96} color="#533fd5" />
-                )
-              }
+              {status === "question" ? (
+                <IoHelpCircle size={104} color="#533fd5" />
+              ) : (
+                <IoCheckmarkCircle size={96} color="#533fd5" />
+              )}
             </div>
             <div className={styles.footerBottomContainer}>
               <div className={styles.footerButton} onClick={addTemplate}>
-                <text className={styles.footerButtonText}>{status === "question" ? "Confirm" : "Done"}</text>
+                <text className={styles.footerButtonText}>
+                  {status === "question" ? "Confirm" : "Done"}
+                </text>
               </div>
-              <text className={styles.footerCancelText} onClick={() => setShow(false)} style={{ color: "#533fd5" }}>Cancel</text>
+              <text
+                className={styles.footerCancelText}
+                onClick={() => setShow(false)}
+                style={{ color: "#533fd5" }}
+              >
+                Cancel
+              </text>
             </div>
           </section>
         </div>
       </main>
     </>
-  )
+  );
 }

@@ -1,44 +1,56 @@
 import React from "react";
 import styles from "./styles/Vote.module.scss";
 
-import { useNavigate } from "react-router-dom"
-import { IoChevronBack, IoCheckmarkCircle, IoArrowUp, IoAlertCircle } from "react-icons/io5"
+import {
+  IoAlertCircle,
+  IoArrowUp,
+  IoCheckmarkCircle,
+  IoChevronBack,
+} from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
-import { collection, getDocs, query, doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
-import { db } from "../../../firebase";
 import { getAuth } from "firebase/auth";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../../firebase";
 
 export default function Vote() {
-
   const auth = getAuth();
 
-  const nav = useNavigate()
+  const nav = useNavigate();
 
-  const [features, setFeatures] = React.useState([])
+  const [features, setFeatures] = React.useState([]);
 
   const fetchFeatures = async () => {
     try {
-      setFeatures([])
-      const q = query(collection(db, "features"))
+      setFeatures([]);
+      const q = query(collection(db, "features"));
 
       const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map(doc => ({
-        ...doc.data()
-      }))
+      const data = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+      }));
 
-      const sortedFeatures = data.sort((a, b) => b.count - a.count)
+      const sortedFeatures = data.sort((a, b) => b.count - a.count);
 
       setFeatures(sortedFeatures);
       // console.log(transactions)
     } catch (error: any) {
-      alert("Error: " + error.message)
+      alert("Error: " + error.message);
     }
-  }
+  };
 
   const [status, setStatus] = React.useState(false);
 
   const manipulateCount = async (id: string, newCount: number) => {
-    setStatus(false)
+    setStatus(false);
     const featureDocRef = doc(db, "features", id);
 
     try {
@@ -46,14 +58,14 @@ export default function Vote() {
 
       if (featureDoc.exists()) {
         const featureData = featureDoc.data();
-        const votedBy = featureData['votedBy'] || [];
+        const votedBy = featureData["votedBy"] || [];
 
         if (!votedBy.includes(auth.currentUser.uid)) {
           await updateDoc(featureDocRef, {
             count: newCount,
             votedBy: arrayUnion(auth.currentUser.uid),
           });
-          fetchFeatures()
+          fetchFeatures();
         } else {
           console.log("User has already voted for this feature.");
         }
@@ -63,11 +75,11 @@ export default function Vote() {
     } catch (error) {
       console.error("Error updating document: ", error);
     }
-  }
+  };
 
   React.useEffect(() => {
     fetchFeatures();
-  }, [])
+  }, []);
 
   const [show, setShow] = React.useState(false);
 
@@ -81,47 +93,72 @@ export default function Vote() {
           <text className="title">Vote</text>
         </div>
         <div className={styles.content}>
-          <text className={styles.explainText}>Vote for features you'd like to see in the next update.</text>
+          <text className={styles.explainText}>
+            Vote for features you'd like to see in the next update.
+          </text>
           {features.map((feature, i) => {
             return (
               <>
                 <div className={styles.featureContainer} key={i}>
                   <div className={styles.featureLeftContainer}>
                     <text className={styles.featureTitle}>{feature.title}</text>
-                    <text className={styles.featureSubtitle}>{feature.subtitle}</text>
+                    <text className={styles.featureSubtitle}>
+                      {feature.subtitle}
+                    </text>
                   </div>
                   <div className={styles.featureRightContainer}>
                     <text className={styles.featureCount}>{feature.count}</text>
                     <div className={styles.featureVoteContainer}>
-                      <IoArrowUp className={styles.featureVoteIcon} onClick={() => feature.votedBy.includes(auth.currentUser.uid) ? (setShow(true), setStatus(false)) : (setShow(true), setStatus(true))} />
+                      <IoArrowUp
+                        className={styles.featureVoteIcon}
+                        onClick={() =>
+                          feature.votedBy.includes(auth.currentUser.uid)
+                            ? (setShow(true), setStatus(false))
+                            : (setShow(true), setStatus(true))
+                        }
+                      />
                     </div>
                   </div>
                 </div>
-                <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+                <section
+                  className={styles.footer}
+                  style={{ display: `${show ? "flex" : "none"}` }}
+                >
                   <div className={styles.footerTopContainer}>
-                    <text className={styles.footerTitle}>{status ? "Success!" : "Sorry!"}</text>
-                    <text className={styles.footerSubtitle}>{status ? "Are you sure you want to continue?" : "You've already voted for this feature"}</text>
+                    <text className={styles.footerTitle}>
+                      {status ? "Success!" : "Sorry!"}
+                    </text>
+                    <text className={styles.footerSubtitle}>
+                      {status
+                        ? "Are you sure you want to continue?"
+                        : "You've already voted for this feature"}
+                    </text>
                   </div>
                   <div className={styles.footerMiddleContainer}>
-                    {
-                      status ? (
-                        <IoCheckmarkCircle size={104} color="#533fd5" />
-                      ) : (
-                        <IoAlertCircle size={96} color="#533fd5" />
-                      )
-                    }
+                    {status ? (
+                      <IoCheckmarkCircle size={104} color="#533fd5" />
+                    ) : (
+                      <IoAlertCircle size={96} color="#533fd5" />
+                    )}
                   </div>
                   <div className={styles.footerBottomContainer}>
-                    <div className={styles.footerButton} onClick={() => { setShow(false); setStatus(false); manipulateCount(feature.id, feature.count + 1) }}>
+                    <div
+                      className={styles.footerButton}
+                      onClick={() => {
+                        setShow(false);
+                        setStatus(false);
+                        manipulateCount(feature.id, feature.count + 1);
+                      }}
+                    >
                       <text className={styles.footerButtonText}>Done</text>
                     </div>
                   </div>
                 </section>
               </>
-            )
+            );
           })}
         </div>
       </main>
     </>
-  )
+  );
 }

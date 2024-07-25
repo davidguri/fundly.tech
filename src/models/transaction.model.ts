@@ -9,6 +9,6 @@ type Transaction = {
   duration: any;
   type: string;
   incoming: boolean;
-}
+};
 
-export default Transaction
+export default Transaction;

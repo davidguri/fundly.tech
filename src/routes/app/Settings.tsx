@@ -140,7 +140,7 @@ export default function Settings() {
             </div>
           </div>
         </main>
-        <section className={styles.footer} style={{ display: `${show ? "flex" : "none" || "none"}` }}>
+        <section className={styles.footer} style={{ display: `${show ? "flex" : "none"}` }}>
           <div className={styles.footerTopContainer}>
             <text className={styles.footerTitle}>{status === "question" ? "Confirm Operation?" : "Success!"}</text>
             <text className={styles.footerSubtitle}>{status === "question" ? "Are you sure you want to continue?" : "Operation completed successfully!"}</text>

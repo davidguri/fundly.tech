@@ -1,8 +1,8 @@
 type Template = {
-  name: string,
-  type: string,
-  amount: number,
-  incoming: boolean,
-}
+  name: string;
+  type: string;
+  amount: number;
+  incoming: boolean;
+};
 
-export default Template
+export default Template;

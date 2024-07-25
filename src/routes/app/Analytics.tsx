@@ -1,12 +1,11 @@
 // import React from "react"
-import styles from "./styles/Settings.module.scss"
-import Layout from "../../components/layout/Layout"
+import styles from "./styles/Settings.module.scss";
+import Layout from "../../components/layout/Layout";
 
-import { useNavigate } from "react-router-dom"
-import { IoChevronBack } from "react-icons/io5"
+import { useNavigate } from "react-router-dom";
+import { IoChevronBack } from "react-icons/io5";
 
 export default function Analytics() {
-
   const nav = useNavigate();
 
   return (
@@ -22,7 +21,10 @@ export default function Analytics() {
             </div>
           </div>
           <div className={styles.content}>
-            <text>This feature is still under development. Thank you for waiting patiently!</text>
+            <text>
+              This feature is still under development. Thank you for waiting
+              patiently!
+            </text>
           </div>
         </main>
       </Layout>
