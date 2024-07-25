@@ -23,7 +23,14 @@ export default function Settings() {
     return await Auth.signOut();
   };
 
-  const userLocal = JSON.parse(localStorage.getItem("userData"));
+  const userLocal = JSON.parse(localStorage.getItem("userData")) || {
+    role: "Freelancer",
+    business: "",
+    displayName: "",
+    email: "",
+    currency: "ALL",
+    photoUrl: "",
+  };
 
   const getUserData = async () => {
     const data = await Firestore.getUserById(auth.currentUser.uid);
@@ -91,7 +98,7 @@ export default function Settings() {
             <div
               style={{ textDecoration: "none", color: "inherit" }}
               onClick={() => {
-                currency !== user.currency
+                currency !== userLocal.currency || currency !== user.currency
                   ? setShow(true)
                   : setStatus("question");
               }}
@@ -111,21 +118,21 @@ export default function Settings() {
                 <div className={styles.accountInfoContainer}>
                   <text className={styles.accountInfoText}>
                     {auth.currentUser.displayName} -{" "}
-                    {user.role || userLocal.role || "Reload..."}
+                    {user.role || userLocal.role}
                   </text>
                   <text className={styles.accountInfoTextAlt}>
                     {auth.currentUser.email}
                   </text>
                 </div>
               </div>
-              {user.role !== "Freelancer" && (
+              {(userLocal.role || user.role) !== "Freelancer" && (
                 <div className={styles.setting}>
                   <text className={styles.settingText}>Business</text>
                   <text
                     className={styles.settingText}
                     style={{ color: "#533fd5" }}
                   >
-                    {user.business || userLocal.business || "Reload..."}
+                    {user.business || userLocal.business}
                   </text>
                 </div>
               )}
@@ -140,7 +147,7 @@ export default function Settings() {
                   </Link>
                 </text>
               </div>
-              {user.role !== "Worker" && (
+              {(userLocal.role || user.role) !== "Worker" && (
                 <div className={styles.setting}>
                   <text className={styles.settingText}>Membership Plan</text>
                   <text
@@ -149,7 +156,7 @@ export default function Settings() {
                   >
                     {userLocal.royalty
                       ? "Royalty"
-                      : user.membership || userLocal.membership || "Reload..."
+                      : user.membership || userLocal.membership
                         ? userPlan
                         : "Freelancer"}
                   </text>
