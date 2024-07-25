@@ -1,16 +1,15 @@
+import { onAuthStateChanged } from "firebase/auth";
 import React from "react";
-import styles from "./styles/Info.module.scss";
-import { useNavigate, useLocation } from "react-router-dom";
-import User from "../../models/user.model";
+import { useLocation, useNavigate } from "react-router-dom";
+import { auth } from "../../../firebase";
 import { Auth } from "../../controllers/auth.controller";
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../../../firebase';
+import User from "../../models/user.model";
+import styles from "./styles/Info.module.scss";
 
-import { getDoc, doc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../../firebase";
 
 export default function Info() {
-
   function useQuery() {
     const { search } = useLocation();
 
@@ -29,25 +28,35 @@ export default function Info() {
 
   const role = type === "0" ? "Owner" : type === "1" ? "Worker" : "Freelancer";
 
-  const nav = useNavigate()
+  const nav = useNavigate();
 
   const user: User = {
     id: "",
     role: role,
     displayName: name,
     email: email,
-    business: type !== "2" ? business : "",
-    photoUrl: "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true",
-    currency: "ALL"
-  }
+    business: type !== "2" && business,
+    photoUrl:
+      "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true",
+    currency: "ALL",
+  };
 
   const signUp = async () => {
-    await Auth.signUp(user, password, name, "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true").catch((error: any) => {
+    await Auth.signUp(
+      user,
+      password,
+      name,
+      "https://api.dicebear.com/7.x/big-ears-neutral/png?randomizeIds=true",
+    ).catch((error: any) => {
       alert(error.message);
-    })
-  }
+    });
+  };
 
-  const checkPendingWorkers = async (email: string, authCode: number, businessId: string) => {
+  const checkPendingWorkers = async (
+    email: string,
+    authCode: number,
+    businessId: string,
+  ) => {
     try {
       // Get a reference to the specific business document
       const businessDocRef = doc(db, "businesses", businessId);
@@ -57,18 +66,20 @@ export default function Info() {
         const businessData = businessDocSnap.data();
         let pendingWorkers = businessData.pendingWorkers || [];
 
-        const updatedPendingWorkers = pendingWorkers.filter(worker => {
-          return worker.email !== email && worker.authCode !== authCode;
-        });
+        const updatedPendingWorkers = pendingWorkers.filter(
+          (worker: { email: string; authCode: number }) => {
+            return worker.email !== email && worker.authCode !== authCode;
+          },
+        );
 
         console.log(updatedPendingWorkers);
         console.log(pendingWorkers);
 
         await updateDoc(businessDocRef, {
-          pendingWorkers: updatedPendingWorkers
+          pendingWorkers: updatedPendingWorkers,
         });
 
-        await signUp()
+        await signUp();
       } else {
         console.log("No such business document!");
       }
@@ -80,64 +91,97 @@ export default function Info() {
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        nav('/');
+        nav("/");
       }
     });
 
     return () => unsubscribe();
-
   }, [nav]);
 
   const handleContinue = async () => {
     await signUp().then(() => {
       localStorage.setItem("owner", JSON.stringify(false));
-    })
-  }
+    });
+  };
 
   const handleWorkerContinue = async () => {
     await checkPendingWorkers(email, code, business);
-  }
+  };
 
   const handleOwnerContinue = async () => {
     await signUp().then(() => {
       localStorage.setItem("owner", JSON.stringify(true));
     });
-  }
+  };
 
   return (
     <>
       <main className={styles.main}>
         <text className={styles.title}>Create An Account</text>
-        <input className={styles.formInput} placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} type="text" />
-        <input className={styles.formInput} placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
-        <input className={styles.formInput} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} type="password" />
-        {
-          type === "0" ? (
-            <input className={styles.formInput} placeholder="Business Name" value={business} onChange={(e) => setBusiness(e.target.value)} type="text" />
-          ) : (
-            <>
-              {
-                type === "1" && (
-                  <>
-                    <input className={styles.formInput} placeholder="Business Name" value={business} onChange={(e) => setBusiness(e.target.value)} type="text" />
-                    <input className={styles.formInput} placeholder="Code (from business owner)" value={code} onChange={(e) => setCode(parseInt(e.target.value))} type="number" inputMode="numeric" />
-                  </>
-                )
-              }
-            </>
-          )
-        }
-        {
-          type === "0" ? (
-            <div className={styles.submitButton} onClick={handleOwnerContinue}>
-              <text className={styles.submitButtonText}>Continue</text>
-            </div>
-          ) : (
-            <div className={styles.submitButton} onClick={type === "1" ? handleWorkerContinue : handleContinue}>
-              <text className={styles.submitButtonText}>Continue</text>
-            </div>
-          )
-        }
+        <input
+          className={styles.formInput}
+          placeholder="Full Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          type="text"
+        />
+        <input
+          className={styles.formInput}
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+        />
+        <input
+          className={styles.formInput}
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="password"
+        />
+        {type === "0" ? (
+          <input
+            className={styles.formInput}
+            placeholder="Business Name"
+            value={business}
+            onChange={(e) => setBusiness(e.target.value)}
+            type="text"
+          />
+        ) : (
+          <>
+            {type === "1" && (
+              <>
+                <input
+                  className={styles.formInput}
+                  placeholder="Business Name"
+                  value={business}
+                  onChange={(e) => setBusiness(e.target.value)}
+                  type="text"
+                />
+                <input
+                  className={styles.formInput}
+                  placeholder="Code (from business owner)"
+                  value={code}
+                  onChange={(e) => setCode(parseInt(e.target.value))}
+                  type="number"
+                  inputMode="numeric"
+                />
+              </>
+            )}
+          </>
+        )}
+        {type === "0" ? (
+          <div className={styles.submitButton} onClick={handleOwnerContinue}>
+            <text className={styles.submitButtonText}>Continue</text>
+          </div>
+        ) : (
+          <div
+            className={styles.submitButton}
+            onClick={type === "1" ? handleWorkerContinue : handleContinue}
+          >
+            <text className={styles.submitButtonText}>Continue</text>
+          </div>
+        )}
       </main>
     </>
   );

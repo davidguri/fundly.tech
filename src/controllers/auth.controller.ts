@@ -67,9 +67,11 @@ export class Auth {
   static async signIn(email: string, password: string): Promise<void> {
     setPersistence(auth, browserLocalPersistence).then(async () => {
       return await signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
+        .then(async (userCredential) => {
           const user = userCredential.user;
           console.log("✅ Signed in successfully: ", user);
+          const data = await Firestore.getUserById(user.uid);
+          localStorage.setItem("userData", JSON.stringify(data));
         })
         .catch((error) => {
           const errorCode = error.code;
