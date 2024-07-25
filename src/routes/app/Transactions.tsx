@@ -26,22 +26,14 @@ export default function Transactions() {
   const [expenses, setExpenses] = React.useState([]);
   const [transactions, setTransactions] = React.useState([]);
   const [myTransactions, setMyTransactions] = React.useState([]);
-  const [user, setUser]: any = React.useState([]);
-
-  const getUserData = async () => {
-    const data = await Firestore.getUserById(auth.currentUser.uid);
-    setUser(data);
-    return data;
-  };
 
   const getMyTransactions = async () => {
     setLoading(true);
     try {
-      const userData = await getUserData();
       setMyTransactions([]);
       const q1 = query(
         collection(db, "transactions"),
-        where("name", "==", userData.displayName),
+        where("name", "==", userLocal.displayName),
       );
 
       const querySnapshot1 = await getDocs(q1);
@@ -118,12 +110,11 @@ export default function Transactions() {
   const getTransactions = async () => {
     setLoading(true);
     try {
-      const userData = await getUserData();
       setTransactions([]);
-      if (userData.role === "Worker") {
+      if (userLocal.role === "Worker") {
         const q = query(
           collection(db, "transactions"),
-          where("name", "==", userData.displayName),
+          where("name", "==", userLocal.displayName),
         );
 
         const querySnapshot = await getDocs(q);
@@ -132,7 +123,7 @@ export default function Transactions() {
         }));
 
         const filteredTransactions = data.filter((transaction) => {
-          return transaction.name === userData.displayName;
+          return transaction.name === userLocal.displayName;
         });
 
         const sortedTransactions = filteredTransactions.sort(
@@ -143,12 +134,12 @@ export default function Transactions() {
       } else {
         const q1 = query(
           collection(db, "transactions"),
-          where("business", "==", userData.business),
+          where("business", "==", userLocal.business),
         );
 
         const q2 = query(
           collection(db, "transactions"),
-          where("business", "==", userData.id),
+          where("business", "==", userLocal.id),
         );
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([
@@ -179,7 +170,7 @@ export default function Transactions() {
 
         const filteredTransactios = combinedTransactions.filter(
           (transaction) => {
-            return transaction.name !== userData.displayName;
+            return transaction.name !== userLocal.displayName;
           },
         );
 
@@ -233,6 +224,8 @@ export default function Transactions() {
   const [show, setShow] = React.useState(false);
   const status = "question";
 
+  const userLocal = JSON.parse(localStorage.getItem("userData"));
+
   return (
     <>
       <Layout>
@@ -256,7 +249,7 @@ export default function Transactions() {
               >
                 <text className={styles.chipText}>You</text>
               </div>
-              {user.role === "Owner" && (
+              {userLocal.role === "Owner" && (
                 <div
                   className={`${styles.chip} ${option === "1" && styles.selectedChip}`}
                   onClick={() => selectOptionHandler("1")}
