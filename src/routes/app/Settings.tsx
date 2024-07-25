@@ -107,7 +107,7 @@ export default function Settings() {
                 <div className={styles.accountInfoContainer}>
                   <text className={styles.accountInfoText}>
                     {auth.currentUser.displayName} -{" "}
-                    {user.role || userLocal.role}
+                    {user.role || userLocal.role || "Reload..."}
                   </text>
                   <text className={styles.accountInfoTextAlt}>
                     {auth.currentUser.email}
@@ -121,7 +121,7 @@ export default function Settings() {
                     className={styles.settingText}
                     style={{ color: "#533fd5" }}
                   >
-                    {user.business || userLocal.business}
+                    {user.business || userLocal.business || "Reload..."}
                   </text>
                 </div>
               )}
@@ -145,7 +145,7 @@ export default function Settings() {
                   >
                     {userLocal.royalty
                       ? "Royalty"
-                      : user.membership || userLocal.membership
+                      : user.membership || userLocal.membership || "Reload..."
                         ? userPlan
                         : "Freelancer"}
                   </text>
