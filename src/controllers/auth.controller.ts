@@ -81,10 +81,6 @@ export class Auth {
     });
   }
 
-  static async signInGoogle(): Promise<void> {
-    // TODO: wtf is this
-  }
-
   static async signOut(): Promise<void> {
     await signOut(auth)
       .then(() => {
@@ -93,6 +89,7 @@ export class Auth {
       .catch((error: any) => {
         alert(error.message);
       });
+    localStorage.removeItem("userData");
   }
 
   static getUserData(): any {
