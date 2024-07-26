@@ -6,13 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 import Transaction from "../../components/global/Transaction.component";
 
-import { collection, getDocs, query, where } from "firebase/firestore";
 import {
-  IoCheckmarkCircle,
-  IoChevronBack,
-  IoHelpCircle,
-  IoRefresh,
-} from "react-icons/io5";
+  collection,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
+import { IoChevronBack, IoHelpCircle, IoRefresh } from "react-icons/io5";
 import { auth, db } from "../../../firebase";
 
 import Loader from "../../components/global/Loader.component";
@@ -192,11 +194,11 @@ export default function Transactions() {
   }, []);
 
   const handleDelete = async (id: string, type: string) => {
-    // if (type == "expenses") {
-    //   await deleteDoc(doc(db, "expenses", id));
-    // } else {
-    //   await deleteDoc(doc(db, "transactions", id));
-    // }
+    if (type == "expenses") {
+      // await deleteDoc(doc(db, "expenses", id));
+    } else {
+      await deleteDoc(doc(db, "transactions", id));
+    }
     console.log(`Id: ${id} Type: ${type}`);
     setShow(false);
     getExpenses();
@@ -222,7 +224,6 @@ export default function Transactions() {
   };
 
   const [show, setShow] = React.useState(false);
-  const status = "question";
 
   const userLocal = JSON.parse(localStorage.getItem("userData"));
 
@@ -278,25 +279,18 @@ export default function Transactions() {
                           style={{
                             display: `${show ? "flex" : "none"}`,
                           }}
+                          key={i}
                         >
                           <div className={styles.footerTopContainer}>
                             <text className={styles.footerTitle}>
-                              {status === "question"
-                                ? "Confirm Operation?"
-                                : "Success!"}
+                              Confirm Operation
                             </text>
                             <text className={styles.footerSubtitle}>
-                              {status === "question"
-                                ? "Are you sure you want to continue?"
-                                : "Operation completed successfully!"}
+                              Are you sure you want to continue?
                             </text>
                           </div>
                           <div className={styles.footerMiddleContainer}>
-                            {status === "question" ? (
-                              <IoHelpCircle size={104} color="#533fd5" />
-                            ) : (
-                              <IoCheckmarkCircle size={96} color="#533fd5" />
-                            )}
+                            <IoHelpCircle size={104} color="#533fd5" />
                           </div>
                           <div className={styles.footerBottomContainer}>
                             <div
@@ -306,7 +300,7 @@ export default function Transactions() {
                               }
                             >
                               <text className={styles.footerButtonText}>
-                                {status === "question" ? "Confirm" : "Done"}
+                                Confirm
                               </text>
                             </div>
                             <text
@@ -319,7 +313,6 @@ export default function Transactions() {
                           </div>
                         </section>
                         <Transaction
-                          key={i}
                           incoming={transaction.incoming}
                           date={transaction.date.seconds * 1000}
                           type={transaction.type}
@@ -350,6 +343,7 @@ export default function Transactions() {
                               style={{
                                 display: `${show ? "flex" : "none"}`,
                               }}
+                              key={i}
                             >
                               <div className={styles.footerTopContainer}>
                                 <text className={styles.footerTitle}>
@@ -366,7 +360,7 @@ export default function Transactions() {
                                 <div
                                   className={styles.footerButton}
                                   onClick={() =>
-                                    handleDelete(transaction.id, "expenses")
+                                    handleDelete(transaction.id, "transactions")
                                   }
                                 >
                                   <text className={styles.footerButtonText}>
@@ -383,7 +377,6 @@ export default function Transactions() {
                               </div>
                             </section>
                             <Transaction
-                              key={i}
                               incoming={transaction.incoming}
                               date={transaction.date.seconds * 1000}
                               type={transaction.type}
@@ -412,6 +405,7 @@ export default function Transactions() {
                               style={{
                                 display: `${show ? "flex" : "none"}`,
                               }}
+                              key={i}
                             >
                               <div className={styles.footerTopContainer}>
                                 <text className={styles.footerTitle}>
@@ -445,7 +439,6 @@ export default function Transactions() {
                               </div>
                             </section>
                             <Transaction
-                              key={i}
                               incoming={expense.incoming}
                               date={expense.date.seconds * 1000}
                               type={expense.type}
