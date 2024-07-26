@@ -14,7 +14,6 @@ import {
   IoRefresh,
 } from "react-icons/io5";
 import { auth, db } from "../../../firebase";
-import { Firestore } from "../../controllers/firestore.controller";
 
 import Loader from "../../components/global/Loader.component";
 
@@ -193,16 +192,17 @@ export default function Transactions() {
   }, []);
 
   const handleDelete = async (id: string, type: string) => {
-    if (type === "expenses") {
-      await Firestore.deleteExpense(id);
-    } else {
-      await Firestore.deleteTransaction(id);
-    }
+    // if (type == "expenses") {
+    //   await deleteDoc(doc(db, "expenses", id));
+    // } else {
+    //   await deleteDoc(doc(db, "transactions", id));
+    // }
+    console.log(`Id: ${id} Type: ${type}`);
     setShow(false);
     getExpenses();
     getTransactions();
     getMyTransactions();
-  }; // ! WATCH OUT THIS CODE DELETES STUFF FROM THE BOTTOM TO THE TOP
+  }; // WARNING: This function is not working
 
   const handleReload = () => {
     getExpenses();
