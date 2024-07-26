@@ -5,81 +5,89 @@ $background: #0a0a0f;
 $color: #e5e4ec;
 
 ::placeholder {
-  color: #0a0a0f;
+    color: #0a0a0f;
 }
 
 .main {
-  width: calc(100% - 32px);
-  padding-inline: 16px;
-  padding-bottom: 34px;
-  height: calc(100svh - 34px);
-  overflow: hidden !important;
+    width: calc(100% - 32px);
+    padding-inline: 16px;
+    padding-bottom: 34px;
+    height: calc(100svh - 34px);
+    overflow: hidden !important;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
 
-  position: fixed;
+    position: fixed;
 
-  background: $color;
-  background: linear-gradient(0deg, $color 5%, $accent 50%, $background 100%);
+    background: $color;
+    background: linear-gradient(0deg, $color 5%, $accent 50%, $background 100%);
 }
 
 .title {
-  text-align: center;
-  line-height: 1.1;
-  font-weight: 900;
-  font-size: 72px;
-  color: $color;
-  margin-bottom: 24px;
+    text-align: center;
+    line-height: 1.1;
+    font-weight: 900;
+    font-size: 72px;
+    color: $color;
+}
+
+.subtitle {
+    text-align: center;
+    font-weight: 900;
+    font-size: 24px;
+    opacity: 0.75;
+    color: $color;
+    margin-bottom: 24px;
 }
 
 .formInput {
-  width: calc(100% - 36px);
-  padding: 18px;
-  border-radius: 12px;
-  background-color: $color;
-  font-size: medium;
-  font-weight: 600;
-  outline: none;
-  border: 0px;
-  transition: 0.25s ease-in-out;
-  color: $background;
+    width: calc(100% - 36px);
+    padding: 18px;
+    border-radius: 12px;
+    background-color: $color;
+    font-size: medium;
+    font-weight: 600;
+    outline: none;
+    border: 0px;
+    transition: 0.25s ease-in-out;
+    color: $background;
 }
 
 .select {
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  color: $background;
-  font-size: medium;
-  font-weight: 600;
-  padding-inline: 18px;
-  margin: 0px;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: $background;
+    font-size: medium;
+    font-weight: 600;
+    padding-inline: 18px;
+    margin: 0px;
 }
 
 .submitButton {
-  width: calc(100% - 24px);
-  padding-block: 18px;
-  padding-inline: 12px;
-  border-radius: 12px;
-  background-color: $background;
-  transition: 0.25s ease-in-out;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: calc(100% - 24px);
+    padding-block: 18px;
+    padding-inline: 12px;
+    border-radius: 12px;
+    background-color: $background;
+    transition: 0.25s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .submitButtonText {
-  font-size: large;
-  font-weight: 900;
+    font-size: large;
+    font-weight: 900;
 }
 
 .alternativeText {
-  color: $background;
-  text-align: center;
-  font-weight: 600;
+    color: $background;
+    text-align: center;
+    font-weight: 600;
 }

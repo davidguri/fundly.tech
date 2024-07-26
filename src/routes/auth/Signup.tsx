@@ -21,7 +21,7 @@ export default function Signup() {
       <main className={styles.main}>
         <text className={styles.title}>Let's Get Started!</text>
         <text className={styles.subtitle}>
-          The custom tool to manage your business' cash payments!
+          Pick the account type that best fits your needs.
         </text>
         <section className={styles.selectSection}>
           <div

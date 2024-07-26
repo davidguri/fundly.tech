@@ -118,6 +118,9 @@ export default function Info() {
     <>
       <main className={styles.main}>
         <text className={styles.title}>Create An Account</text>
+        <text className={styles.subtitle}>
+          Enter your information to create an account.
+        </text>
         <input
           className={styles.formInput}
           placeholder="Full Name"
@@ -142,7 +145,7 @@ export default function Info() {
         {type === "0" ? (
           <input
             className={styles.formInput}
-            placeholder="Business Name"
+            placeholder="Your Business Name"
             value={business}
             onChange={(e) => setBusiness(e.target.value)}
             type="text"
