@@ -33,6 +33,15 @@ export default function Root() {
 
   const [loading, setLoading] = React.useState(true);
 
+  const userLocal = JSON.parse(localStorage.getItem("userData")) || {
+    role: "Freelancer",
+    business: "",
+    displayName: "",
+    email: "",
+    currency: "ALL",
+    photoUrl: "",
+  };
+
   const getUserData = async () => {
     const docRef = doc(db, "users", auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
@@ -69,11 +78,10 @@ export default function Root() {
 
   const getTransactions = async () => {
     try {
-      const userData = await getUserData();
       setTransactions([]);
       const q = query(
         collection(db, "transactions"),
-        where("business", "==", userData.business),
+        where("business", "==", user.business || userLocal.business),
       );
 
       const querySnapshot = await getDocs(q);
@@ -82,7 +90,7 @@ export default function Root() {
       }));
 
       const filteredTransactions = data.filter((transaction) => {
-        return transaction.name === userData.displayName;
+        return transaction.name === auth.currentUser.displayName;
       });
 
       setTransactions(filteredTransactions);
@@ -97,7 +105,7 @@ export default function Root() {
 
   const getRate = (toCurrency: string): any => {
     fetch(
-      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${user.currency.toLowerCase()}.json`,
+      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${userLocal.currency.toLowerCase() || user.currency.toLowerCase()}.json`,
     )
       .then((response) => {
         if (!response.ok) {
@@ -107,13 +115,16 @@ export default function Root() {
       })
       .then((data) => {
         setRate(
-          data[`${user.currency.toLowerCase()}`][`${toCurrency.toLowerCase()}`],
+          data[
+            `${userLocal.currency.toLowerCase() || user.currency.toLowerCase()}`
+          ][`${toCurrency.toLowerCase()}`],
         );
       });
   };
 
   React.useEffect(() => {
     setLoading(true);
+    getUserData();
     getExpenses();
     getTransactions();
   }, []);
@@ -197,7 +208,7 @@ export default function Root() {
 
     currentMonthTransactions.forEach(
       (transaction: { currency: string; amount: string; tip: string }) => {
-        if (transaction.currency !== user.currency) {
+        if (transaction.currency !== (userLocal.currency || user.currency)) {
           const newAmount = convertCurrency(
             transaction.currency,
             parseFloat(transaction.amount),
@@ -215,20 +226,6 @@ export default function Root() {
     );
     return parseFloat((monthlyPay + newMonthlyPay).toFixed(2));
   };
-
-  // const getMonthlyExpenses = () => {
-  //   let monthlyExpenses = 0;
-  //   currentMonthExpenses.forEach(
-  //     (expense: { currency: string; amount: string }) => {
-  //       monthlyExpenses += convertCurrency(
-  //         expense.currency,
-  //         parseFloat(expense.amount),
-  //       );
-  //     },
-  //   );
-
-  //   return parseFloat(monthlyExpenses.toFixed(2));
-  // };
 
   function formatNumber(number: number) {
     if (number % 1 === 0) {
@@ -255,7 +252,6 @@ export default function Root() {
               <text className={styles.subtitle} style={{ lineHeight: 1 }}>
                 Good {greeting}, {auth.currentUser.displayName}!
               </text>
-              {/* <img src={user.photoUrl} className={styles.accountImage} /> */}
             </div>
             <div className={styles.titleContainer}>
               {loading ? (
@@ -263,7 +259,7 @@ export default function Root() {
               ) : (
                 <text className={styles.title}>
                   {formatNumber(getTotal() - getTotalExpenses())}{" "}
-                  {user.currency || "ALL"}
+                  {userLocal.currency || "ALL"}
                 </text>
               )}
               <text
@@ -283,7 +279,7 @@ export default function Root() {
                 ) : (
                   formatNumber(getMonthly())
                 )}{" "}
-                {" " + user.currency || " ALL"}
+                {" " + (userLocal.currency || " ALL")}
               </text>
             </div>
           </section>

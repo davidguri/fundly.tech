@@ -16,6 +16,15 @@ import Transaction from "../../models/transaction.model";
 export default function Wallet() {
   const auth = getAuth();
 
+  const userLocal = JSON.parse(localStorage.getItem("userData")) || {
+    role: "Freelancer",
+    business: "",
+    displayName: "",
+    email: "",
+    currency: "ALL",
+    photoUrl: "",
+  };
+
   const nav = useNavigate();
 
   const [loading, setLoading] = React.useState(true);
@@ -33,6 +42,7 @@ export default function Wallet() {
 
   React.useEffect(() => {
     setLoading(true);
+    getUserData();
 
     const getExpenses = async () => {
       try {
@@ -56,16 +66,15 @@ export default function Wallet() {
 
     const getTransactions = async () => {
       try {
-        const userData = await getUserData();
         setTransactions([]);
         const q1 = query(
           collection(db, "transactions"),
-          where("business", "==", userData.business),
+          where("business", "==", user.business || userLocal.business),
         );
 
         const q2 = query(
           collection(db, "transactions"),
-          where("business", "==", userData.id),
+          where("business", "==", auth.currentUser.uid),
         );
 
         const [querySnapshot1, querySnapshot2] = await Promise.all([
@@ -94,13 +103,13 @@ export default function Wallet() {
 
         const filteredTransactions = combinedTransactions.filter(
           (transaction) => {
-            return transaction.name === userData.displayName;
+            return transaction.name === auth.currentUser.displayName;
           },
         );
 
         const workerTransactions = combinedTransactions.filter(
           (transaction) => {
-            return transaction.name !== userData.displayName;
+            return transaction.name !== auth.currentUser.displayName;
           },
         );
 
@@ -119,7 +128,7 @@ export default function Wallet() {
 
   const getRate = (toCurrency: string): any => {
     fetch(
-      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${user.currency.toLowerCase()}.json`,
+      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${user.currency.toLowerCase() || userLocal.currency.toLowerCase()}.json`,
     )
       .then((response) => {
         if (!response.ok) {
@@ -129,7 +138,9 @@ export default function Wallet() {
       })
       .then((data) => {
         setRate(
-          data[`${user.currency.toLowerCase()}`][`${toCurrency.toLowerCase()}`],
+          data[
+            `${user.currency.toLowerCase() || userLocal.currency.toLowerCase()}`
+          ][`${toCurrency.toLowerCase()}`],
         );
       });
   };
@@ -213,7 +224,7 @@ export default function Wallet() {
     let newMonthlyPay = 0;
 
     currentMonthTransactions.forEach((transaction: any) => {
-      if (transaction.currency !== user.currency) {
+      if (transaction.currency !== (user.currency || userLocal.currency)) {
         const newAmount = convertCurrency(
           transaction.currency,
           parseFloat(transaction.amount),
@@ -246,7 +257,7 @@ export default function Wallet() {
         tip: string;
         incoming: any;
       }) => {
-        if (transaction.currency !== user.currency) {
+        if (transaction.currency !== (user.currency || userLocal.currency)) {
           const newAmount = convertCurrency(
             transaction.currency,
             parseFloat(transaction.amount),
@@ -357,10 +368,10 @@ export default function Wallet() {
                 ) : (
                   formatNumber(getTotal() - getTotalExpenses())
                 )}{" "}
-                {user.currency}
+                {userLocal.currency}
               </text>
             </div>
-            {user.role === "Worker" ? (
+            {(userLocal.role || user.role) === "Worker" ? (
               <>
                 {transactions && (
                   <div className={styles.transaction}>
@@ -369,7 +380,7 @@ export default function Wallet() {
                       className={styles.transactionText}
                       style={{ color: "#533fd5" }}
                     >
-                      {getMonthly()} {user.currency}
+                      {getMonthly()} {userLocal.currency}
                     </text>
                   </div>
                 )}
@@ -379,7 +390,7 @@ export default function Wallet() {
                     className={styles.transactionText}
                     style={{ color: "#533fd5" }}
                   >
-                    {getMonthlyExpenses()} {user.currency}
+                    {getMonthlyExpenses()} {userLocal.currency}
                   </text>
                 </div>
               </>
@@ -419,7 +430,7 @@ export default function Wallet() {
                         ) : (
                           getMonthly() + getMonthlyWorkers()
                         )}{" "}
-                        {user.currency}
+                        {userLocal.currency}
                       </text>
                       <text className={styles.infoText}>Business</text>
                     </div>
@@ -441,7 +452,7 @@ export default function Wallet() {
                         ) : (
                           getMonthly()
                         )}{" "}
-                        {user.currency}
+                        {userLocal.currency}
                       </text>
                       <text className={styles.infoText}>You</text>
                     </div>
@@ -463,7 +474,7 @@ export default function Wallet() {
                         ) : (
                           getMonthlyWorkers()
                         )}{" "}
-                        {user.currency}
+                        {userLocal.currency}
                       </text>
                       <text className={styles.infoText}>Wages</text>
                     </div>
@@ -485,7 +496,7 @@ export default function Wallet() {
                         ) : (
                           getMonthlyExpenses()
                         )}{" "}
-                        {user.currency}
+                        {userLocal.currency}
                       </text>
                       <text className={styles.infoText}>Expenses</text>
                     </div>
@@ -499,7 +510,7 @@ export default function Wallet() {
                           className={styles.transactionText}
                           style={{ color: "#533fd5" }}
                         >
-                          {getMonthly()} {user.currency}
+                          {getMonthly()} {userLocal.currency}
                         </text>
                       </div>
                     )}
@@ -516,7 +527,7 @@ export default function Wallet() {
                               name,
                             ),
                           )}{" "}
-                          {user.currency}
+                          {userLocal.currency}
                         </text>
                       </div>
                     ))}
