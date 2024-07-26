@@ -50,6 +50,7 @@ export class Firestore {
   static async updateUserData(id: string, userData: User): Promise<any> {
     const userRef = doc(db, "users", id);
     await updateDoc(userRef, userData);
+    localStorage.setItem("userData", JSON.stringify(userData));
   }
 
   static async getAllBusinesses(): Promise<any> {
