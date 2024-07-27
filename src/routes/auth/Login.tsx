@@ -51,6 +51,13 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           type="password"
         />
+        <text
+          className={styles.alternativeText}
+          onClick={() => nav("/forgot")}
+          style={{ color: "#e5e4ec" }}
+        >
+          Forgot Password?
+        </text>
         <div className={styles.submitButton} onClick={login}>
           <text className={styles.submitButtonText}>Log In</text>
         </div>
