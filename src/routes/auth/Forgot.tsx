@@ -2,19 +2,18 @@ import { onAuthStateChanged } from "firebase/auth";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../../firebase";
-import { Auth } from "../../controllers/auth.controller";
-import styles from "./styles/Login.module.scss";
+// import { Auth } from "../../controllers/auth.controller";
+import styles from "./styles/Forgot.module.scss";
 
-export default function Login() {
+export default function Forgot() {
   const nav = useNavigate();
 
   const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
 
   const login = async () => {
-    await Auth.signIn(email, password).catch((error: any) => {
-      console.error(error.message);
-    });
+    // await Auth.signIn(email, password).catch((error: any) => {
+    //   console.error(error.message);
+    // });
   };
 
   React.useEffect(() => {
@@ -36,7 +35,10 @@ export default function Login() {
   return (
     <>
       <main className={styles.main}>
-        <text className={styles.title}>Welcome Back!</text>
+        <text className={styles.title}>Forgot Password?</text>
+        <text className={styles.subtitle}>
+          Type in the email you used to create your account.
+        </text>
         <input
           className={styles.formInput}
           placeholder="Email"
@@ -44,15 +46,8 @@ export default function Login() {
           onChange={(e) => setEmail(e.target.value)}
           type="email"
         />
-        <input
-          className={styles.formInput}
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          type="password"
-        />
         <div className={styles.submitButton} onClick={login}>
-          <text className={styles.submitButtonText}>Log In</text>
+          <text className={styles.submitButtonText}>Get New Password</text>
         </div>
         <text className={styles.alternativeText}>
           Don't have an account yet?{" "}
@@ -63,13 +58,6 @@ export default function Login() {
           >
             Sign Up.
           </span>
-        </text>
-        <text
-          className={styles.alternativeText}
-          onClick={() => nav("/forgot")}
-          // style={{ color: "#e5e4ec" }}
-        >
-          Don't remember your password?
         </text>
       </main>
     </>

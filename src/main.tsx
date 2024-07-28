@@ -1,32 +1,30 @@
-import ReactDOM from 'react-dom/client';
-import './main.scss';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
-import ErrorPage from './ErrorPage';
-import { AuthProvider } from './context/AuthProvider';
-import Protected from './context/Protected';
+import ReactDOM from "react-dom/client";
+import "./main.scss";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ErrorPage from "./ErrorPage";
+import { AuthProvider } from "./context/AuthProvider";
+import Protected from "./context/Protected";
 
 import WelcomePage from "./routes/auth/Welcome";
-import Signup from './routes/auth/Signup';
-import Info from './routes/auth/Info';
-import Login from './routes/auth/Login';
-import Payment from './routes/auth/Payment';
+import Signup from "./routes/auth/Signup";
+import Info from "./routes/auth/Info";
+import Login from "./routes/auth/Login";
+import Forgot from "./routes/auth/Forgot";
+import Payment from "./routes/auth/Payment";
 
 import Root from "./routes/app/Root";
-import Transactions from './routes/app/Transactions';
-import Add from './routes/app/Add';
-import AddTemplate from './routes/app/AddTemplate';
-import Team from './routes/app/Team';
-import AddMember from './routes/app/AddMember';
-import Wallet from './routes/app/Wallet';
-import Calendar from './routes/app/Calendar';
-import Settings from './routes/app/Settings';
-import Vote from './routes/app/Vote';
-import Analytics from './routes/app/Analytics';
+import Transactions from "./routes/app/Transactions";
+import Add from "./routes/app/Add";
+import AddTemplate from "./routes/app/AddTemplate";
+import Team from "./routes/app/Team";
+import AddMember from "./routes/app/AddMember";
+import Wallet from "./routes/app/Wallet";
+import Calendar from "./routes/app/Calendar";
+import Settings from "./routes/app/Settings";
+import Vote from "./routes/app/Vote";
+import Analytics from "./routes/app/Analytics";
 
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +64,14 @@ const router = createBrowserRouter([
     element: (
       <AuthProvider>
         <Login />
+      </AuthProvider>
+    ),
+  },
+  {
+    path: "/forgot",
+    element: (
+      <AuthProvider>
+        <Forgot />
       </AuthProvider>
     ),
   },
@@ -192,8 +198,8 @@ const router = createBrowserRouter([
   },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <RouterProvider router={router} />
+ReactDOM.createRoot(document.getElementById("root")!).render(
+  <RouterProvider router={router} />,
 );
 
 serviceWorkerRegistration.register();
