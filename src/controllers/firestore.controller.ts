@@ -12,7 +12,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import User from "../models/user.model";
-import Transaction from "../models/transaction.model";
+import { Transaction } from "../models/transaction.model";
 
 export class Firestore {
   static async addUserDocument(id: string, userData: User): Promise<any> {

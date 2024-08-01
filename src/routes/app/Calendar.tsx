@@ -10,12 +10,13 @@ import Transaction from "../../components/global/Transaction.component";
 
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase";
-import { Firestore } from "../../controllers/firestore.controller";
 import { auth } from "../../../firebase";
 
 import { differenceInCalendarDays, differenceInCalendarMonths } from "date-fns";
 
 import Loader from "../../components/global/Loader.component";
+
+import { Transaction as TransactionModel } from "../../models/transaction.model";
 
 export default function Calendar() {
   const nav = useNavigate();
@@ -23,6 +24,7 @@ export default function Calendar() {
   const [value, setValue] = React.useState<any>(new Date());
 
   const [loading, setLoading] = React.useState(true);
+  const [workerTransactions, setWorkerTransactions] = React.useState([]);
 
   let months = [
     "Jan",
@@ -37,6 +39,21 @@ export default function Calendar() {
     "Oct",
     "Nov",
     "Dec",
+  ];
+
+  let monthsLong = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const nth = function (d: number) {
@@ -71,122 +88,75 @@ export default function Calendar() {
     " " +
     months[value.getMonth()];
 
-  const [user, setUser]: any = React.useState([]);
-  console.log(user.displayName);
-
-  const getUserData = async () => {
-    const data = await Firestore.getUserById(auth.currentUser.uid);
-    setUser(data);
-    return data;
-  };
+  const userLocal = JSON.parse(localStorage.getItem("userData"));
+  // console.log(user.displayName);
 
   const [transactions, setTransactions] = React.useState([]);
 
-  const getTransactions = async (date: any) => {
-    setLoading(true);
+  async function getTransactions() {
     try {
-      const userData = await getUserData();
       setTransactions([]);
-      if (userData.role === "Worker") {
-        const q = query(
-          collection(db, "transactions"),
-          where("name", "==", userData.displayName),
-        );
+      const q1 = query(
+        collection(db, "transactions"),
+        where("business", "==", userLocal.business),
+      );
 
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map((doc) => ({
-          ...doc.data(),
-        }));
+      const q2 = query(
+        collection(db, "transactions"),
+        where("business", "==", auth.currentUser.uid),
+      );
 
-        const filteredTransactions = data.filter((transaction) => {
-          const timestamp = new Date(transaction.date.seconds * 1000);
-          if (
-            timestamp.getMonth() === date.getMonth() &&
-            timestamp.getDate() === date.getDate() &&
-            timestamp.getFullYear() === date.getFullYear()
-          ) {
-            return transaction;
-          }
-        });
+      const [querySnapshot1, querySnapshot2] = await Promise.all([
+        getDocs(q1),
+        getDocs(q2),
+      ]);
 
-        const sortedTransactions = filteredTransactions.sort(
-          (a, b) => b.date - a.date,
-        );
+      const transactions1 = querySnapshot1.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      const transactions2 = querySnapshot2.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
 
-        setTransactions(sortedTransactions);
-      } else {
-        const q1 = query(
-          collection(db, "transactions"),
-          where("business", "==", userData.business),
-        );
-
-        const q2 = query(
-          collection(db, "transactions"),
-          where("business", "==", userData.id),
-        );
-
-        const [querySnapshot1, querySnapshot2] = await Promise.all([
-          getDocs(q1),
-          getDocs(q2),
-        ]);
-
-        // Combine the results
-        const transactions1 = querySnapshot1.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        const transactions2 = querySnapshot2.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-
-        // Combine the two arrays and remove duplicates
-        const combinedTransactions = [
-          ...transactions1,
-          ...transactions2,
-        ].reduce((acc, transaction) => {
+      const combinedTransactions = [...transactions1, ...transactions2].reduce(
+        (acc, transaction) => {
           if (!acc.find((t) => t.id === transaction.id)) {
             acc.push(transaction);
           }
           return acc;
-        }, []);
+        },
+        [],
+      );
 
-        const filteredTransactions = combinedTransactions.filter(
-          (transaction) => {
-            const timestamp = new Date(transaction.date.seconds * 1000);
-            if (
-              timestamp.getMonth() === date.getMonth() &&
-              timestamp.getDate() === date.getDate() &&
-              timestamp.getFullYear() === date.getFullYear()
-            ) {
-              return transaction;
-            }
-          },
-        );
+      const filteredTransactions = combinedTransactions.filter(
+        (transaction) => {
+          return transaction.name === auth.currentUser.displayName;
+        },
+      );
 
-        const sortedTransactions = filteredTransactions.sort(
-          (a, b) => b.date - a.date,
-        );
+      const workerTransactions = combinedTransactions.filter((transaction) => {
+        return transaction.name !== auth.currentUser.displayName;
+      });
 
-        setTransactions(sortedTransactions);
-      }
-      // console.log(transactions)
+      setTransactions(filteredTransactions);
+      setWorkerTransactions(workerTransactions);
+      setLoading(false);
     } catch (error: any) {
       alert("Error: " + error.message);
-    } finally {
-      setLoading(false);
     }
-  };
+  }
 
   React.useEffect(() => {
-    getTransactions(value);
+    getTransactions();
   }, []);
 
   const [rate, setRate] = React.useState<any>();
 
   const getRate = (toCurrency: string): any => {
     fetch(
-      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${user.currency.toLowerCase()}.json`,
+      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${userLocal.currency.toLowerCase()}.json`,
     )
       .then((response) => {
         if (!response.ok) {
@@ -196,7 +166,9 @@ export default function Calendar() {
       })
       .then((data) => {
         setRate(
-          data[`${user.currency.toLowerCase()}`][`${toCurrency.toLowerCase()}`],
+          data[`${userLocal.currency.toLowerCase()}`][
+            `${toCurrency.toLowerCase()}`
+          ],
         );
       });
   };
@@ -207,22 +179,31 @@ export default function Calendar() {
     return convertedAmount;
   }
 
-  const [currentMonth, setCurrentMonth] = React.useState<any>(value);
+  const [currentMonth, setCurrentMonth] = React.useState<Date>(value);
 
-  function getTotalMonth(date: any) {
+  function getMonthTransactions(date: any) {
+    console.log(transactions);
     const monthTransactions = transactions.filter((transaction) => {
       const timestamp = new Date(transaction.date.seconds * 1000);
+      console.log(timestamp.getMonth());
+      console.log(date.getMonth());
       if (
         timestamp.getMonth() === date.getMonth() &&
         timestamp.getFullYear() === date.getFullYear()
       ) {
+        console.log(transaction);
         return transaction;
       }
     });
+    return monthTransactions;
+  }
+
+  function getTotalMonth(date: any) {
+    const monthTransactions = getMonthTransactions(date);
     let totalPay = 0;
     let newTotalPay = 0;
     monthTransactions.forEach((transaction) => {
-      if (transaction.currency !== user.currency) {
+      if (transaction.currency !== userLocal.currency) {
         const newAmount = convertCurrency(
           transaction.currency,
           parseFloat(transaction.amount),
@@ -259,6 +240,62 @@ export default function Calendar() {
     }
   }
 
+  const groupTransactionsByName = (transactions: TransactionModel[]) => {
+    return transactions.reduce((acc, transaction) => {
+      const { name } = transaction;
+      if (!acc[name]) {
+        acc[name] = [];
+      }
+      acc[name].push(transaction);
+      return acc;
+    }, {});
+  };
+
+  function formatNumber(number: number) {
+    if (number % 1 === 0) {
+      return number.toString();
+    } else {
+      return number.toFixed(2);
+    }
+  }
+
+  function filterCurrentMonthTransactions(transactions: any) {
+    const now = new Date();
+    const currentMonth = now.getMonth();
+    const currentYear = now.getFullYear();
+
+    const filteredTransactions = transactions.filter((transaction: any) => {
+      const date = new Date(transaction.date.seconds * 1000);
+      const transactionMonth = date.getMonth();
+      const transactionYear = date.getFullYear();
+
+      return (
+        transactionMonth === currentMonth && transactionYear === currentYear
+      );
+    });
+
+    return filteredTransactions;
+  }
+
+  const currentMonthWorkerTransactions =
+    filterCurrentMonthTransactions(workerTransactions);
+
+  const getTransactionsByName = (transactions: any[], name: string) => {
+    let amount = 0;
+    transactions.forEach((transaction) => {
+      if (transaction.name === name) {
+        amount +=
+          convertCurrency(
+            transaction.currency,
+            parseFloat(transaction.amount),
+          ) +
+          convertCurrency(transaction.currency, parseFloat(transaction.tip));
+      }
+    });
+
+    return parseFloat(amount.toFixed(2));
+  };
+
   return (
     <>
       <Layout>
@@ -285,13 +322,14 @@ export default function Calendar() {
               }}
             >
               <text className={styles.overlayText}>
-                {getTotalMonth(currentMonth)} {user.currency}
+                {getTotalMonth(currentMonth)} {userLocal.currency}
               </text>
             </div>
             <CalendarComponent
               onChange={(value) => {
                 setValue(value);
-                getTransactions(value);
+                getTransactions();
+                getTotalMonth(value);
               }}
               value={value}
               view="month"
@@ -312,33 +350,90 @@ export default function Calendar() {
                   color="#533fd5"
                 />
               }
-              onActiveStartDateChange={({ activeStartDate }) => {
+              onActiveStartDateChange={({ activeStartDate, value }) => {
+                setValue(value);
                 setCurrentMonth(activeStartDate);
+                getTransactions();
+                getTotalMonth(activeStartDate);
               }}
             />
           </div>
           <div className={styles.content}>
-            <text className={styles.title}>Activity for {resultDate}:</text>
+            {currentMonth.getMonth() === value.getMonth() ? (
+              <text className={styles.title}>Activity for {resultDate}:</text>
+            ) : (
+              <text className={styles.title}>
+                Activity for {monthsLong[currentMonth.getMonth()]}
+              </text>
+            )}
             {loading ? (
               <Loader />
+            ) : currentMonth.getMonth() === value.getMonth() ? (
+              transactions
+                .filter((transaction) => {
+                  const timestamp = new Date(transaction.date.seconds * 1000);
+                  console.log(timestamp.getMonth());
+                  console.log(value.getMonth());
+                  if (
+                    timestamp.getMonth() === value.getMonth() &&
+                    timestamp.getDate() === value.getDate() &&
+                    timestamp.getFullYear() === value.getFullYear()
+                  ) {
+                    return transaction;
+                  }
+                })
+                .map((transaction, i) => {
+                  return (
+                    <>
+                      <Transaction
+                        key={i}
+                        incoming={transaction.incoming}
+                        date={transaction.date.seconds * 1000}
+                        type={transaction.type}
+                        name={transaction.name}
+                        amount={transaction.amount}
+                        tip={transaction.tip}
+                        duration={transaction.duration}
+                        currency={transaction.currency}
+                      />
+                    </>
+                  );
+                })
             ) : (
-              transactions.map((transaction, i) => {
-                return (
-                  <>
-                    <Transaction
-                      key={i}
-                      incoming={transaction.incoming}
-                      date={transaction.date.seconds * 1000}
-                      type={transaction.type}
-                      name={transaction.name}
-                      amount={transaction.amount}
-                      tip={transaction.tip}
-                      duration={transaction.duration}
-                      currency={transaction.currency}
-                    />
-                  </>
-                );
-              })
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: 12 }}
+              >
+                {transactions && (
+                  <div className={styles.transaction}>
+                    <text className={styles.transactionText}>You</text>
+                    <text
+                      className={styles.transactionText}
+                      style={{ color: "#533fd5" }}
+                    >
+                      {getTotalMonth(currentMonth)} {userLocal.currency}
+                    </text>
+                  </div>
+                )}
+                {Object.keys(groupTransactionsByName(workerTransactions)).map(
+                  (name) => (
+                    <div className={styles.transaction} key={name}>
+                      <text className={styles.transactionText}>{name}</text>
+                      <text
+                        className={styles.transactionText}
+                        style={{ color: "#533fd5" }}
+                      >
+                        {formatNumber(
+                          getTransactionsByName(
+                            currentMonthWorkerTransactions,
+                            name,
+                          ),
+                        )}{" "}
+                        {userLocal.currency}
+                      </text>
+                    </div>
+                  ),
+                )}
+              </div>
             )}
           </div>
         </main>

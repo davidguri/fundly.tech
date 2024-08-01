@@ -1,4 +1,4 @@
-type Transaction = {
+export type Transaction = {
   id: string;
   name: string;
   amount: any;
@@ -10,5 +10,3 @@ type Transaction = {
   type: string;
   incoming: boolean;
 };
-
-export default Transaction;

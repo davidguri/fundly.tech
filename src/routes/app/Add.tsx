@@ -9,7 +9,7 @@ import {
   IoCheckmarkCircle,
 } from "react-icons/io5";
 
-import Transaction from "../../models/transaction.model";
+import { Transaction } from "../../models/transaction.model";
 import { Firestore } from "../../controllers/firestore.controller";
 import { v4 as uuidv4 } from "uuid";
 

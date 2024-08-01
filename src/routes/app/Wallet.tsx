@@ -11,7 +11,7 @@ import { Firestore } from "../../controllers/firestore.controller";
 
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebase";
-import Transaction from "../../models/transaction.model";
+import { Transaction } from "../../models/transaction.model";
 
 export default function Wallet() {
   const auth = getAuth();

@@ -61,7 +61,7 @@ export default function Transaction(props: any) {
           <text className={styles.subtitle}>{formattedDate}</text>
         </div>
         {location.pathname !== "/calendar" && (
-          <div className={styles.tRightContainer} onClick={props.onDelete}>
+          <div className={styles.tRightContainer} onClick={() => {}}>
             <IoTrash
               className={styles.subtitle}
               size={24}
