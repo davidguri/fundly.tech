@@ -241,14 +241,27 @@ export default function Calendar() {
   }
 
   const groupTransactionsByName = (transactions: TransactionModel[]) => {
-    return transactions.reduce((acc, transaction) => {
-      const { name } = transaction;
-      if (!acc[name]) {
-        acc[name] = [];
-      }
-      acc[name].push(transaction);
-      return acc;
-    }, {});
+    return transactions
+      .filter((transaction) => {
+        const timestamp = new Date(transaction.date);
+        console.log(timestamp.getMonth());
+        console.log(currentMonth.getMonth());
+        if (
+          timestamp.getMonth() === currentMonth.getMonth() &&
+          timestamp.getFullYear() === currentMonth.getFullYear()
+        ) {
+          console.log(transaction);
+          return transaction;
+        }
+      })
+      .reduce((acc, transaction) => {
+        const { name } = transaction;
+        if (!acc[name]) {
+          acc[name] = [];
+        }
+        acc[name].push(transaction);
+        return acc;
+      }, {});
   };
 
   function formatNumber(number: number) {
