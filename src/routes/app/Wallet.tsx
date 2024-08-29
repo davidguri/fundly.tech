@@ -128,7 +128,7 @@ export default function Wallet() {
 
   const getRate = (toCurrency: string): any => {
     fetch(
-      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${user.currency.toLowerCase() || userLocal.currency.toLowerCase()}.json`,
+      `https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${userLocal.currency.toLowerCase() || user.currency.toLowerCase()}.json`,
     )
       .then((response) => {
         if (!response.ok) {
@@ -139,7 +139,7 @@ export default function Wallet() {
       .then((data) => {
         setRate(
           data[
-            `${user.currency.toLowerCase() || userLocal.currency.toLowerCase()}`
+            `${userLocal.currency.toLowerCase() || user.currency.toLowerCase()}`
           ][`${toCurrency.toLowerCase()}`],
         );
       });
@@ -319,7 +319,6 @@ export default function Wallet() {
           convertCurrency(transaction.currency, parseFloat(transaction.tip));
       }
     });
-
     return parseFloat(amount.toFixed(2));
   }; // TODO: USE WEB WORKER HERE
 

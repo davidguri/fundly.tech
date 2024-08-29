@@ -264,7 +264,9 @@ export default function Transactions() {
   };
 
   const selectWorkerHandler = (workerName: string) => {
-    setWorkerOption(workerName);
+    workerOption === workerName
+      ? setWorkerOption("0")
+      : setWorkerOption(workerName);
     console.log(workerName);
     getTransactionsByName(workerName);
   };
