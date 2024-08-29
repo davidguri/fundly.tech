@@ -43,7 +43,7 @@ export class Firestore {
     if (docSnap.exists()) {
       return docSnap.data();
     } else {
-      alert("❌ No such document user!");
+      console.error("❌ No such document user!");
     }
   }
 
