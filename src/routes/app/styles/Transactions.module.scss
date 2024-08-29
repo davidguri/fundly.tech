@@ -39,12 +39,24 @@ $color: #e5e4ec;
     align-items: center;
     justify-content: flex-start;
     gap: 8px;
+    margin-bottom: 8px;
 }
 
 .chip {
     border: 3.2px solid $color;
     padding-inline: 24px;
     padding-block: 12px;
+    border-radius: 12px;
+    color: $color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.miniChip {
+    border: 3.2px solid $color;
+    padding-inline: 12px;
+    padding-block: 6px;
     border-radius: 12px;
     color: $color;
 }
@@ -54,9 +66,14 @@ $color: #e5e4ec;
     color: $background;
 }
 
-.chipText {
+.chipText,
+.miniChipText {
     font-weight: 800;
     text-align: center;
+}
+
+.miniChipText {
+    font-size: 12px;
 }
 
 .transactionsContainer {
@@ -64,6 +81,7 @@ $color: #e5e4ec;
     display: flex;
     flex-direction: column;
     gap: 36px;
+    margin-top: 28px;
 }
 
 .footer {
