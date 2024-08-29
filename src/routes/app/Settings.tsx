@@ -136,17 +136,19 @@ export default function Settings() {
                   </text>
                 </div>
               )}
-              <div className={styles.setting}>
-                <text className={styles.settingText}>Team Members</text>
-                <text
-                  className={styles.settingText}
-                  style={{ color: "#533fd5" }}
-                >
-                  <Link to="/team" className="link">
-                    View
-                  </Link>
-                </text>
-              </div>
+              {(userLocal.role || user.role) === "Owner" && (
+                <div className={styles.setting}>
+                  <text className={styles.settingText}>Team Members</text>
+                  <text
+                    className={styles.settingText}
+                    style={{ color: "#533fd5" }}
+                  >
+                    <Link to="/team" className="link">
+                      View
+                    </Link>
+                  </text>
+                </div>
+              )}
               {/*{(userLocal.role || user.role) !== "Worker" && (
                 <div className={styles.setting}>
                   <text className={styles.settingText}>Membership Plan</text>
