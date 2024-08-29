@@ -71,18 +71,18 @@ export default function Settings() {
   const [show, setShow] = React.useState(false);
   const [status, setStatus] = React.useState("question");
 
-  const plans = {
-    starter: "P-9GP57167MX0059824M2H7FIA",
-    plus: "P-5P504453PS770450NM2H7F5I",
-    pro: "P-94R91105AE452244SM2H7GMI",
-  };
+  // const plans = {
+  //   starter: "P-9GP57167MX0059824M2H7FIA",
+  //   plus: "P-5P504453PS770450NM2H7F5I",
+  //   pro: "P-94R91105AE452244SM2H7GMI",
+  // };
 
-  const userPlan =
-    user.membership === plans.starter || userLocal.membership === plans.starter
-      ? "Starter"
-      : user.membership === plans.plus || userLocal.membership === plans.plus
-        ? "Plus"
-        : "Pro";
+  // const userPlan =
+  //   user.membership === plans.starter || userLocal.membership === plans.starter
+  //     ? "Starter"
+  //     : user.membership === plans.plus || userLocal.membership === plans.plus
+  //       ? "Plus"
+  //       : "Pro";
 
   return (
     <>
@@ -147,7 +147,7 @@ export default function Settings() {
                   </Link>
                 </text>
               </div>
-              {(userLocal.role || user.role) !== "Worker" && (
+              {/*{(userLocal.role || user.role) !== "Worker" && (
                 <div className={styles.setting}>
                   <text className={styles.settingText}>Membership Plan</text>
                   <text
@@ -161,7 +161,7 @@ export default function Settings() {
                         : "Freelancer"}
                   </text>
                 </div>
-              )}
+              )}*/}
               <div className={styles.setting}>
                 <text className={styles.settingText}>Currency</text>
                 <select
@@ -196,7 +196,7 @@ export default function Settings() {
                   style={{ color: "#533fd5" }}
                 >
                   <a
-                    href="https://www.buymeacoffee.com/davidguri"
+                    href="https://www.davidguri.com/"
                     target="_blank"
                     className="link"
                   >
